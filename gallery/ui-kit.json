@@ -38,6 +38,7 @@
     "src/components/ui/TextInput.tsx",
     "src/components/ui/View.tsx",
     "src/globals.css",
+    "src/hooks/useTabPaneBottomInset.ts",
     "src/hooks/useThemeColors.ts"
   ],
   "seeds": [
