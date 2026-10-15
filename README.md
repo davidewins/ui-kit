@@ -13,6 +13,7 @@ Rules and screen recipes: [Native UI spec](https://linear.app/takeoversoftware/d
 | `native/files/` | Canonical native files, at the same path they live in an app (`src/components/ui/SettingsRow.tsx` etc.), so imports work unchanged |
 | `native/seeds/` | App-owned files the kit depends on, copied once when missing (`useFontFamily`: Geist only) |
 | `bin/ui-kit.mjs` | `tokens`, `sync`, `check` |
+| `gallery/` | Expo app showing every kit component, light and dark. Runs in Expo Go: `cd gallery && npm install && npx expo start`, scan the QR |
 
 ## Use
 
@@ -37,14 +38,19 @@ The kit imports these but does not ship them:
 ## Where each file came from (15 Oct 2026)
 
 * VOID (superset of RIDERS for every file): `ui/*` primitives, `SettingsRow` (adds `href` + Link.Preview), `GlassButton`, `Input`, `EmptyState`, `Text`, `useThemeColors`, `PressableScale`, `GlassSurface`, `LoadErrorState`, `phone/PhoneInput`
-* SELLERS: `InsetShell`, `WizardProgress`, `SelectRow`, `Switch`, `SkeletonBlock`, `Sparkline`, `CustomToast`, `FuseTopTabs`, `useTabPaneBottomInset`
+* SELLERS: `InsetShell`, `WizardProgress`, `SelectRow`, `Switch`, `SkeletonBlock`, `SectionTitle`, `Sparkline`, `CustomToast`, `FuseTopTabs`, `useTabPaneBottomInset`
+* `Button` is VOID's: primary, secondary, danger. No ghost or outline buttons, ever
+* Tokens: light page `#fff` and grouped surface `#f5f5f5` (VOID, David 15 Oct); amber warning; old names (`danger`, `textMuted`, `primaryText`, `surfaceElevated`, ...) kept as aliases
 * Only edit vs source: `Text` imports `FontWeight` from `@/hooks/useFontFamily`
 
 ## Synced
 
-| App | Files | Not yet in kit |
+| App | Files | Still app-owned (different API, converge next) |
 | -- | -- | -- |
-| RIDERS | 29 | `Button`, onboarding (`SelectRow`, `WizardProgress`, `InsetShell` differ from SELLERS) |
-| VOID | 29 | `Button` |
-| SELLERS, TKVR, demo, ADMIN | not yet | |
+| RIDERS | 30 | onboarding `SelectRow` / `WizardProgress` / `InsetShell` (ahead of SELLERS) |
+| VOID | 30 | |
+| SELLERS | 38 | `Button` (GlassButton-style pill with `outline`), `EmptyState` (`art` / `layout` API, the spec reference) |
+| TKVR | 25 | `Button`, `EmptyState`, `InsetShell` (adds `InsetFooter`, `keyboardInsets`) |
+| demo | 27 | `Button` |
+| ADMIN | 19 | `Button`, `Text`, `TextInput`, `FuseTopTabs`: ADMIN still uses the system font (spec Q12) |
 | Web | not yet | |
