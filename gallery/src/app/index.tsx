@@ -1,12 +1,14 @@
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SettingsGroup } from "@/components/ui/SettingsGroup";
 import { SettingsRow } from "@/components/ui/SettingsRow";
-import { Switch } from "@/components/ui/Switch";
+import { View } from "@/components/ui";
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import * as Haptics from "expo-haptics";
+import { useState } from "react";
 import {
   CircleAlert,
   Layers,
   List,
-  Moon,
   MousePointerClick,
   Palette,
   PanelBottom,
@@ -16,22 +18,35 @@ import {
 import { ScrollView, useColorScheme } from "react-native";
 import { Uniwind } from "uniwind";
 
-// Recipe §3.6: unlabelled SettingsGroups of SettingsRows.
+const APPEARANCES = ["system", "light", "dark"] as const;
+const LABELS = ["Automatic", "Light", "Dark"];
+
+// Recipe §3.6: unlabelled SettingsGroups of SettingsRows. Appearance control
+// copied from VOID profile/appearance.
 export default function Index() {
-  const dark = useColorScheme() === "dark";
+  const mode = useColorScheme() === "dark" ? "dark" : "light";
+  const [appearance, setAppearance] = useState<(typeof APPEARANCES)[number]>("system");
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
       <SectionTitle inset={32}>Appearance</SectionTitle>
-      <SettingsGroup>
-        <SettingsRow
-          label="Dark mode"
-          Icon={Moon}
-          accessory={
-            <Switch value={dark} onValueChange={(v) => Uniwind.setTheme(v ? "dark" : "light")} />
-          }
+      <View style={{ marginHorizontal: 16 }}>
+        <SegmentedControl
+          values={LABELS}
+          selectedIndex={APPEARANCES.indexOf(appearance)}
+          onChange={(e) => {
+            Haptics.selectionAsync();
+            const next = APPEARANCES[e.nativeEvent.selectedSegmentIndex] ?? "system";
+            setAppearance(next);
+            Uniwind.setTheme(next);
+          }}
+          appearance={mode}
+          fontStyle={{ fontFamily: "Geist-Medium" }}
+          activeFontStyle={{ fontFamily: "Geist-SemiBold" }}
+          style={{ height: 44 }}
+          accessibilityLabel="Appearance"
         />
-      </SettingsGroup>
+      </View>
 
       <SectionTitle inset={32}>Components</SectionTitle>
       <SettingsGroup>

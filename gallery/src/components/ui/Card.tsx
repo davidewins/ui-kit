@@ -25,7 +25,9 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <View
-      className={` bg-card rounded-lg p-3 border border-border ${className} `}
+      // Same fill and shape as SettingsGroup (spec §2.3): surface, radius 24, no border.
+      className={`bg-surface p-4 ${className}`}
+      style={{ borderRadius: 24, borderCurve: "continuous" }}
       accessibilityRole={accessibilityRole}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
