@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "044ca0e",
+  "rev": "8f635f0",
   "files": {
     "src/components/CustomToast.tsx": "9f6e95dde7b4c0ede014290263c76e16b7b3c39604eed135f87f573958fb4747",
     "src/components/GlassSurface.tsx": "8a341064d2620e70841bfbc5151b4818309af1b47032a5e3545f228d0f4fb24e",
@@ -12,7 +12,7 @@
     "src/components/onboarding/shells/InsetShell.tsx": "28fc4ed402294e86f9cc8724bcd4e7f1d8e0a1a8e8ae08e13307c87148cd6ae6",
     "src/components/phone/PhoneInput.tsx": "d56a90b5ba5feae2ce16671f123c4c57903a63eeaf4a17fda423293d649e2f21",
     "src/components/phone/countries.ts": "078dc60d474edf09be9e0b842f4a7fc900b7b9fee359320543693d96779dbd94",
-    "src/components/ui/Badge.tsx": "d363b335725fea7f118344ac9076de15177e06b599b6bf197814c86c948adf69",
+    "src/components/ui/Badge.tsx": "e9495017a1c704d7c518b58eaf1f27dada7a50f1a2f2a22c4cac3324034c78da",
     "src/components/ui/Button.tsx": "bee03f9d49c81b651ef244ae5ae10d0f961c3ce0464f4be8cb76a269f4b2c9a5",
     "src/components/ui/Card.tsx": "4dc882908c91c81e6352d2369d2c612646110d40e26ff3973bc553c1cf883b28",
     "src/components/ui/CountBadge.tsx": "3ff75475f66de93a568a21c8faac5d2d4000318476152256f9fb3b700cf1cd54",
