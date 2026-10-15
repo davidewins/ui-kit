@@ -1,0 +1,6 @@
+{
+  "name": "ui-kit",
+  "private": true,
+  "type": "module",
+  "bin": { "ui-kit": "bin/ui-kit.mjs" }
+}

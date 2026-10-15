@@ -1,0 +1,77 @@
+@import "tailwindcss";
+@import "uniwind";
+
+/* Generated from ui-kit tokens.json (Native UI spec §2.1). Do not edit by hand. */
+@layer theme {
+  :root {
+    @variant light {
+      --color-text: #000000;
+      --color-background: #f2f2f7;
+      --color-secondary-background: #f2f2f7;
+      --color-surface: #ffffff;
+      --color-foreground: #000000;
+      --color-border: #e5e5ea;
+      --color-separator: #e5e5ea;
+      --color-muted: #6c6c70;
+      --color-tint: #000000;
+      --color-primary: #000000;
+      --color-on-tint: #ffffff;
+      --color-primary-foreground: #ffffff;
+      --color-on-variant: #ffffff;
+      --color-transparent: transparent;
+      --color-success: #16a34a;
+      --color-success-bg: #dcfce7;
+      --color-success-text: #14532d;
+      --color-error: #dc2626;
+      --color-error-bg: #fee2e2;
+      --color-error-text: #7f1d1d;
+      --color-warning: #f59e0b;
+      --color-warning-bg: #fef3c7;
+      --color-warning-text: #78350f;
+      --color-info: #0075d4;
+      --color-info-bg: #e0f2fe;
+      --color-info-text: #0c4a6e;
+      --color-card: #ffffff;
+      --color-tab-background: #f2f2f7;
+      --color-tab-icon-default: #8e8e93;
+      --color-tab-icon-selected: #000000;
+      --color-input-background: #ffffff;
+      --color-input-border: #e5e5ea;
+    }
+
+    @variant dark {
+      --color-text: #ffffff;
+      --color-background: #000000;
+      --color-secondary-background: #2c2c2e;
+      --color-surface: #1c1c1e;
+      --color-foreground: #ffffff;
+      --color-border: #2c2c2e;
+      --color-separator: #2c2c2e;
+      --color-muted: #8e8e93;
+      --color-tint: #ffffff;
+      --color-primary: #ffffff;
+      --color-on-tint: #000000;
+      --color-primary-foreground: #000000;
+      --color-on-variant: #ffffff;
+      --color-transparent: transparent;
+      --color-success: #22c55e;
+      --color-success-bg: #052e16;
+      --color-success-text: #bbf7d0;
+      --color-error: #ef4444;
+      --color-error-bg: #450a0a;
+      --color-error-text: #fecaca;
+      --color-warning: #f59e0b;
+      --color-warning-bg: #451a03;
+      --color-warning-text: #fde68a;
+      --color-info: #2b9aff;
+      --color-info-bg: #082f49;
+      --color-info-text: #bae6fd;
+      --color-card: #1c1c1e;
+      --color-tab-background: #1c1c1e;
+      --color-tab-icon-default: #636366;
+      --color-tab-icon-selected: #ffffff;
+      --color-input-background: #1c1c1e;
+      --color-input-border: #2c2c2e;
+    }
+  }
+}
