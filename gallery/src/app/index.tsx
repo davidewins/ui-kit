@@ -7,6 +7,7 @@ import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import {
   CircleAlert,
+  Columns2,
   Layers,
   List,
   MousePointerClick,
@@ -58,6 +59,12 @@ export default function Index() {
         <SettingsRow label="Empty, error, loading" Icon={CircleAlert} href="/states" navigates />
         <SettingsRow label="Surfaces" Icon={Layers} href="/surfaces" navigates />
         <SettingsRow label="Sticky footer" Icon={PanelBottom} href="/footer" navigates />
+      </SettingsGroup>
+
+      <SectionTitle inset={32}>Compare (every version in the apps)</SectionTitle>
+      <SettingsGroup>
+        <SettingsRow label="Select rows" Icon={Columns2} href="/compare-select" navigates trailing="7" />
+        <SettingsRow label="Status badges" Icon={Columns2} href="/compare-status" navigates trailing="7" />
       </SettingsGroup>
     </ScrollView>
   );

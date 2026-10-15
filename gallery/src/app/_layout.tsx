@@ -58,6 +58,8 @@ export default function RootLayout() {
             <Stack.Screen name="states" options={{ title: "Empty, error, loading" }} />
             <Stack.Screen name="surfaces" options={{ title: "Surfaces" }} />
             <Stack.Screen name="footer" options={{ title: "Sticky footer" }} />
+            <Stack.Screen name="compare-select" options={{ title: "Select rows" }} />
+            <Stack.Screen name="compare-status" options={{ title: "Status badges" }} />
             <Stack.Screen
               name="(protected)/profile/personal-info/country-code"
               options={{ presentation: "modal", headerTitle: "Country Code", headerTransparent: false }}
