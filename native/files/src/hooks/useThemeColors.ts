@@ -38,6 +38,8 @@ export function useThemeColors() {
   const tabIconSelected = useCSSVariable("--color-tab-icon-selected") as string;
   const inputBackground = useCSSVariable("--color-input-background") as string;
   const inputBorder = useCSSVariable("--color-input-border") as string;
+  const surfaceElevated = useCSSVariable("--color-surface-elevated") as string;
+  const onAccent = useCSSVariable("--color-on-accent") as string;
 
   return useMemo(
     () => ({
@@ -79,6 +81,17 @@ export function useThemeColors() {
       tabIconSelected,
       inputBackground,
       inputBorder,
+      surfaceElevated,
+      onAccent,
+
+      // Legacy aliases (old names still used across SELLERS, TKVR, ADMIN, demo)
+      danger: error,
+      destructive: error,
+      textMuted: muted,
+      tertiary: muted,
+      surfaceMuted: surfaceElevated,
+      primaryText: onTint,
+      onPrimary: onTint,
 
       headerStyle:
         Platform.OS === "android" ? { backgroundColor: background } : null,
@@ -118,6 +131,8 @@ export function useThemeColors() {
       tabIconSelected,
       inputBackground,
       inputBorder,
+      surfaceElevated,
+      onAccent,
     ],
   );
 }
