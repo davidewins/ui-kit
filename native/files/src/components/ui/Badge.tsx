@@ -21,9 +21,9 @@ export const Badge: React.FC<BadgeProps> = ({
 
   let bgVar = "--color-secondary-background";
   let textVar = "--color-foreground";
-  // A real token: useCSSVariable("transparent") is undefined, which drew a
-  // black 1pt border on every status badge in light mode.
-  let borderVar = "--color-transparent";
+  // Only the default badge has a border. useCSSVariable("transparent") is
+  // undefined, which drew a black 1pt border on every status badge in light mode.
+  let borderVar = "--color-border";
 
   switch (variant) {
     case "success":
@@ -51,7 +51,8 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const bgColor = useCSSVariable(bgVar) as string;
   const textColor = useCSSVariable(textVar) as string;
-  const borderColor = useCSSVariable(borderVar) as string;
+  const border = useCSSVariable(borderVar) as string;
+  const borderColor = variant === "default" ? border : "transparent";
 
   return (
     <View
