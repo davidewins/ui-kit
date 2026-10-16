@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "f22dd65",
+  "rev": "c47bf03",
   "files": {
     "src/components/CustomToast.tsx": "9f6e95dde7b4c0ede014290263c76e16b7b3c39604eed135f87f573958fb4747",
     "src/components/GlassSurface.tsx": "8a341064d2620e70841bfbc5151b4818309af1b47032a5e3545f228d0f4fb24e",
@@ -18,7 +18,7 @@
     "src/components/ui/Card.tsx": "4dc882908c91c81e6352d2369d2c612646110d40e26ff3973bc553c1cf883b28",
     "src/components/ui/CountBadge.tsx": "3ff75475f66de93a568a21c8faac5d2d4000318476152256f9fb3b700cf1cd54",
     "src/components/ui/Divider.tsx": "9988130303bd087f8131f2f7b8628c0506193c54b8e454612c2b5f1df986d9ce",
-    "src/components/ui/EmptyState.tsx": "ab4836b148db1deacb443ad0e7d8829ed6fd4ac4cfa1dc54f1acdbf04406e792",
+    "src/components/ui/EmptyState.tsx": "21277098b24752cb4714e7aad024da49ad37e0f15da7e9cb6b4d83ae32018079",
     "src/components/ui/FlatList.tsx": "033fa9f4d869ee0d29af712907d8363fb834462179b371b848dd92deb29ae168",
     "src/components/ui/GlassButton.tsx": "243d1ea91edc93ff0eeafa22992bfeb9425e88e488e282880aa162b7362779b2",
     "src/components/ui/Heading.tsx": "343208fa1ead5e2040daa944bf745de9d934e85a6404dd4320a1e53c7c82cebb",

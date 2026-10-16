@@ -58,6 +58,7 @@ export default function RootLayout() {
             <Stack.Screen name="states" options={{ title: "Badges and toasts" }} />
             <Stack.Screen name="empty" options={{ title: "Empty state" }} />
             <Stack.Screen name="empty-icon" options={{ title: "Empty state, icon" }} />
+            <Stack.Screen name="empty-list" options={{ title: "Empty state, list" }} />
             <Stack.Screen name="error" options={{ title: "Error" }} />
             <Stack.Screen name="loading" options={{ title: "Loading" }} />
             <Stack.Screen name="surfaces" options={{ title: "Surfaces" }} />

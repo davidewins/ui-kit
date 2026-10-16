@@ -61,6 +61,7 @@ export default function Index() {
         <SettingsRow label="Inputs" Icon={TextCursorInput} href="/inputs" navigates />
         <SettingsRow label="Empty state" Icon={Inbox} href="/empty" navigates />
         <SettingsRow label="Empty state, icon" Icon={Inbox} href="/empty-icon" navigates />
+        <SettingsRow label="Empty state, list" Icon={Inbox} href="/empty-list" navigates />
         <SettingsRow label="Error" Icon={CircleAlert} href="/error" navigates />
         <SettingsRow label="Loading" Icon={Loader} href="/loading" navigates />
         <SettingsRow label="Badges and toasts" Icon={Tag} href="/states" navigates />
