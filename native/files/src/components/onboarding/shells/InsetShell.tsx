@@ -8,8 +8,7 @@ import { Text, View } from "@/components/ui";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { ArrowRight } from "lucide-react-native";
-import React from "react";
-import { ActivityIndicator, KeyboardAvoidingView, Pressable, ScrollView } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Cta = {
@@ -32,12 +31,6 @@ type Props = {
   primaryCta: Cta;
   secondaryCta?: Cta;
   children?: React.ReactNode;
-  /** TKVR addition: false for single-field steps. Plain View, and the bottom
-   * bar rides above the keyboard. Everything else is SELLERS verbatim. */
-  scroll?: boolean;
-  /** TKVR addition (TAK-1375 Studio editors): the scroll view makes room for
-   * the keyboard, so a long field stays visible while typing. */
-  keyboardInsets?: boolean;
 };
 
 export function InsetShell({
@@ -48,31 +41,17 @@ export function InsetShell({
   primaryCta,
   secondaryCta,
   children,
-  scroll = true,
-  keyboardInsets = false,
 }: Props) {
   const colors = useThemeColors();
 
-  const subtitleBlock = subtitle ? (
-    <View className="px-5 mb-5">
-      <Text className="text-sm text-muted leading-tight tracking-tight">
-        {subtitle}
-      </Text>
-    </View>
-  ) : null;
-
-  const Root = scroll ? React.Fragment : FlatRoot;
-
   return (
-    <Root>
-      {scroll ? (
+    <>
       <ScrollView
         style={{ flex: 1, backgroundColor: colors.background }}
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={{ paddingTop: 4, paddingBottom: 24 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        automaticallyAdjustKeyboardInsets={keyboardInsets}
         alwaysBounceVertical
       >
         {subtitle && (
@@ -84,15 +63,9 @@ export function InsetShell({
         )}
         {children}
       </ScrollView>
-      ) : (
-        <View style={{ flex: 1, paddingTop: 16, backgroundColor: colors.background }}>
-          {subtitleBlock}
-          {children}
-        </View>
-      )}
 
       <InsetFooter step={step} total={total} phase={phase} primaryCta={primaryCta} secondaryCta={secondaryCta} />
-    </Root>
+    </>
   );
 }
 
@@ -215,14 +188,5 @@ export function InsetFooter({
       </View>
     </Pressable>
   </View>
-  );
-}
-
-// TKVR addition for scroll={false}: keeps the bottom bar above the keyboard.
-function FlatRoot({ children }: { children?: React.ReactNode }) {
-  return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-      {children}
-    </KeyboardAvoidingView>
   );
 }

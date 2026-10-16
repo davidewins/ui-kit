@@ -26,6 +26,17 @@ export default function States() {
         <GlassButton label="Success toast" tone="neutral" onPress={() => Toast.success("Saved")} />
         <GlassButton label="Error toast" tone="neutral" onPress={() => Toast.error("Couldn't save that")} />
         <GlassButton label="Info toast" tone="neutral" onPress={() => Toast.info("Order picked up")} />
+        <GlassButton
+          label="Long toast"
+          tone="neutral"
+          onPress={() =>
+            Toast.show({
+              type: "warn",
+              text1: "Your payout is on hold until Stripe confirms your bank details",
+              text2: "We've emailed you the two documents they need. It usually clears within a working day once they're uploaded.",
+            })
+          }
+        />
       </View>
     </ScrollView>
   );

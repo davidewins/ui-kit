@@ -34,10 +34,20 @@ export const LoadErrorState: FC<LoadErrorStateProps> = ({
       >
         <Ionicons name="cloud-offline-outline" size={32} color={colors.muted} />
       </View>
-      <Text weight="bold" className="text-xl text-center mb-1.5">
+      {/* Same title and body type as EmptyState. */}
+      <Text
+        weight="semibold"
+        className="text-center"
+        maxFontSizeMultiplier={1.4}
+        style={{ fontSize: 17, letterSpacing: -0.3, color: colors.text, maxWidth: 280 }}
+      >
         {title}
       </Text>
-      <Text className="text-base text-muted text-center mb-8" style={{ lineHeight: 22 }}>
+      <Text
+        className="text-center mt-1.5 mb-8"
+        maxFontSizeMultiplier={1.4}
+        style={{ fontSize: 14, lineHeight: 20, color: colors.muted, maxWidth: 280 }}
+      >
         {message}
       </Text>
       <View className="w-full" style={{ maxWidth: 320, gap: 4 }}>

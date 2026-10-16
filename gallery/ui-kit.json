@@ -1,6 +1,7 @@
 {
   "kit": "native",
   "files": [
+    "src/assets/sounds/toast.wav",
     "src/components/CustomToast.tsx",
     "src/components/GlassSurface.tsx",
     "src/components/LoadErrorState.tsx",

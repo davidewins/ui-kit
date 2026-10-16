@@ -55,7 +55,7 @@ export interface EmptyStateProps {
   body?: string;
   art?: EmptyStateArt;
   action?: EmptyStateAction;
-  /** A quiet text link under the pill, e.g. "Clear filters". */
+  /** A second action, e.g. "Clear filters": a filled grey pill (never a ghost link). */
   secondary?: EmptyStateAction;
   /** `fill` centres in the available space; `inline` sits in a section. */
   layout?: "fill" | "inline";
@@ -106,28 +106,23 @@ export function EmptyState({
       ) : null}
 
       {action ? <EmptyStatePill {...action} /> : null}
-      {secondary ? (
-        <Pressable
-          onPress={() => {
-            Haptics.selectionAsync().catch(() => {});
-            secondary.onPress();
-          }}
-          hitSlop={10}
-          accessibilityRole="button"
-          style={({ pressed }) => ({ marginTop: action ? 14 : 18, opacity: pressed ? 0.5 : 1 })}
-        >
-          <Text weight="medium" style={{ fontSize: 14, color: colors.muted }}>
-            {secondary.label}
-          </Text>
-        </Pressable>
-      ) : null}
+      {secondary ? <EmptyStatePill {...secondary} tone="secondary" stacked={!!action} /> : null}
       {children}
     </View>
   );
 }
 
-function EmptyStatePill({ label, onPress, plus }: EmptyStateAction) {
+// Secondary uses InsetShell's secondary CTA colours (surface fill + border).
+function EmptyStatePill({
+  label,
+  onPress,
+  plus,
+  tone = "primary",
+  stacked = false,
+}: EmptyStateAction & { tone?: "primary" | "secondary"; stacked?: boolean }) {
   const colors = useThemeColors();
+  const secondary = tone === "secondary";
+  const labelColor = secondary ? colors.text : colors.primaryText;
   return (
     <Pressable
       onPress={() => {
@@ -137,12 +132,14 @@ function EmptyStatePill({ label, onPress, plus }: EmptyStateAction) {
       accessibilityRole="button"
       accessibilityLabel={label}
       style={({ pressed }) => ({
-        marginTop: 20,
+        marginTop: stacked ? 10 : 20,
         height: 38,
         paddingHorizontal: 18,
         borderRadius: 19,
         borderCurve: "continuous",
-        backgroundColor: colors.primary,
+        backgroundColor: secondary ? colors.surface : colors.primary,
+        borderWidth: secondary ? 1 : 0,
+        borderColor: colors.border,
         flexDirection: "row",
         alignItems: "center",
         gap: 6,
@@ -150,8 +147,8 @@ function EmptyStatePill({ label, onPress, plus }: EmptyStateAction) {
         transform: [{ scale: pressed ? 0.98 : 1 }],
       })}
     >
-      {plus ? <Plus size={15} strokeWidth={2.4} color={colors.primaryText} /> : null}
-      <Text weight="semibold" style={{ fontSize: 14, color: colors.primaryText }}>
+      {plus ? <Plus size={15} strokeWidth={2.4} color={labelColor} /> : null}
+      <Text weight="semibold" style={{ fontSize: 14, color: labelColor }}>
         {label}
       </Text>
     </Pressable>

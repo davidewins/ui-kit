@@ -21,10 +21,14 @@ function header(kitPath) {
   return kitPath.endsWith(".css") ? `/* ${msg} */\n` : `// ${msg}\n`;
 }
 
+// Text files get the header line; binary assets (sounds, images) are copied as-is.
+const TEXT = /\.(tsx?|jsx?|css|json|md)$/;
+
 function kitContent(kind, file) {
   const kitPath = `${kind}/files/${file}`;
   const src = join(KIT, kitPath);
   if (!existsSync(src)) throw new Error(`not in kit: ${kitPath}`);
+  if (!TEXT.test(file)) return readFileSync(src);
   return header(kitPath) + readFileSync(src, "utf8");
 }
 
@@ -96,7 +100,7 @@ function check(app) {
   for (const file of cfg.files) {
     const dest = join(app, file);
     if (!existsSync(dest)) drift.push(`missing  ${file}`);
-    else if (readFileSync(dest, "utf8") !== kitContent(kind, file)) drift.push(`differs  ${file}`);
+    else if (!readFileSync(dest).equals(Buffer.from(kitContent(kind, file)))) drift.push(`differs  ${file}`);
   }
   if (drift.length) {
     console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nMove the change into ui-kit, then sync.`);
