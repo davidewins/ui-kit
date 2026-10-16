@@ -13,6 +13,8 @@ Rules and screen recipes: [Native UI spec](https://linear.app/takeoversoftware/d
 | `native/files/` | Canonical native files, at the same path they live in an app (`src/components/ui/SettingsRow.tsx` etc.), so imports work unchanged |
 | `native/seeds/` | App-owned files the kit depends on, copied once when missing (`useFontFamily`: Geist only) |
 | `bin/ui-kit.mjs` | `tokens`, `sync`, `check` |
+| `recipes/` | Reference screens copied in by hand, never synced (`recipes/auth`: Welcome / Email / Verify OTP + root session gate, from VOID) |
+| `server/` | Read-only hq-node API patterns (auth middleware, rate limit, route, handler, error shapes) for tkvr-node / creator-platform |
 | `gallery/` | Expo app showing every kit component, light and dark. Runs in Expo Go: `cd gallery && npm install && npx expo start`, scan the QR |
 
 ## Use
@@ -42,6 +44,22 @@ The kit imports these but does not ship them:
 * `Button` is VOID's: primary, secondary, danger. No ghost or outline buttons, ever
 * Tokens: light page `#fff` and grouped surface `#f5f5f5` (VOID, David 15 Oct); amber warning; old names (`danger`, `textMuted`, `primaryText`, `surfaceElevated`, ...) kept as aliases
 * Only edit vs source: `Text` imports `FontWeight` from `@/hooks/useFontFamily`
+
+## Data layer (16 Oct 2026)
+
+| Kit file | Source | Synced into | Notes |
+| -- | -- | -- | -- |
+| `src/lib/utils/safeExecute.ts` | SELLERS (`a6e0f27`: no NetInfo / getSession pre-flights, 50-300ms per call) | RIDERS, VOID, SELLERS | `requiresNetwork` / `requiresAuth` kept on the type, no longer block. No call site read the pre-flight error codes |
+| `src/hooks/useSafeQuery.ts`, `useSafeExecute.ts` | SELLERS (VOID + `useQuery<TData, Error>` + usage docs) | RIDERS, VOID, SELLERS | |
+| `src/hooks/useSafeMutation.ts` | RIDERS (VOID's zod `variablesSchema` + `onError` context, zod 3 and 4 safe `.issues`) + SELLERS `?? ""` guard and docs | RIDERS, VOID, SELLERS | |
+| `src/lib/Logger.ts` | VOID (`unknown[]` args) | RIDERS, VOID, SELLERS, demo | |
+| `src/lib/queryClient.ts` | VOID (5 min stale, retry 2, helpers) | RIDERS, VOID, demo | RIDERS' foreground refresh moved to app-owned `src/lib/riderStatus.ts` |
+| `src/lib/query.ts` | ADMIN (no retry on 4xx, 429 backoff, 30s stale) | ADMIN, TKVR | Different retry policy from `queryClient.ts`; merging the two changes refetch behaviour, so it's a product call |
+| `src/lib/supabase.ts` | VOID (= RIDERS), supabase-js 2.89.0 | RIDERS, VOID | SELLERS (`detectSessionInUrl: false` on web), TKVR (own MMKV id + share extension), ADMIN and demo (untyped client) stay app-owned |
+
+SELLERS keeps its own `queryClient.ts` (signs out on `SESSION_REVOKED`, react-query defaults).
+
+Database types are **not** in the kit. `davidewins/takeover-db` generates `types/database.ts` and its CI recommits it after every migration, so it is already the one source; a kit copy would be a second hand-bumped mirror. Every app that holds `src/types/index.ts` (RIDERS, VOID, SELLERS, demo, ADMIN) has `npm run sync-types`, which fetches it. TKVR uses its own `src/lib/database.types.ts`.
 
 ## Synced
 
