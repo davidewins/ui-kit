@@ -55,7 +55,11 @@ export default function RootLayout() {
             <Stack.Screen name="buttons" options={{ title: "Buttons" }} />
             <Stack.Screen name="rows" options={{ title: "Settings rows" }} />
             <Stack.Screen name="inputs" options={{ title: "Inputs" }} />
-            <Stack.Screen name="states" options={{ title: "Empty, error, loading" }} />
+            <Stack.Screen name="states" options={{ title: "Badges and toasts" }} />
+            <Stack.Screen name="empty" options={{ title: "Empty state" }} />
+            <Stack.Screen name="empty-icon" options={{ title: "Empty state, icon" }} />
+            <Stack.Screen name="error" options={{ title: "Error" }} />
+            <Stack.Screen name="loading" options={{ title: "Loading" }} />
             <Stack.Screen name="surfaces" options={{ title: "Surfaces" }} />
             <Stack.Screen name="footer" options={{ title: "Sticky footer" }} />
             <Stack.Screen name="compare-select" options={{ title: "Select rows" }} />

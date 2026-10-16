@@ -1,11 +1,14 @@
-// One-tap select row used inside a GlassPanel. Icon + label + optional
-// description + trailing radio circle that fills with a tint check when
-// selected. Disabled + comingSoon variants supported.
+// One-tap select row inside an inset-grouped panel. Icon + label + optional
+// description + trailing circle that fills with a check when selected.
+// RIDERS' version (spacing, note line, screen-reader labels) plus SELLERS'
+// comingSoon tag: the one SelectRow for both onboarding flows.
 
-import { Pressable, Text, View } from "@/components/ui";
+import { Text } from "@/components/ui/Text";
+import { View } from "@/components/ui/View";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { Check, type LucideIcon } from "lucide-react-native";
+import { Pressable } from "react-native";
 
 type Props = {
   icon: LucideIcon;
@@ -15,6 +18,8 @@ type Props = {
   disabled?: boolean;
   comingSoon?: boolean;
   isLast?: boolean;
+  /** Small muted line under the description - e.g. extra documents required. */
+  note?: string;
   onPress?: () => void;
 };
 
@@ -26,6 +31,7 @@ export function SelectRow({
   disabled = false,
   comingSoon = false,
   isLast = false,
+  note,
   onPress,
 }: Props) {
   const colors = useThemeColors();
@@ -37,7 +43,7 @@ export function SelectRow({
         alignItems: "center",
         gap: 12,
         paddingHorizontal: 14,
-        paddingVertical: 11,
+        paddingVertical: 12,
         opacity: disabled ? 0.45 : 1,
       }}
     >
@@ -54,12 +60,10 @@ export function SelectRow({
       >
         <Icon size={16} strokeWidth={1.8} color={colors.tint} />
       </View>
+
       <View style={{ flex: 1 }}>
-        <View className="flex-row items-center" style={{ gap: 6 }}>
-          <Text
-            weight="semibold"
-            className="text-[14px] tracking-tight text-text"
-          >
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <Text weight="semibold" style={{ fontSize: 14, color: colors.text }}>
             {label}
           </Text>
           {comingSoon && (
@@ -84,12 +88,32 @@ export function SelectRow({
             </View>
           )}
         </View>
-        {description && (
-          <Text className="text-[12px] text-muted leading-relaxed mt-0.5">
+        {description ? (
+          <Text
+            style={{
+              fontSize: 12,
+              lineHeight: 17,
+              color: colors.muted,
+              marginTop: 2,
+            }}
+          >
             {description}
           </Text>
-        )}
+        ) : null}
+        {note ? (
+          <Text
+            style={{
+              fontSize: 11,
+              lineHeight: 16,
+              color: colors.muted,
+              marginTop: 4,
+            }}
+          >
+            {note}
+          </Text>
+        ) : null}
       </View>
+
       {selected ? (
         <View
           style={{
@@ -127,6 +151,11 @@ export function SelectRow({
             Haptics.selectionAsync().catch(() => {});
             onPress?.();
           }}
+          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+          accessibilityRole="radio"
+          accessibilityLabel={label}
+          accessibilityHint={description}
+          accessibilityState={{ checked: selected, disabled }}
         >
           {inner}
         </Pressable>

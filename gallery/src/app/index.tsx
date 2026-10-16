@@ -8,11 +8,14 @@ import { useState } from "react";
 import {
   CircleAlert,
   Columns2,
+  Inbox,
   Layers,
   List,
+  Loader,
   MousePointerClick,
   Palette,
   PanelBottom,
+  Tag,
   TextCursorInput,
   Type,
 } from "lucide-react-native";
@@ -56,15 +59,19 @@ export default function Index() {
         <SettingsRow label="Buttons" Icon={MousePointerClick} href="/buttons" navigates />
         <SettingsRow label="Settings rows" Icon={List} href="/rows" navigates />
         <SettingsRow label="Inputs" Icon={TextCursorInput} href="/inputs" navigates />
-        <SettingsRow label="Empty, error, loading" Icon={CircleAlert} href="/states" navigates />
+        <SettingsRow label="Empty state" Icon={Inbox} href="/empty" navigates />
+        <SettingsRow label="Empty state, icon" Icon={Inbox} href="/empty-icon" navigates />
+        <SettingsRow label="Error" Icon={CircleAlert} href="/error" navigates />
+        <SettingsRow label="Loading" Icon={Loader} href="/loading" navigates />
+        <SettingsRow label="Badges and toasts" Icon={Tag} href="/states" navigates />
         <SettingsRow label="Surfaces" Icon={Layers} href="/surfaces" navigates />
         <SettingsRow label="Sticky footer" Icon={PanelBottom} href="/footer" navigates />
       </SettingsGroup>
 
       <SectionTitle inset={32}>Compare (every version in the apps)</SectionTitle>
       <SettingsGroup>
-        <SettingsRow label="Select rows" Icon={Columns2} href="/compare-select" navigates trailing="7" />
-        <SettingsRow label="Status badges" Icon={Columns2} href="/compare-status" navigates trailing="7" />
+        <SettingsRow label="Select rows" Icon={Columns2} href="/compare-select" navigates trailing="6" />
+        <SettingsRow label="Status badges" Icon={Columns2} href="/compare-status" navigates trailing="4" />
       </SettingsGroup>
     </ScrollView>
   );

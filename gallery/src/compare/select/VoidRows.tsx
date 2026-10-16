@@ -1,5 +1,6 @@
 // Inline rows lifted out of VOID screens, markup unchanged:
-// - VoidPickerRow: src/app/(protected)/config/dropoff-options.tsx (map body)
+// - VoidPickerRow: src/app/(protected)/config/dropoff-options.tsx (map body),
+//   plus an optional `leading` icon placed the way VoidOptionRow places it
 // - VoidOptionRow: src/app/(protected)/(tabs)/profile/appearance/index.tsx (OptionRow)
 // - VoidSourceChip: src/components/onboarding/AcquisitionSourcePicker.tsx (SourceChip)
 import { PressableScale } from "@/components/PressableScale";
@@ -17,12 +18,14 @@ export function VoidPickerRow({
   isSelected,
   isLast,
   onPress,
+  leading,
 }: {
   label: string;
   description: string;
   isSelected: boolean;
   isLast: boolean;
   onPress: () => void;
+  leading?: React.ReactNode;
 }) {
   const colors = useThemeColors();
   return (
@@ -40,9 +43,11 @@ export function VoidPickerRow({
           alignItems: "center",
           paddingHorizontal: 16,
           paddingVertical: 14,
+          gap: 12,
           backgroundColor: pressed ? colors.secondaryBackground : "transparent",
         })}
       >
+        {leading}
         <View className="flex-1">
           <Text weight={isSelected ? "semibold" : "medium"}>{label}</Text>
           <Text weight="medium" className="text-sm text-muted mt-0.5">
@@ -52,7 +57,7 @@ export function VoidPickerRow({
         {isSelected && <Check size={20} color={colors.tint} strokeWidth={2.5} />}
       </Pressable>
       {!isLast && (
-        <View style={{ height: 1, backgroundColor: colors.separator, marginLeft: 16 }} />
+        <View style={{ height: 1, backgroundColor: colors.separator, marginLeft: leading ? 48 : 16 }} />
       )}
     </React.Fragment>
   );

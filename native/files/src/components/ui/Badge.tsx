@@ -1,4 +1,5 @@
 import React from "react";
+import { useColorScheme } from "react-native";
 import { useCSSVariable } from "uniwind";
 import { Text } from "./Text";
 import { View } from "./View";
@@ -49,10 +50,25 @@ export const Badge: React.FC<BadgeProps> = ({
       break;
   }
 
-  const bgColor = useCSSVariable(bgVar) as string;
-  const textColor = useCSSVariable(textVar) as string;
+  // Light mode is TKVR's badge: white label on the saturated status fill,
+  // grey for default and info. Dark mode keeps the tints above. (David, 15 Oct)
+  const solidVar =
+    variant === "success"
+      ? "--color-success"
+      : variant === "error"
+        ? "--color-error"
+        : variant === "warning"
+          ? "--color-warning"
+          : "--color-muted";
+  const light = useColorScheme() !== "dark";
+
+  const tintBg = useCSSVariable(bgVar) as string;
+  const tintText = useCSSVariable(textVar) as string;
+  const solid = useCSSVariable(solidVar) as string;
   const border = useCSSVariable(borderVar) as string;
-  const borderColor = variant === "default" ? border : "transparent";
+  const bgColor = light ? solid : tintBg;
+  const textColor = light ? "#FFFFFF" : tintText;
+  const borderColor = !light && variant === "default" ? border : "transparent";
 
   return (
     <View

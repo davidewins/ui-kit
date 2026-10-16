@@ -1,47 +1,15 @@
-import { Badge, SkeletonList, View } from "@/components/ui";
-import { LoadErrorState } from "@/components/LoadErrorState";
+import { Badge, View } from "@/components/ui";
 import { CountBadge } from "@/components/ui/CountBadge";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SkeletonBlock } from "@/components/ui/SkeletonBlock";
-import { Inbox } from "lucide-react-native";
 import { ScrollView } from "react-native";
 import { Toast } from "toastify-react-native";
-
-const noop = () => {};
 
 export default function States() {
   const pad = { paddingHorizontal: 20, gap: 12 };
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 48 }}>
-      <SectionTitle>EmptyState, Thiings image</SectionTitle>
-      <EmptyState
-        image={require("../assets/images/empty/delivery-truck.png")}
-        title="No deliveries yet"
-        message="New orders show up here"
-        actionLabel="Go online"
-        onAction={noop}
-        fullScreen={false}
-      />
-
-      <SectionTitle>EmptyState, icon</SectionTitle>
-      <EmptyState icon={Inbox} title="No messages yet" message="Start a chat to see it here" fullScreen={false} />
-
-      <SectionTitle>LoadErrorState</SectionTitle>
-      <View style={{ height: 320 }}>
-        <LoadErrorState onRetry={noop} />
-      </View>
-
-      <SectionTitle>Skeleton</SectionTitle>
-      <View style={pad}>
-        <SkeletonBlock height={20} width="60%" />
-        <SkeletonBlock height={14} />
-        <SkeletonBlock height={14} width="80%" />
-      </View>
-      <SkeletonList count={2} />
-
       <SectionTitle>Badges</SectionTitle>
       <View style={[pad, { flexDirection: "row", flexWrap: "wrap", alignItems: "center" }]}>
         <Badge>Default</Badge>

@@ -1,4 +1,4 @@
-// Verbatim copy of RIDERS src/components/onboarding/CheckRow.tsx.
+// ui-kit: copy of davidewins/ui-kit native/files/src/components/onboarding/CheckRow.tsx. Edit it there and sync; local edits fail ui-kit:check.
 // Confirmation checkbox row for declaration lists (insurance self-cert, TOS).
 // Same inset-grouped row geometry as SelectRow, with a square-ish tick target
 // on the left because the user is agreeing to a statement, not picking one of
@@ -61,6 +61,7 @@ export function CheckRow({ checked, onPress, text, isLast = false }: Props) {
             ) : null}
           </View>
           <Text
+            weight="medium"
             style={{ flex: 1, fontSize: 13, lineHeight: 19, color: colors.text }}
           >
             {text}

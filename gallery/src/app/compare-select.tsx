@@ -1,12 +1,12 @@
+import { GlassSurface } from "@/components/GlassSurface";
 import { View } from "@/components/ui";
+import { CheckRow } from "@/components/onboarding/CheckRow";
 import { SelectRow } from "@/components/onboarding/SelectRow";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { CheckRow } from "@/compare/select/RidersCheckRow";
-import { LargeMultiSelect } from "@/compare/select/RidersLargeMultiSelect";
-import { RidersSelectRow } from "@/compare/select/RidersSelectRow";
 import { VoidOptionRow, VoidPickerRow, VoidSourceChip } from "@/compare/select/VoidRows";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { Image } from "expo-image";
 import { Bike, Car, Footprints } from "lucide-react-native";
 import { useState } from "react";
 import { ScrollView } from "react-native";
@@ -17,28 +17,34 @@ const OPTIONS = [
   { id: "foot", label: "On foot", description: "City centre only", icon: Footprints, ion: "walk-outline" as const },
 ];
 
-// Every single-choice row in the six apps, same data, so they can be compared.
+const GLASS = { marginHorizontal: 16, borderRadius: 24, borderCurve: "continuous" as const, overflow: "hidden" as const };
+
+// The single-choice rows left after David's 15 Oct pass, same data in each.
 export default function CompareSelect() {
   const colors = useThemeColors();
   const [sel, setSel] = useState("bike");
-  const [multi, setMulti] = useState<string[]>(["bike"]);
   const [agreed, setAgreed] = useState([true, false]);
+  const icon = (o: (typeof OPTIONS)[number]) => <o.icon size={20} strokeWidth={1.8} color={colors.muted} />;
+
+  const selectRows = OPTIONS.map((o, i) => (
+    <SelectRow key={o.id} icon={o.icon} label={o.label} description={o.description} selected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} />
+  ));
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 48 }}>
-      <SectionTitle inset={32}>A. SELLERS SelectRow (kit now)</SectionTitle>
-      <SettingsGroup>
-        {OPTIONS.map((o, i) => (
-          <SelectRow key={o.id} icon={o.icon} label={o.label} description={o.description} selected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} />
-        ))}
-      </SettingsGroup>
+      <SectionTitle>A. SelectRow (SELLERS + RIDERS merged) on Liquid Glass</SectionTitle>
+      <GlassSurface style={GLASS}>{selectRows}</GlassSurface>
 
-      <SectionTitle inset={32}>B. RIDERS SelectRow (onboarding)</SectionTitle>
-      <SettingsGroup>
-        {OPTIONS.map((o, i) => (
-          <RidersSelectRow key={o.id} icon={o.icon} label={o.label} description={o.description} selected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} />
-        ))}
-      </SettingsGroup>
+      <SectionTitle>A. Same, glass over a photo</SectionTitle>
+      <View style={{ marginHorizontal: 16, borderRadius: 24, borderCurve: "continuous", overflow: "hidden" }}>
+        <Image source={require("../assets/images/glass-bg.jpeg")} style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} contentFit="cover" />
+        <View style={{ padding: 16 }}>
+          <GlassSurface style={{ borderRadius: 20, borderCurve: "continuous", overflow: "hidden" }}>{selectRows}</GlassSurface>
+        </View>
+      </View>
+
+      <SectionTitle inset={32}>A. Same, on the grey group (no glass)</SectionTitle>
+      <SettingsGroup>{selectRows}</SettingsGroup>
 
       <SectionTitle inset={32}>C. VOID picker row (dropoff options)</SectionTitle>
       <SettingsGroup>
@@ -47,28 +53,19 @@ export default function CompareSelect() {
         ))}
       </SettingsGroup>
 
-      <SectionTitle inset={32}>D. VOID option row with icon (appearance)</SectionTitle>
+      <SectionTitle inset={32}>C2. VOID picker row with an icon</SectionTitle>
       <SettingsGroup>
         {OPTIONS.map((o, i) => (
-          <VoidOptionRow
-            key={o.id}
-            label={o.label}
-            selected={sel === o.id}
-            isLast={i === OPTIONS.length - 1}
-            onPress={() => setSel(o.id)}
-            leading={<o.icon size={20} strokeWidth={1.8} color={colors.muted} />}
-          />
+          <VoidPickerRow key={o.id} label={o.label} description={o.description} isSelected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} leading={icon(o)} />
         ))}
       </SettingsGroup>
 
-      <SectionTitle>E. RIDERS LargeMultiSelect (cards)</SectionTitle>
-      <View style={{ paddingHorizontal: 16 }}>
-        <LargeMultiSelect
-          options={OPTIONS.map((o) => ({ id: o.id, title: o.label, description: o.description, icon: o.icon }))}
-          selectedIds={multi}
-          onSelectedIdsChange={setMulti}
-        />
-      </View>
+      <SectionTitle inset={32}>D. VOID option row with icon (appearance)</SectionTitle>
+      <SettingsGroup>
+        {OPTIONS.map((o, i) => (
+          <VoidOptionRow key={o.id} label={o.label} selected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} leading={icon(o)} />
+        ))}
+      </SettingsGroup>
 
       <SectionTitle>F. VOID chips (acquisition source)</SectionTitle>
       <View style={{ paddingHorizontal: 16, flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
@@ -77,7 +74,7 @@ export default function CompareSelect() {
         ))}
       </View>
 
-      <SectionTitle inset={32}>G. RIDERS CheckRow (agree to statements)</SectionTitle>
+      <SectionTitle inset={32}>G. CheckRow (agree to statements)</SectionTitle>
       <SettingsGroup>
         {["I have valid insurance for deliveries", "I'm over 18 and allowed to work in Ireland"].map((t, i) => (
           <CheckRow key={t} text={t} checked={agreed[i]} isLast={i === 1} onPress={() => setAgreed((a) => a.map((v, j) => (j === i ? !v : v)))} />
