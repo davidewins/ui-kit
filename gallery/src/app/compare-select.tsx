@@ -3,8 +3,10 @@ import { View } from "@/components/ui";
 import { CheckRow } from "@/components/onboarding/CheckRow";
 import { SelectRow } from "@/components/onboarding/SelectRow";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { GlassGroup } from "@/components/ui/GlassGroup";
 import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { VoidOptionRow, VoidPickerRow, VoidSourceChip } from "@/compare/select/VoidRows";
+import { Chip } from "@/components/ui/Chip";
+import { VoidOptionRow, VoidPickerRow } from "@/compare/select/VoidRows";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Image } from "expo-image";
 import { Bike, Car, Footprints } from "lucide-react-native";
@@ -12,9 +14,9 @@ import { useState } from "react";
 import { ScrollView } from "react-native";
 
 const OPTIONS = [
-  { id: "bike", label: "Bicycle", description: "No licence needed", icon: Bike, ion: "bicycle-outline" as const },
-  { id: "car", label: "Car", description: "Licence and insurance", icon: Car, ion: "car-outline" as const },
-  { id: "foot", label: "On foot", description: "City centre only", icon: Footprints, ion: "walk-outline" as const },
+  { id: "bike", label: "Bicycle", description: "No licence needed", icon: Bike },
+  { id: "car", label: "Car", description: "Licence and insurance", icon: Car },
+  { id: "foot", label: "On foot", description: "City centre only", icon: Footprints },
 ];
 
 const GLASS = { marginHorizontal: 16, borderRadius: 24, borderCurve: "continuous" as const, overflow: "hidden" as const };
@@ -43,8 +45,8 @@ export default function CompareSelect() {
         </View>
       </View>
 
-      <SectionTitle inset={32}>A. Same, on the grey group (no glass)</SectionTitle>
-      <SettingsGroup>{selectRows}</SettingsGroup>
+      <SectionTitle>A. GlassGroup (glass; grey card on phones without it)</SectionTitle>
+      <GlassGroup style={{ marginHorizontal: 16 }}>{selectRows}</GlassGroup>
 
       <SectionTitle inset={32}>C. VOID picker row (dropoff options)</SectionTitle>
       <SettingsGroup>
@@ -67,11 +69,21 @@ export default function CompareSelect() {
         ))}
       </SettingsGroup>
 
-      <SectionTitle>F. VOID chips (acquisition source)</SectionTitle>
+      <SectionTitle>F. Chip (kit): glass, solid when selected</SectionTitle>
       <View style={{ paddingHorizontal: 16, flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
         {OPTIONS.map((o) => (
-          <VoidSourceChip key={o.id} label={o.label} icon={o.ion} active={sel === o.id} disabled={false} onPress={() => setSel(o.id)} />
+          <Chip key={o.id} label={o.label} icon={o.icon} selected={sel === o.id} onPress={() => setSel(o.id)} />
         ))}
+      </View>
+
+      <SectionTitle>F. Same chips over a photo</SectionTitle>
+      <View style={{ marginHorizontal: 16, borderRadius: 24, borderCurve: "continuous", overflow: "hidden" }}>
+        <Image source={require("../assets/images/glass-bg.jpeg")} style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} contentFit="cover" />
+        <View style={{ padding: 16, flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+          {OPTIONS.map((o) => (
+            <Chip key={o.id} label={o.label} icon={o.icon} selected={sel === o.id} onPress={() => setSel(o.id)} />
+          ))}
+        </View>
       </View>
 
       <SectionTitle inset={32}>G. CheckRow (agree to statements)</SectionTitle>

@@ -1,5 +1,5 @@
 import "../globals.css";
-import { toastConfig } from "@/components/CustomToast";
+import { Toaster } from "@/components/Toaster";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useFonts } from "expo-font";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
@@ -9,7 +9,6 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import ToastManager from "toastify-react-native";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -66,6 +65,13 @@ export default function RootLayout() {
             <Stack.Screen name="compare-select" options={{ title: "Select rows" }} />
             <Stack.Screen name="compare-status" options={{ title: "Status badges" }} />
             <Stack.Screen name="compare-buttons" options={{ title: "Buttons" }} />
+            <Stack.Screen name="compare-sounds" options={{ title: "Toast sounds" }} />
+            <Stack.Screen name="glass" options={{ title: "Liquid Glass" }} />
+            <Stack.Screen name="swiftui" options={{ title: "SwiftUI controls" }} />
+            <Stack.Screen name="examples/list" options={{ title: "Orders", headerLargeTitle: true }} />
+            <Stack.Screen name="examples/create" options={{ title: "New product", presentation: "modal", headerTransparent: false }} />
+            <Stack.Screen name="examples/edit" options={{ title: "Edit product" }} />
+            <Stack.Screen name="examples/detail" options={{ title: "" }} />
             <Stack.Screen
               name="(protected)/profile/personal-info/country-code"
               options={{ presentation: "modal", headerTitle: "Country Code", headerTransparent: false }}
@@ -73,16 +79,7 @@ export default function RootLayout() {
           </Stack>
         </ThemeProvider>
         <StatusBar style="auto" />
-        <ToastManager
-          config={toastConfig}
-          useModal={false}
-          duration={3500}
-          position="top"
-          topOffset={0}
-          minHeight={0}
-          showProgressBar={false}
-          showCloseIcon={false}
-        />
+        <Toaster />
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

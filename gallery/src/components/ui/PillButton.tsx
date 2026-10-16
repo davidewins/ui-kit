@@ -1,10 +1,12 @@
-// Verbatim copy of TKVR src/components/ui/Button.tsx (export renamed).
+// ui-kit: copy of davidewins/ui-kit native/files/src/components/ui/PillButton.tsx. Edit it there and sync; local edits fail ui-kit:check.
+// TKVR's Button (David, 16 Oct: keep it in the kit). Solid pills, clear Liquid
+// Glass for secondary, a haptic per variant. Use Button for the spec's default.
 import React from "react";
-import { Pressable, ActivityIndicator, type ViewStyle } from "react-native";
+import { Pressable, ActivityIndicator, View, type ViewStyle } from "react-native";
 import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import { Text } from "@/components/ui/Text";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { haptic as fireHaptic, type HapticFeel } from "@/compare/buttons/tkvrHaptics";
+import { haptic as fireHaptic, type HapticFeel } from "@/lib/haptics";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "danger";
 type ButtonSize = "xs" | "sm" | "md" | "lg";
@@ -40,7 +42,7 @@ const PADX: Record<ButtonSize, number> = { xs: 14, sm: 16, md: 22, lg: 24 };
 // engine as the glass cards. Primary/danger carry a tint; secondary/outline are
 // clear glass. Falls back to a solid token pill where glass isn't available.
 // Replaces the @expo/ui SwiftUI button that rendered a blank white-on-white pill.
-export const TkvrButton: React.FC<ButtonProps> = ({
+export const PillButton: React.FC<ButtonProps> = ({
   onPress,
   variant = "primary",
   size = "md",
@@ -116,14 +118,21 @@ export const TkvrButton: React.FC<ButtonProps> = ({
   // white on dark.
   if (variant === "secondary" && isLiquidGlassAvailable()) {
     return (
-      <Pressable onPress={handlePress} disabled={isDisabled} style={wrap}>
+      // Spec 1.10: no opacity on a GlassView or its ancestors (expo#41024), so
+      // pressed / disabled dim the label row inside the glass instead.
+      <Pressable onPress={handlePress} disabled={isDisabled} style={{ ...wrap, opacity: 1 }}>
         {({ pressed }) => (
-          <GlassView
-            glassEffectStyle="regular"
-            isInteractive
-            style={[dims, edge, { opacity: pressed ? 0.85 : 1 }]}
-          >
-            {inner}
+          <GlassView glassEffectStyle="regular" isInteractive style={[dims, edge]}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 8,
+                opacity: isDisabled ? 0.65 : pressed ? 0.85 : 1,
+              }}
+            >
+              {inner}
+            </View>
           </GlassView>
         )}
       </Pressable>
@@ -135,7 +144,8 @@ export const TkvrButton: React.FC<ButtonProps> = ({
     variant === "primary" ? c.primary
     : variant === "danger" ? c.danger
     : variant === "secondary" ? c.surface
-    : "transparent";
+    // outline is a filled grey pill with its border, never a see-through ghost.
+    : c.surface;
   return (
     <Pressable
       onPress={handlePress}

@@ -3,7 +3,7 @@ import { CountBadge } from "@/components/ui/CountBadge";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { ScrollView } from "react-native";
-import { Toast } from "toastify-react-native";
+import { Toast } from "@/lib/toast";
 
 export default function States() {
   const pad = { paddingHorizontal: 20, gap: 12 };
@@ -26,6 +26,16 @@ export default function States() {
         <GlassButton label="Success toast" tone="neutral" onPress={() => Toast.success("Saved")} />
         <GlassButton label="Error toast" tone="neutral" onPress={() => Toast.error("Couldn't save that")} />
         <GlassButton label="Info toast" tone="neutral" onPress={() => Toast.info("Order picked up")} />
+        <GlassButton label="Warning toast" tone="neutral" onPress={() => Toast.warn("Card expires next month")} />
+        <GlassButton
+          label="Three in a row (stack)"
+          tone="neutral"
+          onPress={() => {
+            Toast.success("Saved");
+            setTimeout(() => Toast.info("Synced to the web"), 350);
+            setTimeout(() => Toast.error("One photo didn't upload"), 700);
+          }}
+        />
         <GlassButton
           label="Long toast"
           tone="neutral"

@@ -61,6 +61,13 @@ SELLERS keeps its own `queryClient.ts` (signs out on `SESSION_REVOKED`, react-qu
 
 Database types are **not** in the kit. `davidewins/takeover-db` generates `types/database.ts` and its CI recommits it after every migration, so it is already the one source; a kit copy would be a second hand-bumped mirror. Every app that holds `src/types/index.ts` (RIDERS, VOID, SELLERS, demo, ADMIN) has `npm run sync-types`, which fetches it. TKVR uses its own `src/lib/database.types.ts`.
 
+## Added 16 Oct (round 6)
+
+* Toasts: `lib/toast.tsx` (same `Toast.success/error/info/warn` calls as toastify), `components/Toaster.tsx` (sonner-native: top, stacks of 3, swipe up, above modals) and `components/ToastCard.tsx` (interactive Liquid Glass with a solid backing, press scale + light haptic, unlimited lines). Each toast fires one haptic for its kind plus a sound (`assets/sounds/toast-*.wav`, marimba set; gallery Compare → Toast sounds has the other two sets).
+* `Button` is now SELLERS' (GlassButton spec: primary, secondary glass, outline filled, danger). `PillButton` is TKVR's (solid pills, clear glass secondary, haptic per variant) with outline filled, never see-through. VOID's old Button is gone.
+* `GlassGroup`: container for SelectRows (glass on iOS 26, grey grouped card elsewhere). `Chip`: glass chip, solid tint when selected. `HeaderIconButton`: spec §3.1 header button from SELLERS Today.
+* Gallery: Liquid Glass page, SwiftUI controls page (@expo/ui), example pages (list, create modal, edit, detail with sticky footer).
+
 ## Synced
 
 | App | Files | Still app-owned (different API, converge next) |

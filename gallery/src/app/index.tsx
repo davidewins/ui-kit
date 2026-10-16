@@ -69,10 +69,25 @@ export default function Index() {
         <SettingsRow label="Sticky footer" Icon={PanelBottom} href="/footer" navigates />
       </SettingsGroup>
 
+      <SectionTitle inset={32}>Native and Liquid Glass</SectionTitle>
+      <SettingsGroup>
+        <SettingsRow label="Liquid Glass" Icon={Layers} href="/glass" navigates />
+        <SettingsRow label="SwiftUI controls (@expo/ui)" Icon={MousePointerClick} href="/swiftui" navigates />
+      </SettingsGroup>
+
+      <SectionTitle inset={32}>Example pages</SectionTitle>
+      <SettingsGroup>
+        <SettingsRow label="List (orders)" Icon={List} href="/examples/list" navigates />
+        <SettingsRow label="Create (modal)" Icon={PanelBottom} href="/examples/create" navigates />
+        <SettingsRow label="Edit" Icon={TextCursorInput} href="/examples/edit" navigates />
+        <SettingsRow label="Detail with sticky footer" Icon={Type} href="/examples/detail" navigates />
+      </SettingsGroup>
+
       <SectionTitle inset={32}>Compare (every version in the apps)</SectionTitle>
       <SettingsGroup>
         <SettingsRow label="Select rows" Icon={Columns2} href="/compare-select" navigates trailing="6" />
-        <SettingsRow label="Buttons" Icon={Columns2} href="/compare-buttons" navigates trailing="4" />
+        <SettingsRow label="Buttons" Icon={Columns2} href="/compare-buttons" navigates trailing="3" />
+        <SettingsRow label="Toast sounds" Icon={Columns2} href="/compare-sounds" navigates trailing="3" />
         <SettingsRow label="Status badges" Icon={Columns2} href="/compare-status" navigates trailing="4" />
       </SettingsGroup>
     </ScrollView>

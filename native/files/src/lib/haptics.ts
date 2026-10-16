@@ -1,4 +1,3 @@
-// Verbatim copy of TKVR src/lib/haptics.ts.
 import * as Haptics from "expo-haptics";
 
 // One place to tune how the whole app feels. Press feedback lives in the shared

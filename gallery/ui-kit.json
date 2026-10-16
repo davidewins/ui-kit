@@ -1,11 +1,14 @@
 {
   "kit": "native",
   "files": [
-    "src/assets/sounds/toast.wav",
-    "src/components/CustomToast.tsx",
+    "src/assets/sounds/toast-error.wav",
+    "src/assets/sounds/toast-info.wav",
+    "src/assets/sounds/toast-success.wav",
     "src/components/GlassSurface.tsx",
     "src/components/LoadErrorState.tsx",
     "src/components/PressableScale.tsx",
+    "src/components/ToastCard.tsx",
+    "src/components/Toaster.tsx",
     "src/components/analytics/Sparkline.tsx",
     "src/components/onboarding/CheckRow.tsx",
     "src/components/onboarding/SelectRow.tsx",
@@ -16,16 +19,20 @@
     "src/components/ui/Badge.tsx",
     "src/components/ui/Button.tsx",
     "src/components/ui/Card.tsx",
+    "src/components/ui/Chip.tsx",
     "src/components/ui/CountBadge.tsx",
     "src/components/ui/Divider.tsx",
     "src/components/ui/EmptyState.tsx",
     "src/components/ui/FlatList.tsx",
     "src/components/ui/GlassButton.tsx",
+    "src/components/ui/GlassGroup.tsx",
+    "src/components/ui/HeaderIconButton.tsx",
     "src/components/ui/Heading.tsx",
     "src/components/ui/Image.tsx",
     "src/components/ui/Input.tsx",
     "src/components/ui/Label.tsx",
     "src/components/ui/LegendList.tsx",
+    "src/components/ui/PillButton.tsx",
     "src/components/ui/Pressable.tsx",
     "src/components/ui/SafeAreaView.tsx",
     "src/components/ui/ScrollView.tsx",
@@ -41,7 +48,9 @@
     "src/components/ui/View.tsx",
     "src/globals.css",
     "src/hooks/useTabPaneBottomInset.ts",
-    "src/hooks/useThemeColors.ts"
+    "src/hooks/useThemeColors.ts",
+    "src/lib/haptics.ts",
+    "src/lib/toast.tsx"
   ],
   "seeds": [
     "src/hooks/useFontFamily.ts"
