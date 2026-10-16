@@ -71,6 +71,7 @@ export default function Index() {
       <SectionTitle inset={32}>Compare (every version in the apps)</SectionTitle>
       <SettingsGroup>
         <SettingsRow label="Select rows" Icon={Columns2} href="/compare-select" navigates trailing="6" />
+        <SettingsRow label="Buttons" Icon={Columns2} href="/compare-buttons" navigates trailing="4" />
         <SettingsRow label="Status badges" Icon={Columns2} href="/compare-status" navigates trailing="4" />
       </SettingsGroup>
     </ScrollView>

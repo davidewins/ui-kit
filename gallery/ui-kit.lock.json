@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "1dd521c",
+  "rev": "f22dd65",
   "files": {
     "src/components/CustomToast.tsx": "9f6e95dde7b4c0ede014290263c76e16b7b3c39604eed135f87f573958fb4747",
     "src/components/GlassSurface.tsx": "8a341064d2620e70841bfbc5151b4818309af1b47032a5e3545f228d0f4fb24e",
@@ -10,7 +10,7 @@
     "src/components/onboarding/CheckRow.tsx": "5901b97c0f7f7dcc68722bb9956310681d796707928f6d3bf0947d5411a44616",
     "src/components/onboarding/SelectRow.tsx": "6a0de9bf32423c7e5f5fbef7b22d2f4c03956ef847fc0c41639c48be6e559c66",
     "src/components/onboarding/WizardProgress.tsx": "151db95ef8ea43ed834da3186e5eb0c85c0d165560ee72a66f1ec80074b6b730",
-    "src/components/onboarding/shells/InsetShell.tsx": "28fc4ed402294e86f9cc8724bcd4e7f1d8e0a1a8e8ae08e13307c87148cd6ae6",
+    "src/components/onboarding/shells/InsetShell.tsx": "aea8936b30ca6f438701e846928337182c74a98c750ccdf6cd3c1f79ab4c96be",
     "src/components/phone/PhoneInput.tsx": "d56a90b5ba5feae2ce16671f123c4c57903a63eeaf4a17fda423293d649e2f21",
     "src/components/phone/countries.ts": "078dc60d474edf09be9e0b842f4a7fc900b7b9fee359320543693d96779dbd94",
     "src/components/ui/Badge.tsx": "151317a166787e49e22d216360efc3fbfd3bf3194950a07c7954c5a67e85eb58",
