@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// ui-kit: one source for every app's components and tokens.
+// ZESTY UI (ui-kit): one source for every app's components and tokens.
 //
 //   node bin/ui-kit.mjs tokens        regenerate native/files/src/globals.css from tokens.json
 //   node bin/ui-kit.mjs sync <app>    copy the files listed in <app>/ui-kit.json into the app

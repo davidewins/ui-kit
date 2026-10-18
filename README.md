@@ -1,6 +1,6 @@
-# ui-kit
+# ZESTY UI
 
-The one source for every app's UI components and colour tokens (TAK-1403).
+ZESTY UI (repo `davidewins/ui-kit`) is the one source for every app's UI components and colour tokens (TAK-1403).
 New UI is remixed from here. Nothing is written from scratch.
 
 Rules and screen recipes: [Native UI spec](https://linear.app/takeoversoftware/document/native-ui-spec-sellers-void-riders-admin-demo-d4efcd7af27c).
@@ -15,7 +15,7 @@ Rules and screen recipes: [Native UI spec](https://linear.app/takeoversoftware/d
 | `bin/ui-kit.mjs` | `tokens`, `sync`, `check` |
 | `recipes/` | Reference screens copied in by hand, never synced (`recipes/auth`: Welcome / Email / Verify OTP + root session gate, from VOID) |
 | `server/` | Read-only hq-node API patterns (auth middleware, rate limit, route, handler, error shapes) for tkvr-node / creator-platform |
-| `gallery/` | Expo app showing every kit component, light and dark. Runs in Expo Go: `cd gallery && npm install && npx expo start`, scan the QR |
+| `gallery/` | ZESTY UI gallery: Expo app showing every kit component, light and dark. Runs in Expo Go: `cd gallery && npm install && npx expo start`, scan the QR |
 
 ## Use
 
@@ -67,6 +67,25 @@ Database types are **not** in the kit. `davidewins/takeover-db` generates `types
 * `Button` is now SELLERS' (GlassButton spec: primary, secondary glass, outline filled, danger). `PillButton` is TKVR's (solid pills, clear glass secondary, haptic per variant) with outline filled, never see-through. VOID's old Button is gone.
 * `GlassGroup`: container for SelectRows (glass on iOS 26, grey grouped card elsewhere). `Chip`: glass chip, solid tint when selected. `HeaderIconButton`: spec §3.1 header button from SELLERS Today.
 * Gallery: Liquid Glass page, SwiftUI controls page (@expo/ui), example pages (list, create modal, edit, detail with sticky footer).
+
+## Native controls (18 Oct 2026)
+
+The @expo/ui SwiftUI controls are kit components now, not raw `Host` blocks in screens. Each one draws SwiftUI on iOS and has a plain RN fallback elsewhere. The row ones keep the 52pt SettingsRow geometry, so they go straight into a `SettingsGroup`.
+
+| Component | iOS (SwiftUI) | Fallback | Use for |
+| -- | -- | -- | -- |
+| `SegmentedControl` | Picker, segmented | Surface pill track | Range / filter / appearance switch. Replaces `@react-native-segmented-control` |
+| `PickerRow` | Picker, menu (in the row's accessory) | Trailing value + Alert list | One of a short list (prep time, category) |
+| `StepperRow` | Stepper | - / + buttons | Whole-number quantities |
+| `SliderRow` | Slider under the label line | - / + buttons | Continuous values (capacity, radius) |
+| `DateRow` | DatePicker, compact | Read-only trailing text | Date, time, or both |
+| `ColorRow` | ColorPicker | Swatch | Brand / accent colour |
+| `ProgressBar` | ProgressView, linear | 4pt track | Load, upload, onboarding progress |
+| `ActionMenu` | Menu with SF Symbols | HeaderIconButton + Alert | Header "..." actions |
+| `Sheet` | BottomSheet hosting RN children | Slide-up Modal card | Short confirms and quick forms |
+| `Switch` (existing) | Toggle | RN Switch | On / off, as a SettingsRow accessory |
+
+Gallery → **Native controls (store settings)** is one real screen using all of them; **Edit** and **List** examples use them too. Add the files an app needs to its `ui-kit.json` and sync (`StepperRow` is needed by `SliderRow`).
 
 ## Synced
 

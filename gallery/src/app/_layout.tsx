@@ -48,7 +48,7 @@ export default function RootLayout() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
           <Stack screenOptions={screen}>
-            <Stack.Screen name="index" options={{ title: "UI kit", headerLargeTitle: true }} />
+            <Stack.Screen name="index" options={{ title: "ZESTY UI", headerLargeTitle: true }} />
             <Stack.Screen name="colours" options={{ title: "Colours" }} />
             <Stack.Screen name="type" options={{ title: "Type" }} />
             <Stack.Screen name="buttons" options={{ title: "Buttons" }} />
@@ -67,7 +67,7 @@ export default function RootLayout() {
             <Stack.Screen name="compare-buttons" options={{ title: "Buttons" }} />
             <Stack.Screen name="compare-sounds" options={{ title: "Toast sounds" }} />
             <Stack.Screen name="glass" options={{ title: "Liquid Glass" }} />
-            <Stack.Screen name="swiftui" options={{ title: "SwiftUI controls" }} />
+            <Stack.Screen name="native" options={{ title: "Store settings" }} />
             <Stack.Screen name="examples/list" options={{ title: "Orders", headerLargeTitle: true }} />
             <Stack.Screen name="examples/create" options={{ title: "New product", presentation: "modal", headerTransparent: false }} />
             <Stack.Screen name="examples/edit" options={{ title: "Edit product" }} />

@@ -3,12 +3,11 @@ import { SelectRow } from "@/components/onboarding/SelectRow";
 import { PhoneInput } from "@/components/phone/PhoneInput";
 import { COUNTRIES, type Country } from "@/components/phone/countries";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SettingsGroup } from "@/components/ui/SettingsGroup";
 import { Bike, Car, Footprints } from "lucide-react-native";
-import SegmentedControl from "@react-native-segmented-control/segmented-control";
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
-import { ScrollView, useColorScheme } from "react-native";
+import { ScrollView } from "react-native";
 
 const VEHICLES = [
   { id: "bike", label: "Bicycle", description: "No licence needed", icon: Bike },
@@ -23,7 +22,6 @@ export default function Inputs() {
   const [phone, setPhone] = useState("");
   const [vehicle, setVehicle] = useState("bike");
   const [range, setRange] = useState(0);
-  const mode = useColorScheme() === "dark" ? "dark" : "light";
 
   return (
     <ScrollView
@@ -46,20 +44,7 @@ export default function Inputs() {
       </View>
 
       <SectionTitle>SegmentedControl (spec §3.4, height 44)</SectionTitle>
-      <View style={{ paddingHorizontal: 16 }}>
-        <SegmentedControl
-          values={["Today", "Week", "Month"]}
-          selectedIndex={range}
-          onChange={(e) => {
-            Haptics.selectionAsync();
-            setRange(e.nativeEvent.selectedSegmentIndex);
-          }}
-          appearance={mode}
-          fontStyle={{ fontFamily: "Geist-Medium" }}
-          activeFontStyle={{ fontFamily: "Geist-SemiBold" }}
-          style={{ height: 44 }}
-        />
-      </View>
+      <SegmentedControl values={["Today", "Week", "Month"]} selectedIndex={range} onChange={setRange} size="large" style={{ marginHorizontal: 16 }} />
 
       <SectionTitle inset={32}>SelectRow</SectionTitle>
       <SettingsGroup>

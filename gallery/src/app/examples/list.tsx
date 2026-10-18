@@ -4,11 +4,11 @@ import { HeaderIconButton } from "@/components/ui/HeaderIconButton";
 import { SettingsGroup } from "@/components/ui/SettingsGroup";
 import { SettingsRow } from "@/components/ui/SettingsRow";
 import { SkeletonList } from "@/components/ui";
-import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Stack, router } from "expo-router";
 import { Package, Plus } from "lucide-react-native";
 import { useState } from "react";
-import { ScrollView, View, useColorScheme } from "react-native";
+import { ScrollView } from "react-native";
 
 const ORDERS = [
   { id: "1042", who: "Aoife M.", status: "Preparing", variant: "warning" as const },
@@ -22,7 +22,6 @@ const STATES = ["Loaded", "Loading", "Empty"] as const;
 // skeleton while loading, EmptyState when empty.
 export default function ExampleList() {
   const [state, setState] = useState(0);
-  const mode = useColorScheme() === "dark" ? "dark" : "light";
   return (
     <>
       <Stack.Screen
@@ -33,9 +32,7 @@ export default function ExampleList() {
         }}
       />
       <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: 48, flexGrow: 1 }}>
-        <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
-          <SegmentedControl values={[...STATES]} selectedIndex={state} onChange={(e) => setState(e.nativeEvent.selectedSegmentIndex)} appearance={mode} style={{ height: 36 }} />
-        </View>
+        <SegmentedControl values={STATES} selectedIndex={state} onChange={setState} accessibilityLabel="State" style={{ marginHorizontal: 16, marginBottom: 16 }} />
         {STATES[state] === "Loading" ? (
           <SkeletonList count={4} />
         ) : STATES[state] === "Empty" ? (

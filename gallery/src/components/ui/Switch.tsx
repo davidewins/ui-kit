@@ -8,7 +8,7 @@
 // doesn't accept a flip (e.g. it asks to confirm first) we snap it back,
 // matching RN's controlled Switch.
 import { Host, Toggle } from "@expo/ui/swift-ui";
-import { disabled as disabledModifier, labelsHidden, tint } from "@expo/ui/swift-ui/modifiers";
+import { disabled as disabledModifier, labelsHidden } from "@expo/ui/swift-ui/modifiers";
 import { useEffect, useState } from "react";
 import { Platform, Switch as RNSwitch, type SwitchProps } from "react-native";
 
@@ -33,7 +33,7 @@ function IOSSwitch({ value = false, onValueChange, disabled, trackColor, style, 
   const onColor = typeof trackColor?.true === "string" ? trackColor.true : undefined;
 
   return (
-    <Host matchContents style={style} testID={testID}>
+    <Host matchContents seedColor={onColor} style={style} testID={testID}>
       <Toggle
         key={rev}
         isOn={value}
@@ -43,7 +43,6 @@ function IOSSwitch({ value = false, onValueChange, disabled, trackColor, style, 
         }}
         modifiers={[
           labelsHidden(),
-          ...(onColor ? [tint(onColor)] : []),
           disabledModifier(!!disabled),
         ]}
       />

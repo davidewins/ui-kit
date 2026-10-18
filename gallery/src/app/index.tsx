@@ -1,9 +1,8 @@
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SettingsGroup } from "@/components/ui/SettingsGroup";
 import { SettingsRow } from "@/components/ui/SettingsRow";
 import { View } from "@/components/ui";
-import SegmentedControl from "@react-native-segmented-control/segmented-control";
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import {
   CircleAlert,
@@ -17,9 +16,10 @@ import {
   PanelBottom,
   Tag,
   TextCursorInput,
+  SlidersHorizontal,
   Type,
 } from "lucide-react-native";
-import { ScrollView, useColorScheme } from "react-native";
+import { ScrollView } from "react-native";
 import { Uniwind } from "uniwind";
 
 const APPEARANCES = ["system", "light", "dark"] as const;
@@ -28,29 +28,23 @@ const LABELS = ["Automatic", "Light", "Dark"];
 // Recipe §3.6: unlabelled SettingsGroups of SettingsRows. Appearance control
 // copied from VOID profile/appearance.
 export default function Index() {
-  const mode = useColorScheme() === "dark" ? "dark" : "light";
   const [appearance, setAppearance] = useState<(typeof APPEARANCES)[number]>("system");
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
       <SectionTitle inset={32}>Appearance</SectionTitle>
-      <View style={{ marginHorizontal: 16 }}>
-        <SegmentedControl
-          values={LABELS}
-          selectedIndex={APPEARANCES.indexOf(appearance)}
-          onChange={(e) => {
-            Haptics.selectionAsync();
-            const next = APPEARANCES[e.nativeEvent.selectedSegmentIndex] ?? "system";
-            setAppearance(next);
-            Uniwind.setTheme(next);
-          }}
-          appearance={mode}
-          fontStyle={{ fontFamily: "Geist-Medium" }}
-          activeFontStyle={{ fontFamily: "Geist-SemiBold" }}
-          style={{ height: 44 }}
-          accessibilityLabel="Appearance"
-        />
-      </View>
+      <SegmentedControl
+        values={LABELS}
+        selectedIndex={APPEARANCES.indexOf(appearance)}
+        onChange={(i) => {
+          const next = APPEARANCES[i] ?? "system";
+          setAppearance(next);
+          Uniwind.setTheme(next);
+        }}
+        size="large"
+        accessibilityLabel="Appearance"
+        style={{ marginHorizontal: 16 }}
+      />
 
       <SectionTitle inset={32}>Components</SectionTitle>
       <SettingsGroup>
@@ -72,7 +66,7 @@ export default function Index() {
       <SectionTitle inset={32}>Native and Liquid Glass</SectionTitle>
       <SettingsGroup>
         <SettingsRow label="Liquid Glass" Icon={Layers} href="/glass" navigates />
-        <SettingsRow label="SwiftUI controls (@expo/ui)" Icon={MousePointerClick} href="/swiftui" navigates />
+        <SettingsRow label="Native controls (store settings)" Icon={SlidersHorizontal} href="/native" navigates />
       </SettingsGroup>
 
       <SectionTitle inset={32}>Example pages</SectionTitle>
