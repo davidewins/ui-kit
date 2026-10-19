@@ -24,8 +24,10 @@ interface GlassButtonProps {
   rightIcon?: ReactElement<{ size?: number; color?: string }>;
   accessibilityLabel?: string;
   accessibilityHint?: string;
-  /** "solid": an opaque border-coloured pill with a muted label instead of
-   * fading, for buttons floating over content (product add bar). */
+  /** "solid": an opaque pill in the page's own background colour with a
+   * hairline outline and a muted label, instead of fading. For buttons
+   * floating over content (product add bar): it stays readable and doesn't
+   * blend into grey cards scrolling behind it. */
   disabledStyle?: "fade" | "solid";
   /** The caller fires its own result haptic. */
   haptic?: boolean;
@@ -66,14 +68,14 @@ export const GlassButton: FC<GlassButtonProps> = ({
 
   // Solid fills for everything except the explicit glass tone.
   const fill = solidDisabled
-    ? colors.border
+    ? colors.background
     : tone === "primary"
       ? colors.text
       : tone === "danger"
         ? colors.error
         : colors.secondaryBackground; // neutral
   const labelColor = solidDisabled
-    ? colors.text
+    ? colors.muted
     : tone === "primary"
       ? colors.background
       : tone === "danger"
@@ -151,7 +153,7 @@ export const GlassButton: FC<GlassButtonProps> = ({
             styles.center,
             shape,
             { backgroundColor: fill },
-            tone === "neutral" && {
+            (tone === "neutral" || solidDisabled) && {
               borderColor: colors.border,
               borderWidth: StyleSheet.hairlineWidth,
             },
