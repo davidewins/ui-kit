@@ -85,7 +85,7 @@ The @expo/ui SwiftUI controls are kit components now, not raw `Host` blocks in s
 | `Sheet` | BottomSheet hosting RN children | Slide-up Modal card | Short confirms and quick forms |
 | `Switch` (existing) | Toggle | RN Switch | On / off, as a SettingsRow accessory |
 
-`FuseTopTabs` draws `SegmentedControl` on iOS (19 Oct), so an app syncing FuseTopTabs must list `SegmentedControl` too. Its non-iOS pill sits on the page colour with a soft shadow (light), `surfaceElevated` (dark).
+`FuseTopTabs` draws `SegmentedControl` on iOS (19 Oct), so an app syncing FuseTopTabs must list `SegmentedControl` too. The original pill track is kept as `variant="pill"`; `setFuseTopTabsVariant("pill")` once at startup switches a whole app back. Its non-iOS pill sits on the page colour with a soft shadow (light), `surfaceElevated` (dark).
 
 Gallery → **Native controls (store settings)** is one real screen using all of them; **Edit** and **List** examples use them too. Add the files an app needs to its `ui-kit.json` and sync (`StepperRow` is needed by `SliderRow`).
 
