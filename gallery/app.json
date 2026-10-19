@@ -20,6 +20,19 @@
     ],
     "experiments": {
       "typedRoutes": false
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a5c2dd97-4924-4663-b0a4-310b3eb3e10a"
+      }
+    },
+    "owner": "davidewins",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a5c2dd97-4924-4663-b0a4-310b3eb3e10a"
     }
   }
 }
