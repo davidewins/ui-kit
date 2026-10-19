@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "f8c1100",
+  "rev": "80b6202",
   "files": {
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
     "src/assets/sounds/toast-info.wav": "acf11da1020b4363bd3f44b8b5b359a201b33c522b877cba3f61ad5f83024223",
@@ -28,7 +28,7 @@
     "src/components/ui/Divider.tsx": "9988130303bd087f8131f2f7b8628c0506193c54b8e454612c2b5f1df986d9ce",
     "src/components/ui/EmptyState.tsx": "7e938e8bd75bcb8ea39a16be22956a95ba1010b115cd75f559c8767257fbeeb9",
     "src/components/ui/FlatList.tsx": "033fa9f4d869ee0d29af712907d8363fb834462179b371b848dd92deb29ae168",
-    "src/components/ui/GlassButton.tsx": "243d1ea91edc93ff0eeafa22992bfeb9425e88e488e282880aa162b7362779b2",
+    "src/components/ui/GlassButton.tsx": "7a7903e56073787bf358265dba7a68a408fba846d8558aff229c64beb768c597",
     "src/components/ui/GlassGroup.tsx": "e562aac4522bf3aae7cc57fc1bb1718134ba10d5f7a4c203e73901616816df28",
     "src/components/ui/HeaderIconButton.tsx": "dca2e74094d7b9c31c21f91a196e4e15b213927e463527a3f2010f7dd96fae89",
     "src/components/ui/Heading.tsx": "343208fa1ead5e2040daa944bf745de9d934e85a6404dd4320a1e53c7c82cebb",
