@@ -157,7 +157,9 @@ export function SettingsRow({
         />
       ) : null}
 
-      {accessory}
+      {/* Wrapped so an accessory with its own alignSelf (Badge is self-start,
+          so it doesn't stretch in columns) still centres on the row. */}
+      {accessory ? <View style={{ justifyContent: "center" }}>{accessory}</View> : null}
 
       {navigates ? (
         <ChevronRight

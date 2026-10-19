@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "cc117ac",
+  "rev": "f8c1100",
   "files": {
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
     "src/assets/sounds/toast-info.wav": "acf11da1020b4363bd3f44b8b5b359a201b33c522b877cba3f61ad5f83024223",
@@ -46,7 +46,7 @@
     "src/components/ui/SegmentedControl.tsx": "000f42b44bf1a41a1f2abc37891c76cb85b8fccd301c058391717560a3b20b72",
     "src/components/ui/SettingsGroup.tsx": "c6e2af52555bd73ffebfdff327cf8aebf872f7e144308b7ec95f23f6a4df3034",
     "src/components/ui/SettingsIdentity.tsx": "719a70390e3e41c9c9f76e0cc9eceeee570e04d9341b30f2aecca0c043273e07",
-    "src/components/ui/SettingsRow.tsx": "9d84ace97a6bf6145ac683c95bef2f75a414f4f9a710ba0b38fe1a0f2972ca04",
+    "src/components/ui/SettingsRow.tsx": "f410b7ec333f1a4e5732c47ba348ac525ad4996b665dd6911aa3caf3d77b37f5",
     "src/components/ui/Sheet.tsx": "e29bf6be25b1aa1663ca59c97923be36f43eb4d0ad4c7799ec9885792410d7d8",
     "src/components/ui/Skeleton.tsx": "01acf6e9d96c1c3d8f95ad72fe8a44b01d7c4ade4993f85cb90320d55f7dfda9",
     "src/components/ui/SkeletonBlock.tsx": "d273043c615f6991be5e609e86c23f5e9c9ee1d84b1da26993141e836849ef84",
