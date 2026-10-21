@@ -34,9 +34,11 @@ type Props = {
   style?: ViewStyle;
   onTabChange?: (index: number) => void;
   variant?: FuseTabsVariant;
+  /** Tab to open on (e.g. a deep link into Analytics > Customers). */
+  initialIndex?: number;
 };
 
-export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant }) => {
+export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, initialIndex = 0 }) => {
   const { width } = useWindowDimensions();
   const horizontalListRef = useRef<FlatList>(null);
   // iOS floats the native tab bar over the panes; Android lays them out above
@@ -44,10 +46,11 @@ export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant }) =>
   const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
   const paneBottomInset = Platform.OS === "ios" ? tabBarHeight : 0;
 
-  const horizontalListOffsetX = useSharedValue(0);
+  const startIndex = Math.min(Math.max(0, initialIndex), Math.max(0, tabs.length - 1));
+  const horizontalListOffsetX = useSharedValue(startIndex * width);
   const isHorizontalListScrollingX = useSharedValue(false);
-  const prevActiveTabIndex = useSharedValue(0);
-  const activeTabIndex = useSharedValue(0);
+  const prevActiveTabIndex = useSharedValue(startIndex);
+  const activeTabIndex = useSharedValue(startIndex);
 
   const notifyChange = (i: number) => {
     onTabChange?.(i);
@@ -108,6 +111,8 @@ export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant }) =>
         keyExtractor={(item) => item.value.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
+        initialScrollIndex={startIndex}
+        getItemLayout={(_, index) => ({ length: width, offset: width * index, index })}
         pagingEnabled
         decelerationRate="fast"
         onScroll={scrollHandler}
