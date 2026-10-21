@@ -1,6 +1,5 @@
 import { useFontFamily } from "@/hooks/useFontFamily";
 import { useMemo } from "react";
-import { Platform } from "react-native";
 import { useCSSVariable } from "uniwind";
 
 export function useThemeColors() {
@@ -93,8 +92,9 @@ export function useThemeColors() {
       primaryText: onTint,
       onPrimary: onTint,
 
-      headerStyle:
-        Platform.OS === "android" ? { backgroundColor: background } : null,
+      // Headers sit on the page colour on both platforms (black / white), so
+      // the bar never shows the grey system material over a black page.
+      headerStyle: { backgroundColor: background },
 
       headerTitleStyle: { fontFamily: headerFont },
       headerLargeTitleStyle: { fontFamily: headerFont, fontSize: 32 },
