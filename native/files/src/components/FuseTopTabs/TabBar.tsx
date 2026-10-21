@@ -51,7 +51,7 @@ export const TabBar: FC<Props> = ({
   const { width: windowWidth } = useWindowDimensions();
   const slotWidth =
     (windowWidth - _sidePadding * 2 - _trackPadding * 2) / tabs.length;
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(() => activeTabIndex.get());
 
   useAnimatedReaction(
     () => activeTabIndex.get(),
