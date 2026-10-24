@@ -4,6 +4,16 @@ import { useMemo } from "react";
 import { Platform } from "react-native";
 import { useCSSVariable } from "uniwind";
 
+let iosHeaderBackground: "system" | "page" = "system";
+/**
+ * Per-app header look on iOS. "system" (default): the native bar, as RIDERS,
+ * VOID and ADMIN ship. "page": the bar is painted the page background (black
+ * in dark mode), as SELLERS ships. Call once at startup, before first render.
+ */
+export function setIOSHeaderBackground(value: "system" | "page") {
+  iosHeaderBackground = value;
+}
+
 export function useThemeColors() {
   const fontFamily = useFontFamily();
   const headerFont = fontFamily("semibold");
@@ -94,8 +104,13 @@ export function useThemeColors() {
       primaryText: onTint,
       onPrimary: onTint,
 
+      // Android always paints the bar the page colour. iOS leaves it to the
+      // system bar (RIDERS, VOID, ADMIN) unless the app opts into the page
+      // colour with setIOSHeaderBackground("page") (SELLERS).
       headerStyle:
-        Platform.OS === "android" ? { backgroundColor: background } : null,
+        Platform.OS === "android" || iosHeaderBackground === "page"
+          ? { backgroundColor: background }
+          : null,
 
       headerTitleStyle: { fontFamily: headerFont },
       headerLargeTitleStyle: { fontFamily: headerFont, fontSize: 32 },

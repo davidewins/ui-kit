@@ -21,7 +21,7 @@ export function Sparkline({
     const stepX = width / (values.length - 1);
     const padY = 3;
     const usable = height - padY * 2;
-    const p = Skia.Path.Make();
+    const p = Skia.PathBuilder.Make();
     values.forEach((v, i) => {
       const x = i * stepX;
       const y = padY + usable - ((v - min) / span) * usable;
@@ -34,7 +34,7 @@ export function Sparkline({
         p.cubicTo(cx, prevY, cx, y, x, y);
       }
     });
-    return p;
+    return p.build();
   }, [values, width, height]);
 
   if (!path) return <View style={{ width, height }} />;

@@ -28,8 +28,8 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { Plus, type LucideIcon } from "lucide-react-native";
 import type { ReactNode } from "react";
-import { Image } from "expo-image";
-import { Pressable, StyleSheet, View as RNView, type ImageSourcePropType } from "react-native";
+import { Image, type ImageProps } from "expo-image";
+import { Pressable, StyleSheet, View as RNView } from "react-native";
 import { Text } from "./Text";
 import { View } from "./View";
 
@@ -38,7 +38,7 @@ export type EmptyStateArt =
   /** A lucide icon in a 72pt circle (VOID's chip), when there's no 3D art. */
   | { icon: LucideIcon }
   /** A 3D icon PNG (transparent, square, ideally 512px), e.g. from Thiings. */
-  | { image: ImageSourcePropType }
+  | { image: ImageProps["source"] }
   | "list"
   | "grid"
   | "none";

@@ -13,7 +13,7 @@ type Props = React.ComponentProps<typeof UniwindScrollView>;
 
 // Inside a FuseTopTabs pane, a vertical ScrollView leaves room for the tab bar
 // (see useTabPaneBottomInset). Nested scroll views get no extra room.
-export const ScrollView = React.forwardRef<RNScrollView, Props>(
+export const ScrollView = React.forwardRef<React.ComponentRef<typeof UniwindScrollView>, Props>(
   function ScrollView({ contentContainerStyle, children, ...props }, ref) {
     const inset = useTabPaneBottomInset();
     const applied = props.horizontal ? 0 : inset;

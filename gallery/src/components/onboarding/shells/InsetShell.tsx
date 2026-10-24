@@ -3,6 +3,8 @@
 // Header large title is owned by the consumer's <Stack.Screen> options.
 // Body opens with optional subtitle, then content. Bottom sticky bar:
 // WizardProgress (no step text) + symmetric stacked CTA pills (solid).
+// The bar has no background: it floats over the content, which scrolls under
+// it, so the ScrollView pads its bottom by useInsetFooterSpace().
 
 import { WizardProgress } from "@/components/onboarding/WizardProgress";
 import { Text, View } from "@/components/ui";
@@ -44,13 +46,19 @@ export function InsetShell({
   children,
 }: Props) {
   const colors = useThemeColors();
+  const footerSpace = useInsetFooterSpace({
+    secondary: !!secondaryCta,
+    progress: typeof step === "number" && typeof total === "number",
+    phase: !!phase,
+  });
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <ScrollView
         style={{ flex: 1, backgroundColor: colors.background }}
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{ paddingTop: 4, paddingBottom: 24 }}
+        contentContainerStyle={{ paddingTop: 4, paddingBottom: footerSpace }}
+        scrollIndicatorInsets={{ bottom: footerSpace - 16 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         alwaysBounceVertical
@@ -66,14 +74,37 @@ export function InsetShell({
       </ScrollView>
 
       <InsetFooter step={step} total={total} phase={phase} primaryCta={primaryCta} secondaryCta={secondaryCta} />
-    </>
+    </View>
+  );
+}
+
+/**
+ * Bottom padding a ScrollView needs so its last row clears a floating
+ * InsetFooter (pill heights + gaps + home indicator + 16 breathing room).
+ * Pass the same shape the footer gets.
+ */
+export function useInsetFooterSpace({
+  secondary = false,
+  progress = false,
+  phase = false,
+}: { secondary?: boolean; progress?: boolean; phase?: boolean } = {}) {
+  const insets = useSafeAreaInsets();
+  return (
+    12 +
+    48 +
+    (secondary ? 58 : 0) +
+    (progress ? 25 + (phase ? 19 : 0) : 0) +
+    (insets.bottom || 12) +
+    16
   );
 }
 
 /**
  * TAK-1396: the sticky footer on its own, for read screens (course, product,
  * booking) whose ScrollView has its own refresh control. Render it as a
- * sibling after the ScrollView, as InsetShell does. Unchanged SELLERS markup.
+ * sibling after the ScrollView, inside a flex:1 parent, and pad the
+ * ScrollView's content by useInsetFooterSpace(): the footer is absolutely
+ * positioned with a transparent container, so content scrolls under it.
  */
 export function InsetFooter({
   step,
@@ -87,11 +118,15 @@ export function InsetFooter({
   const insets = useSafeAreaInsets();
   return (
   <View
+    pointerEvents="box-none"
     style={{
+      position: "absolute",
+      left: 0,
+      right: 0,
+      bottom: 0,
       paddingHorizontal: 16,
       paddingTop: 12,
       paddingBottom: insets.bottom || 12,
-      backgroundColor: colors.background,
       gap: 10,
     }}
   >
