@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "bfed579",
+  "rev": "bb10c91",
   "files": {
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
     "src/assets/sounds/toast-info.wav": "acf11da1020b4363bd3f44b8b5b359a201b33c522b877cba3f61ad5f83024223",
