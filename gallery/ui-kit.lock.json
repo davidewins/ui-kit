@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "1615940",
+  "rev": "bfed579",
   "files": {
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
     "src/assets/sounds/toast-info.wav": "acf11da1020b4363bd3f44b8b5b359a201b33c522b877cba3f61ad5f83024223",
@@ -10,7 +10,7 @@
     "src/components/PressableScale.tsx": "d80a565090ce3dcd42364ff82d27be7a299918e3cd5230ba72963b72fc76839c",
     "src/components/ToastCard.tsx": "bf373e0fd9aeaf289eca871fa2be555d1f72b0a0c9a9d0e24f9285d85bac0e86",
     "src/components/Toaster.tsx": "3ddb7f0f2f1a6b83bcc6eb6d0be9c27ff2e0ffd56dc469ac5b5e15e656982aa3",
-    "src/components/analytics/Sparkline.tsx": "dab59b458fff493a694e57cdeff42b587dcda9aa07805728499f27f196eef411",
+    "src/components/analytics/Sparkline.tsx": "65e2997c94476823bafb49565baf97e98e424951340334437eb771df78bfdea6",
     "src/components/onboarding/CheckRow.tsx": "5901b97c0f7f7dcc68722bb9956310681d796707928f6d3bf0947d5411a44616",
     "src/components/onboarding/SelectRow.tsx": "6a0de9bf32423c7e5f5fbef7b22d2f4c03956ef847fc0c41639c48be6e559c66",
     "src/components/onboarding/WizardProgress.tsx": "151db95ef8ea43ed834da3186e5eb0c85c0d165560ee72a66f1ec80074b6b730",
