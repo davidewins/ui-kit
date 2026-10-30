@@ -94,7 +94,6 @@ export const Button: React.FC<ButtonProps> = ({
       <Text
         style={{ fontFamily: "Geist-SemiBold", color: labelColor, fontSize: dims.fontSize }}
         numberOfLines={1}
-        maxFontSizeMultiplier={1.4}
       >
         {children}
       </Text>
@@ -126,7 +125,8 @@ export const Button: React.FC<ButtonProps> = ({
         onPress?.();
       }}
       className={`${fullWidth ? "w-full" : ""} ${className}`.trim()}
-      style={[styles.shadow, isDisabled && !isGlass && styles.disabled]}
+      // Never squeezed by a sibling in a row: the label would truncate.
+      style={[styles.shadow, { flexShrink: 0 }, isDisabled && !isGlass && styles.disabled]}
     >
       {isGlass ? (
         <GlassSurface
