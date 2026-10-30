@@ -94,6 +94,7 @@ export const Button: React.FC<ButtonProps> = ({
       <Text
         style={{ fontFamily: "Geist-SemiBold", color: labelColor, fontSize: dims.fontSize }}
         numberOfLines={1}
+        maxFontSizeMultiplier={1.4}
       >
         {children}
       </Text>
@@ -101,11 +102,13 @@ export const Button: React.FC<ButtonProps> = ({
     </View>
   );
 
-  // Pill: rounded-full, so no borderCurve.
+  // Pill: rounded-full, so no borderCurve. minHeight, not height, so a label
+  // at a larger text size grows the pill instead of being clipped.
   const shape = {
-    height: dims.height,
-    borderRadius: dims.height / 2,
+    minHeight: dims.height,
+    borderRadius: 999,
     paddingHorizontal: dims.paddingHorizontal,
+    paddingVertical: 4,
   };
 
   return (
