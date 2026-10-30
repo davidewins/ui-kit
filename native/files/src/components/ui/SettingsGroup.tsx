@@ -21,29 +21,47 @@ export const SETTINGS_GROUP = {
   marginBottom: 18,
 } as const;
 
+let look: "inset" | "flat" = "inset";
+/**
+ * Per-app group look. "inset" (default): the surface card with rounded
+ * corners, as VOID, SELLERS and TKVR ship. "flat": no fill, edge to edge, and
+ * hairlines that start at the text and run to the right edge, like an iOS
+ * plain list (PREPPERS). Call once at startup, before first render.
+ */
+export function setSettingsGroupLook(value: "inset" | "flat") {
+  look = value;
+}
+
 export function SettingsGroup({
   children,
   style,
+  separatorInset = SETTINGS_ROW.separatorInset,
 }: {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  /** Where hairlines start; rows without an icon pass their text's x (16). */
+  separatorInset?: number;
 }) {
   const colors = useThemeColors();
   const rows = Children.toArray(children);
 
   if (rows.length === 0) return null;
 
+  const flat = look === "flat";
+
   return (
     <View
       style={[
-        {
-          backgroundColor: colors.surface,
-          borderRadius: SETTINGS_GROUP.radius,
-          borderCurve: "continuous",
-          overflow: "hidden",
-          marginHorizontal: SETTINGS_GROUP.marginHorizontal,
-          marginBottom: SETTINGS_GROUP.marginBottom,
-        },
+        flat
+          ? { marginBottom: SETTINGS_GROUP.marginBottom }
+          : {
+              backgroundColor: colors.surface,
+              borderRadius: SETTINGS_GROUP.radius,
+              borderCurve: "continuous",
+              overflow: "hidden",
+              marginHorizontal: SETTINGS_GROUP.marginHorizontal,
+              marginBottom: SETTINGS_GROUP.marginBottom,
+            },
         style,
       ]}
     >
@@ -51,9 +69,7 @@ export function SettingsGroup({
         <Fragment
           key={isValidElement(row) && row.key != null ? row.key : index}
         >
-          {index > 0 ? (
-            <SettingsSeparator inset={SETTINGS_ROW.separatorInset} />
-          ) : null}
+          {index > 0 ? <SettingsSeparator inset={separatorInset} /> : null}
           {row}
         </Fragment>
       ))}
