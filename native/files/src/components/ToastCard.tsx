@@ -59,7 +59,10 @@ export function ToastCard({
       <GlassSurface
         isInteractive
         fill
-        fillOpacity={0.6}
+        // Toasts draw in their own window (Toaster.tsx), where the glass has
+        // little behind it to sample, so the backing carries most of the
+        // surface: keep it nearly solid or the toast reads as see-through.
+        fillOpacity={0.88}
         style={{
           borderRadius: 24,
           borderCurve: "continuous",
