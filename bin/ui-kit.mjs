@@ -9,8 +9,8 @@
 // copied once (only when missing) and are then owned by the app.
 import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const KIT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -93,6 +93,21 @@ function sync(app) {
   console.log(`synced ${cfg.files.length} files into ${app} (kit ${rev})`);
 }
 
+// Text files under src/ whose first line is the kit header, as app-relative paths.
+function kitCopies(app) {
+  const out = [];
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === "node_modules" || e.name.startsWith(".")) continue;
+      const p = join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (TEXT.test(e.name) && readFileSync(p, "utf8").slice(0, 120).includes("ui-kit: copy of davidewins/ui-kit")) out.push(relative(app, p));
+    }
+  };
+  if (existsSync(join(app, "src"))) walk(join(app, "src"));
+  return out;
+}
+
 function check(app) {
   const cfg = readConfig(app);
   const kind = cfg.kit ?? "native";
@@ -102,6 +117,10 @@ function check(app) {
     if (!existsSync(dest)) drift.push(`missing  ${file}`);
     else if (!readFileSync(dest).equals(Buffer.from(kitContent(kind, file)))) drift.push(`differs  ${file}`);
   }
+  // A file carrying the kit header but missing from ui-kit.json is a kit copy
+  // check never compares (left behind by a move, or synced by hand).
+  const listed = new Set(cfg.files);
+  for (const file of kitCopies(app)) if (!listed.has(file)) drift.push(`unlisted ${file}`);
   if (drift.length) {
     console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nMove the change into ui-kit, then sync.`);
     process.exit(1);
