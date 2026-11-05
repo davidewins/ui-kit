@@ -41,6 +41,7 @@ import {
   PanelTop,
   Plus,
   Receipt,
+  RefreshCw,
   Rows3,
   Ruler,
   Search,
@@ -169,6 +170,7 @@ export const ENTRIES: Entry[] = [
   c("lists", "lazy-stacks", "Lazy stacks", ListTree, "LazyVStack LazyHStack LazyRow LazyColumn"),
   c("lists", "carousel", "Carousel", GalleryHorizontal, "Carousel HorizontalMultiBrowseCarousel HorizontalCenteredHeroCarousel HorizontalUncontainedCarousel"),
   c("lists", "pager", "Pager", GalleryHorizontal, "HorizontalPager TabView page"),
+  c("lists", "pull-to-refresh", "Pull to refresh", RefreshCw, "PullToRefreshBox refreshable RefreshControl"),
 
   // Feedback
   c("feedback", "states", "Empty, loading and error", Inbox, "EmptyState LoadErrorState Skeleton"),
