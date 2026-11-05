@@ -21,7 +21,7 @@ export function PageTypeScreen({ type }: { type: PageType }) {
   if (type === "fittedFormSheet") {
     return (
       <View style={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: insets.bottom + 12, gap: 20 }}>
-        <Copy type={type} heading />
+        <Copy type={type} />
         <Button fullWidth onPress={done}>Done</Button>
       </View>
     );
@@ -30,7 +30,7 @@ export function PageTypeScreen({ type }: { type: PageType }) {
   if (SHEETS.includes(type)) {
     return (
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: insets.bottom + 12, gap: 20 }}>
-        <Copy type={type} heading />
+        <Copy type={type} />
         <Button fullWidth onPress={done}>Done</Button>
       </ScrollView>
     );
