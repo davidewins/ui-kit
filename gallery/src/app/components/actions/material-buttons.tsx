@@ -21,7 +21,6 @@ import {
   SplitButtonLeadingButton,
   SplitButtonTrailingButton,
   Text as MText,
-  TextButton,
   ToggleButton,
 } from "@expo/ui/jetpack-compose";
 import { Button, HStack } from "@expo/ui/swift-ui";
@@ -107,7 +106,7 @@ function AndroidStyles() {
           </>,
         )}
       </Demo>
-      <Demo title="Outlined and text (paired with a filled button only)">
+      <Demo title="Outlined (paired with a filled button only)">
         {row(
           <>
             <MButton onClick={say("Refund sent")}>
@@ -116,9 +115,6 @@ function AndroidStyles() {
             <OutlinedButton onClick={say("Kept")}>
               <MText>Keep order</MText>
             </OutlinedButton>
-            <TextButton onClick={say("Undone")}>
-              <MText>Undo</MText>
-            </TextButton>
           </>,
         )}
       </Demo>

@@ -137,7 +137,7 @@ export const ENTRIES: Entry[] = [
 
   // Actions
   c("actions", "buttons", "Buttons", MousePointerClick, "Button NativeButton GlassButton PillButton swiftui"),
-  c("actions", "material-buttons", "Native button styles", MousePointerClick, "compose FilledTonalButton OutlinedButton ElevatedButton TextButton IconButton ToggleButton SplitButtonLayout"),
+  c("actions", "material-buttons", "Native button styles", MousePointerClick, "compose FilledTonalButton OutlinedButton ElevatedButton IconButton ToggleButton SplitButtonLayout"),
   c("actions", "header-menu", "Header menu", Ellipsis, "ActionMenu toolbar"),
   c("actions", "menu", "Menu", Ellipsis, "Menu DropdownMenu SelectableDropdownMenuItem DropdownMenuGroup"),
   c("actions", "context-menu", "Context menu", Hand, "ContextMenu long press DropdownMenu"),
