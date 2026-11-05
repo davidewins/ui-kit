@@ -1,6 +1,6 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/LoadErrorState.tsx. Edit it there and sync; local edits fail ui-kit:check.
 import { Text, View } from "@/components/ui";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Ionicons } from "@expo/vector-icons";
 import { FC } from "react";

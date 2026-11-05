@@ -1,7 +1,7 @@
 import { Text, View } from "@/components/ui";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SliderRow } from "@/components/ui/SliderRow";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SliderRow } from "@/components/ui/inputs/SliderRow";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Row, Slider as MSlider, Text as MText, VerticalSlider } from "@expo/ui/jetpack-compose";
@@ -15,7 +15,7 @@ export default function SliderPage() {
   const [capacity, setCapacity] = useState(0.7);
   const [radius, setRadius] = useState(5);
   return (
-    <DemoPage usage='import { SliderRow } from "@/components/ui/SliderRow". iOS: SwiftUI Slider. Android: SliderRow steps with minus and plus; the Compose Slider is shown below.'>
+    <DemoPage usage='import { SliderRow } from "@/components/ui/inputs/SliderRow". iOS: SwiftUI Slider. Android: SliderRow steps with minus and plus; the Compose Slider is shown below.'>
       <Demo title="SliderRow">
         <View style={{ marginHorizontal: -20 }}>
           <SettingsGroup>

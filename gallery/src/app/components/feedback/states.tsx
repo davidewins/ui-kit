@@ -1,8 +1,8 @@
 import { LoadErrorState } from "@/components/LoadErrorState";
 import { View } from "@/components/ui";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { EmptyState } from "@/components/ui/feedback/EmptyState";
 import { SkeletonList } from "@/components/ui";
-import { SkeletonBlock } from "@/components/ui/SkeletonBlock";
+import { SkeletonBlock } from "@/components/ui/feedback/SkeletonBlock";
 import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { Inbox } from "lucide-react-native";
 import { useState } from "react";

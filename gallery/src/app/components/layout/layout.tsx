@@ -1,4 +1,4 @@
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
 import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { MENU } from "@/gallery/demoData";

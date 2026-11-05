@@ -1,10 +1,10 @@
 import { Image, View } from "@/components/ui";
-import { CountBadge } from "@/components/ui/CountBadge";
-import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsIdentity } from "@/components/ui/SettingsIdentity";
-import { SettingsRow } from "@/components/ui/SettingsRow";
-import { Switch } from "@/components/ui/Switch";
+import { CountBadge } from "@/components/ui/feedback/CountBadge";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsIdentity } from "@/components/ui/lists/SettingsIdentity";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
+import { Switch } from "@/components/ui/inputs/Switch";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Bell, CreditCard, Info, LogOut, Shield, Trash2, Wallet } from "lucide-react-native";
 import { useState } from "react";

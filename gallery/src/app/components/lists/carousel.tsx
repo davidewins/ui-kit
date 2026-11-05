@@ -1,6 +1,6 @@
 import { Text, View } from "@/components/ui";
-import { Carousel } from "@/components/ui/Carousel";
-import { ComposeHost } from "@/components/ui/NativeHost";
+import { Carousel } from "@/components/ui/lists/Carousel";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { MENU, STORES } from "@/gallery/demoData";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -18,7 +18,7 @@ const PHOTO = require("@/assets/images/glass-bg.jpeg");
 export default function CarouselPage() {
   const colors = useThemeColors();
   return (
-    <DemoPage usage='import { Carousel } from "@/components/ui/Carousel". iOS: SwiftUI ScrollView with view-aligned snapping. Android: Compose HorizontalMultiBrowseCarousel.'>
+    <DemoPage usage='import { Carousel } from "@/components/ui/lists/Carousel". iOS: SwiftUI ScrollView with view-aligned snapping. Android: Compose HorizontalMultiBrowseCarousel.'>
       <Demo title="Featured stores">
         <View style={{ marginHorizontal: -20 }}>
           <Carousel

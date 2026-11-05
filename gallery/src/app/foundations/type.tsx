@@ -1,5 +1,5 @@
 import { Heading, Label, Text, View } from "@/components/ui";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import type { FontWeight } from "@/hooks/useFontFamily";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { ScrollView } from "react-native";

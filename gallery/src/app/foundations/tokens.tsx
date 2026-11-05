@@ -1,7 +1,7 @@
-import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SETTINGS_GROUP } from "@/components/ui/SettingsGroup";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SETTINGS_ROW, SettingsRow } from "@/components/ui/SettingsRow";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
+import { SETTINGS_GROUP } from "@/components/ui/lists/SettingsGroup";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SETTINGS_ROW, SettingsRow } from "@/components/ui/lists/SettingsRow";
 import type { HapticFeel } from "@/lib/haptics";
 import { DemoPage } from "@/gallery/DemoPage";
 import { Hand, Ruler, Square } from "lucide-react-native";

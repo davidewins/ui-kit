@@ -1,5 +1,5 @@
 import { Text } from "@/components/ui";
-import { ComposeHost } from "@/components/ui/NativeHost";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
 import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -23,7 +23,7 @@ export default function SegmentedPage() {
   const [range, setRange] = useState(0);
   return (
     <DemoPage
-      usage='import { SegmentedControl } from "@/components/ui/SegmentedControl". iOS: SwiftUI segmented Picker. Android: Material 3 segmented buttons. Put it at the bottom of the page.'
+      usage='import { SegmentedControl } from "@/components/ui/inputs/SegmentedControl". iOS: SwiftUI segmented Picker. Android: Material 3 segmented buttons. Put it at the bottom of the page.'
       bottom={<BottomSwitch values={RANGES} selectedIndex={range} onChange={setRange} accessibilityLabel="Range" />}
     >
       <Demo title={`Orders ${RANGES[range].toLowerCase() === "today" ? "today" : `this ${RANGES[range].toLowerCase()}`}`}>

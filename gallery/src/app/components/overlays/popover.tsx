@@ -1,5 +1,5 @@
 import { Text, View } from "@/components/ui";
-import { Popover } from "@/components/ui/Popover";
+import { Popover } from "@/components/ui/overlays/Popover";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 
@@ -12,7 +12,7 @@ export default function PopoverPage() {
     </View>
   );
   return (
-    <DemoPage usage='import { Popover } from "@/components/ui/Popover". iOS: SwiftUI popover (a sheet on iPhone, a popover on iPad). Android: a Compose DropdownMenu panel.'>
+    <DemoPage usage='import { Popover } from "@/components/ui/overlays/Popover". iOS: SwiftUI popover (a sheet on iPhone, a popover on iPad). Android: a Compose DropdownMenu panel.'>
       <Demo title="Fee breakdown">
         <View style={{ flexDirection: "row" }}>
           <Popover label="Fees" systemImage="info.circle">

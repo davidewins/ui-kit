@@ -1,5 +1,5 @@
 import { Text, View } from "@/components/ui";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { GlassEffectContainer, Host, HStack, Image as SFImage, Slider, Text as SwiftText } from "@expo/ui/swift-ui";
 import { glassEffect, padding } from "@expo/ui/swift-ui/modifiers";
 import { GlassContainer, GlassView, isLiquidGlassAvailable } from "expo-glass-effect";

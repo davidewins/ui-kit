@@ -1,10 +1,10 @@
 import { LoadErrorState } from "@/components/LoadErrorState";
 import { ScrollView, SkeletonList, Text, View } from "@/components/ui";
-import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow, type SettingsIcon } from "@/components/ui/SettingsRow";
-import { Switch } from "@/components/ui/Switch";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
+import { SegmentedControl } from "@/components/ui/inputs/SegmentedControl";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow, type SettingsIcon } from "@/components/ui/lists/SettingsRow";
+import { Switch } from "@/components/ui/inputs/Switch";
 import { API_URL } from "@/apps/void/constants/keys";
 import { useSafeMutation } from "@/hooks/useSafeMutation";
 import { useSafeQuery } from "@/hooks/useSafeQuery";

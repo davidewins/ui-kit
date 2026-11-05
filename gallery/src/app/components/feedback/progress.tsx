@@ -1,6 +1,6 @@
 import { Text, View } from "@/components/ui";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
-import { ProgressBar } from "@/components/ui/ProgressBar";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { ProgressBar } from "@/components/ui/feedback/ProgressBar";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import {
@@ -21,7 +21,7 @@ import { useMemo } from "react";
 export default function ProgressPage() {
   const colors = useThemeColors();
   return (
-    <DemoPage usage='import { ProgressBar } from "@/components/ui/ProgressBar". iOS: SwiftUI ProgressView. Loading data uses Skeleton, not a spinner.'>
+    <DemoPage usage='import { ProgressBar } from "@/components/ui/feedback/ProgressBar". iOS: SwiftUI ProgressView. Loading data uses Skeleton, not a spinner.'>
       <Demo title="ProgressBar: uploading menu photos">
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text weight="medium" style={{ fontSize: 13 }}>3 of 5 photos</Text>

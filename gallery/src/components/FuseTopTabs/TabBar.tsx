@@ -1,5 +1,5 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/FuseTopTabs/TabBar.tsx. Edit it there and sync; local edits fail ui-kit:check.
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { SegmentedControl } from "@/components/ui/inputs/SegmentedControl";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import React, { FC, RefObject, useState } from "react";

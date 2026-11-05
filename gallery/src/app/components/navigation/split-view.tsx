@@ -1,4 +1,4 @@
-import { SwiftHost } from "@/components/ui/NativeHost";
+import { SwiftHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Frame, Note, isIOS } from "@/gallery/DemoPage";
 import { STORES } from "@/gallery/demoData";
 import { useThemeColors } from "@/hooks/useThemeColors";

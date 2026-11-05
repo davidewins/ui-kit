@@ -1,6 +1,6 @@
 // Gallery-only: a compartment's own page, listing everything in it.
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { entriesIn, hrefOf } from "@/gallery/catalog";
 import type { Href } from "expo-router";
 import { ScrollView } from "react-native";

@@ -1,7 +1,7 @@
 // Gallery-only: the variant switch every demo page uses, pinned to the bottom
 // of the page (David, 3 Nov: segmented controls go at the bottom in ZESTY).
 import { View } from "@/components/ui";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { SegmentedControl } from "@/components/ui/inputs/SegmentedControl";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

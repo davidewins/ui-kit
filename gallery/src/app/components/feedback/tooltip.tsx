@@ -1,4 +1,4 @@
-import { ComposeHost } from "@/components/ui/NativeHost";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { FilledTonalIconButton, Icon, Row, Text as MText, TooltipBox, type TooltipBoxRef } from "@expo/ui/jetpack-compose";

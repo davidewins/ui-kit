@@ -1,5 +1,5 @@
 import { Text, View } from "@/components/ui";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Ionicons } from "@expo/vector-icons";
 import { FC } from "react";

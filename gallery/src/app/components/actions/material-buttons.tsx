@@ -1,4 +1,4 @@
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -37,7 +37,7 @@ export default function NativeButtonStyles() {
     <DemoPage
       usage={
         isIOS
-          ? 'SwiftUI: import { Button } from "@expo/ui/swift-ui". In apps use NativeButton from "@/components/ui/NativeButton".'
+          ? 'SwiftUI: import { Button } from "@expo/ui/swift-ui". In apps use NativeButton from "@/components/ui/actions/NativeButton".'
           : 'Compose: import { Button, FilledTonalButton, IconButton, ToggleButton, SplitButtonLayout } from "@expo/ui/jetpack-compose".'
       }
     >

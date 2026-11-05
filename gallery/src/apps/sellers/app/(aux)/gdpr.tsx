@@ -10,8 +10,8 @@
 // by what it does, what we collect is one sentence, and the three groups carry
 // small eyebrow labels (the one screen David asked to have them).
 
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ScrollView, Text } from "@/apps/sellers/components/ui";
 import { CONTACT_EMAIL } from "@/apps/sellers/constants/keys";
 import { useThemeColors } from "@/hooks/useThemeColors";

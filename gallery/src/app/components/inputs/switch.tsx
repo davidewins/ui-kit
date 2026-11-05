@@ -1,7 +1,7 @@
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
-import { Switch } from "@/components/ui/Switch";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
+import { Switch } from "@/components/ui/inputs/Switch";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { Icon, Row, Switch as MSwitch, SyncSwitch, Text as MText } from "@expo/ui/jetpack-compose";
@@ -16,7 +16,7 @@ export default function SwitchPage() {
   const [accepting, setAccepting] = useState(true);
   const [alerts, setAlerts] = useState(false);
   return (
-    <DemoPage usage='import { Switch } from "@/components/ui/Switch". Same props as React Native Switch. iOS: SwiftUI Toggle. Android: React Native Switch.'>
+    <DemoPage usage='import { Switch } from "@/components/ui/inputs/Switch". Same props as React Native Switch. iOS: SwiftUI Toggle. Android: React Native Switch.'>
       <Demo title="In settings rows">
         <View style={{ marginHorizontal: -20 }}>
           <SettingsGroup>

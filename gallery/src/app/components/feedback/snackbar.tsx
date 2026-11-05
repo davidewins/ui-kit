@@ -1,4 +1,4 @@
-import { ComposeHost } from "@/components/ui/NativeHost";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";

@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/Badge";
-import { Text } from "@/components/ui/Text";
-import { View } from "@/components/ui/View";
+import { Badge } from "@/components/ui/feedback/Badge";
+import { Text } from "@/components/ui/primitives/Text";
+import { View } from "@/components/ui/primitives/View";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { ChevronRight } from "lucide-react-native";
 import { Pressable } from "react-native";

@@ -1,5 +1,5 @@
 import { Text } from "@/components/ui";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Frame, Note, isIOS } from "@/gallery/DemoPage";
 import { MENU } from "@/gallery/demoData";

@@ -1,6 +1,6 @@
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
-import { PickerRow } from "@/components/ui/PickerRow";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { PickerRow } from "@/components/ui/inputs/PickerRow";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { PREP_TIMES } from "@/gallery/demoData";
@@ -24,7 +24,7 @@ const VEHICLES = ["Bicycle", "E-bike", "Scooter", "Car"] as const;
 export default function PickerPage() {
   const [prep, setPrep] = useState(15);
   return (
-    <DemoPage usage='import { PickerRow } from "@/components/ui/PickerRow". iOS: SwiftUI Picker (menu). Android: PickerRow opens an Alert list; the Compose dropdown is ExposedDropdownMenuBox.'>
+    <DemoPage usage='import { PickerRow } from "@/components/ui/inputs/PickerRow". iOS: SwiftUI Picker (menu). Android: PickerRow opens an Alert list; the Compose dropdown is ExposedDropdownMenuBox.'>
       <Demo title="PickerRow">
         <View style={{ marginHorizontal: -20 }}>
           <SettingsGroup>

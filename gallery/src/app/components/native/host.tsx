@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/Badge";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
+import { Badge } from "@/components/ui/feedback/Badge";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -13,7 +13,7 @@ import { font } from "@expo/ui/swift-ui/modifiers";
 export default function HostPage() {
   const colors = useThemeColors();
   return (
-    <DemoPage usage={'import { SwiftHost, ComposeHost } from "@/components/ui/NativeHost". One host per island, never nested, never the other platform\'s.'}>
+    <DemoPage usage={'import { SwiftHost, ComposeHost } from "@/components/ui/native/NativeHost". One host per island, never nested, never the other platform\'s.'}>
       <Demo title="matchContents: sized by its content">
         {isIOS ? (
           <SwiftHost matchContents>

@@ -1,6 +1,6 @@
 import { Text } from "@/components/ui";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
-import { NativeTextField } from "@/components/ui/NativeTextField";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { NativeTextField } from "@/components/ui/inputs/NativeTextField";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { BasicTextField, Text as MText, TextField as MTextField } from "@expo/ui/jetpack-compose";
@@ -20,7 +20,7 @@ export default function TextFieldPage() {
   const eircodeError = eircode && !EIRCODE.test(eircode) ? "That Eircode looks short. It's 7 characters, like K67 XW32." : undefined;
 
   return (
-    <DemoPage usage='import { NativeTextField } from "@/components/ui/NativeTextField". iOS: SwiftUI TextField / SecureField. Android: Compose OutlinedTextField.'>
+    <DemoPage usage='import { NativeTextField } from "@/components/ui/inputs/NativeTextField". iOS: SwiftUI TextField / SecureField. Android: Compose OutlinedTextField.'>
       <Demo title="Email" gap={16}>
         <NativeTextField label="Email" value={email} onChangeText={setEmail} keyboard="email" placeholder="you@example.com" />
       </Demo>

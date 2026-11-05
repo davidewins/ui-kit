@@ -1,6 +1,6 @@
 import { Text } from "@/components/ui";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
-import { NativeButton } from "@/components/ui/NativeButton";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { NativeButton } from "@/components/ui/actions/NativeButton";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { OutlinedTextField, SyncSwitch, Row, Text as MText } from "@expo/ui/jetpack-compose";

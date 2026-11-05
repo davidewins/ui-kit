@@ -1,7 +1,7 @@
 import { View } from "@/components/ui";
-import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { createAudioPlayer } from "expo-audio";
 import * as Haptics from "expo-haptics";
 import { CircleAlert, CircleCheck, Info } from "lucide-react-native";

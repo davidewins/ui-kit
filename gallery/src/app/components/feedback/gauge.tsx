@@ -1,6 +1,6 @@
 import { View } from "@/components/ui";
-import { Gauge } from "@/components/ui/Gauge";
-import { SwiftHost } from "@/components/ui/NativeHost";
+import { Gauge } from "@/components/ui/feedback/Gauge";
+import { SwiftHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Gauge as SwiftGauge, HStack, Text } from "@expo/ui/swift-ui";
@@ -8,7 +8,7 @@ import { gaugeStyle, tint } from "@expo/ui/swift-ui/modifiers";
 
 export default function GaugePage() {
   return (
-    <DemoPage usage='import { Gauge } from "@/components/ui/Gauge". iOS: SwiftUI Gauge. Android: Compose progress indicators.'>
+    <DemoPage usage='import { Gauge } from "@/components/ui/feedback/Gauge". iOS: SwiftUI Gauge. Android: Compose progress indicators.'>
       <Demo title="Ring">
         <View style={{ flexDirection: "row", gap: 24 }}>
           <Gauge label="Kitchen load" value={0.62} valueLabel="62%" />

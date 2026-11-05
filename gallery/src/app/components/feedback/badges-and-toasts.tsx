@@ -1,7 +1,7 @@
 import { Badge, View } from "@/components/ui";
-import { CountBadge } from "@/components/ui/CountBadge";
-import { GlassButton } from "@/components/ui/GlassButton";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { CountBadge } from "@/components/ui/feedback/CountBadge";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { ScrollView } from "react-native";
 import { Toast } from "@/lib/toast";
 

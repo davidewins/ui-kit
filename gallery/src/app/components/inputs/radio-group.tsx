@@ -1,4 +1,4 @@
-import { RadioGroup } from "@/components/ui/RadioGroup";
+import { RadioGroup } from "@/components/ui/inputs/RadioGroup";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { SLOTS } from "@/gallery/demoData";
 import { useState } from "react";
@@ -13,7 +13,7 @@ export default function RadioGroupPage() {
   const [slot, setSlot] = useState<string>(SLOTS[0]);
   const [payout, setPayout] = useState<string>("weekly");
   return (
-    <DemoPage usage='import { RadioGroup } from "@/components/ui/RadioGroup". iOS: SwiftUI checkmark rows. Android: Compose RadioButton.'>
+    <DemoPage usage='import { RadioGroup } from "@/components/ui/inputs/RadioGroup". iOS: SwiftUI checkmark rows. Android: Compose RadioButton.'>
       <Demo title="Delivery slot">
         <RadioGroup options={SLOTS.map((s) => ({ label: s, value: s }))} value={slot} onChange={setSlot} />
       </Demo>

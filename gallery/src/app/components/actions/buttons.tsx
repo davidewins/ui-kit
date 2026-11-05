@@ -1,6 +1,6 @@
 import { Button, View } from "@/components/ui";
-import { NativeButton } from "@/components/ui/NativeButton";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { NativeButton } from "@/components/ui/actions/NativeButton";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";

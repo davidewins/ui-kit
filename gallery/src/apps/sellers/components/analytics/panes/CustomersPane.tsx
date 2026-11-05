@@ -6,8 +6,8 @@
 import { AreaChart } from "@/apps/sellers/components/analytics/AreaChart";
 import { KpiTile } from "@/apps/sellers/components/analytics/KpiTile";
 import { EmptyState, Pressable, ScrollView, SectionTitle, Text, View } from "@/apps/sellers/components/ui";
-import { Button } from "@/components/ui/Button";
-import { SkeletonBlock } from "@/components/ui/SkeletonBlock";
+import { Button } from "@/components/ui/actions/Button";
+import { SkeletonBlock } from "@/components/ui/feedback/SkeletonBlock";
 import { useAnalyticsCustomers } from "@/apps/sellers/hooks/useAnalyticsCustomers";
 import { useCurrentVendorId } from "@/apps/sellers/hooks/useCurrentVendor";
 import { useThemeColors } from "@/hooks/useThemeColors";

@@ -1,7 +1,7 @@
 import { Text, View } from "@/components/ui";
-import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { ComposeHost } from "@/components/ui/NativeHost";
-import { NativeButton } from "@/components/ui/NativeButton";
+import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
+import { NativeButton } from "@/components/ui/actions/NativeButton";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
@@ -15,7 +15,7 @@ export default function ConfirmDialogPage() {
   const [open, setOpen] = useState<Open>(null);
   const close = () => setOpen(null);
   return (
-    <DemoPage usage='import { ConfirmDialog } from "@/components/ui/ConfirmDialog". iOS: SwiftUI Alert / ConfirmationDialog. Android: Compose AlertDialog. Name the consequence, never "Are you sure?".'>
+    <DemoPage usage='import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog". iOS: SwiftUI Alert / ConfirmationDialog. Android: Compose AlertDialog. Name the consequence, never "Are you sure?".'>
       <Demo title="Alert, destructive">
         <Row>
           <NativeButton label="Cancel order" tone="destructive" onPress={() => setOpen("cancel")} />

@@ -1,6 +1,6 @@
 import { View } from "@/components/ui";
-import { CountBadge } from "@/components/ui/CountBadge";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
+import { CountBadge } from "@/components/ui/feedback/CountBadge";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Frame, Note, isIOS } from "@/gallery/DemoPage";
 import { Badge, BadgedBox, Icon, Row, Text as MText } from "@expo/ui/jetpack-compose";
@@ -10,7 +10,7 @@ import { Bell } from "lucide-react-native";
 
 export default function BadgePage() {
   return (
-    <DemoPage usage='import { CountBadge } from "@/components/ui/CountBadge". Native: SwiftUI badge() modifier on tabs, Compose BadgedBox. White text on a red fill.'>
+    <DemoPage usage='import { CountBadge } from "@/components/ui/feedback/CountBadge". Native: SwiftUI badge() modifier on tabs, Compose BadgedBox. White text on a red fill.'>
       <Demo title="CountBadge (kit)">
         <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
           <View>

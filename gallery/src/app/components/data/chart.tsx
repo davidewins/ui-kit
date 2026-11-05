@@ -1,6 +1,6 @@
 import { Text, View } from "@/components/ui";
 import { Sparkline } from "@/components/analytics/Sparkline";
-import { SwiftHost } from "@/components/ui/NativeHost";
+import { SwiftHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { SALES_WEEK } from "@/gallery/demoData";
 import { useThemeColors } from "@/hooks/useThemeColors";

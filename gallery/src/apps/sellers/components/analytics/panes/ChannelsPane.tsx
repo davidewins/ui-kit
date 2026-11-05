@@ -6,7 +6,7 @@ import { Donut } from "@/apps/sellers/components/analytics/Donut";
 import { KpiTile } from "@/apps/sellers/components/analytics/KpiTile";
 import { StorefrontList } from "@/apps/sellers/components/analytics/StorefrontList";
 import { EmptyState, ScrollView, Text, View } from "@/apps/sellers/components/ui";
-import { SkeletonBlock } from "@/components/ui/SkeletonBlock";
+import { SkeletonBlock } from "@/components/ui/feedback/SkeletonBlock";
 import { useAnalyticsChannels } from "@/apps/sellers/hooks/useAnalyticsChannels";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { LoadErrorState } from "@/components/LoadErrorState";

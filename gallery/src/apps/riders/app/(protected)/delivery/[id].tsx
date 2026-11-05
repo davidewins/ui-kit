@@ -6,9 +6,9 @@
 import { Text, View } from "@/components/ui";
 import { useOrderBadgeStore } from "@/apps/riders/stores/orderBadgeStore";
 import { GraySurface } from "@/apps/riders/components/GraySurface";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { useGroupSurface } from "@/gallery/groupStyle";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useStartChat } from "@/apps/riders/hooks/useStartChat";
 import { useStartSupportChat } from "@/apps/riders/hooks/useStartSupportChat";

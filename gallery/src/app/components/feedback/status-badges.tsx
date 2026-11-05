@@ -1,6 +1,6 @@
 import { Badge, View } from "@/components/ui";
-import { CountBadge } from "@/components/ui/CountBadge";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { CountBadge } from "@/components/ui/feedback/CountBadge";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SellersTrendChip } from "@/compare/status/Pills";
 import { TkvrBadge } from "@/compare/status/TkvrBadge";
 import type { ReactNode } from "react";

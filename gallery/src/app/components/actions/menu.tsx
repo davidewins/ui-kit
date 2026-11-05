@@ -1,6 +1,6 @@
 import { Text, View } from "@/components/ui";
-import { Menu } from "@/components/ui/Menu";
-import { ComposeHost } from "@/components/ui/NativeHost";
+import { Menu } from "@/components/ui/actions/Menu";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { PREP_TIMES } from "@/gallery/demoData";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -23,7 +23,7 @@ export default function MenuPage() {
   const [prep, setPrep] = useState<string>(PREP_TIMES[1]);
 
   return (
-    <DemoPage usage='import { Menu } from "@/components/ui/Menu". iOS: SwiftUI Menu. Android: Compose DropdownMenu.'>
+    <DemoPage usage='import { Menu } from "@/components/ui/actions/Menu". iOS: SwiftUI Menu. Android: Compose DropdownMenu.'>
       <Demo title="Actions">
         <View style={{ flexDirection: "row" }}>
           <Menu

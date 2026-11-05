@@ -1,7 +1,7 @@
 import { View } from "@/components/ui";
-import { ColorRow } from "@/components/ui/ColorRow";
-import { SwiftHost } from "@/components/ui/NativeHost";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
+import { ColorRow } from "@/components/ui/inputs/ColorRow";
+import { SwiftHost } from "@/components/ui/native/NativeHost";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { ColorPicker } from "@expo/ui/swift-ui";
 import { Palette } from "lucide-react-native";
@@ -11,7 +11,7 @@ export default function ColorPickerPage() {
   const [accent, setAccent] = useState("#dc2626");
   const [label, setLabel] = useState<string | null>("#000000");
   return (
-    <DemoPage usage='import { ColorRow } from "@/components/ui/ColorRow". iOS: SwiftUI ColorPicker. Android: the colour shown read-only (Compose has no colour picker).'>
+    <DemoPage usage='import { ColorRow } from "@/components/ui/inputs/ColorRow". iOS: SwiftUI ColorPicker. Android: the colour shown read-only (Compose has no colour picker).'>
       <Demo title="ColorRow: storefront accent">
         <View style={{ marginHorizontal: -20 }}>
           <SettingsGroup>

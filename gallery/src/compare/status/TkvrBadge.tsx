@@ -1,8 +1,8 @@
 // Verbatim copy of TKVR src/components/ui/Badge.tsx before ui-kit (export renamed).
 import React from "react";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { Text } from "@/components/ui/Text";
-import { View } from "@/components/ui/View";
+import { Text } from "@/components/ui/primitives/Text";
+import { View } from "@/components/ui/primitives/View";
 
 type BadgeVariant = "default" | "success" | "error" | "warning" | "info";
 

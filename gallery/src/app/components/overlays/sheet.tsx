@@ -1,6 +1,6 @@
 import { Button, Text, View } from "@/components/ui";
-import { NativeButton } from "@/components/ui/NativeButton";
-import { Sheet } from "@/components/ui/Sheet";
+import { NativeButton } from "@/components/ui/actions/NativeButton";
+import { Sheet } from "@/components/ui/overlays/Sheet";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
@@ -11,7 +11,7 @@ export default function SheetPage() {
   const [closing, setClosing] = useState(false);
   const [tip, setTip] = useState(false);
   return (
-    <DemoPage usage='import { Sheet } from "@/components/ui/Sheet". iOS: SwiftUI sheet sized to its content. Android: Compose ModalBottomSheet. Never React Native Modal.'>
+    <DemoPage usage='import { Sheet } from "@/components/ui/overlays/Sheet". iOS: SwiftUI sheet sized to its content. Android: Compose ModalBottomSheet. Never React Native Modal.'>
       <Demo title="Confirm with consequence">
         <View style={{ flexDirection: "row" }}>
           <NativeButton label="Close for the day" systemImage="xmark.circle" tone="destructive" onPress={() => setClosing(true)} />

@@ -1,7 +1,7 @@
 import { View } from "@/components/ui";
-import { Chip } from "@/components/ui/Chip";
-import { FilterChip } from "@/components/ui/FilterChip";
-import { ComposeHost } from "@/components/ui/NativeHost";
+import { Chip } from "@/components/ui/inputs/Chip";
+import { FilterChip } from "@/components/ui/inputs/FilterChip";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
 import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { DIETARY } from "@/gallery/demoData";
@@ -17,7 +17,7 @@ export default function ChipsPage() {
   const [diet, setDiet] = useState<string>("Vegan");
   const flip = (f: string) => setOn((l) => (l.includes(f) ? l.filter((x) => x !== f) : [...l, f]));
   return (
-    <DemoPage usage='import { FilterChip } from "@/components/ui/FilterChip" (native) or { Chip } from "@/components/ui/Chip" (React Native glass).'>
+    <DemoPage usage='import { FilterChip } from "@/components/ui/inputs/FilterChip" (native) or { Chip } from "@/components/ui/inputs/Chip" (React Native glass).'>
       <Demo title="FilterChip: store filters">
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {FILTERS.map((f) => (

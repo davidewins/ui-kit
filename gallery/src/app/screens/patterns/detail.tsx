@@ -1,7 +1,7 @@
 import { Text, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { Image } from "expo-image";

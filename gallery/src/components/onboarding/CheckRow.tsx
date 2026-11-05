@@ -4,8 +4,8 @@
 // on the left because the user is agreeing to a statement, not picking one of
 // several options.
 
-import { Text } from "@/components/ui/Text";
-import { View } from "@/components/ui/View";
+import { Text } from "@/components/ui/primitives/Text";
+import { View } from "@/components/ui/primitives/View";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { Check } from "lucide-react-native";

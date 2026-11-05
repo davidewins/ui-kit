@@ -2,7 +2,7 @@
 // the import, then one Demo block per variant. The header title comes from
 // the catalog (src/gallery/catalog.ts) via the root layout.
 import { Text, View } from "@/components/ui";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import type { ReactNode } from "react";
 import { Platform, ScrollView } from "react-native";

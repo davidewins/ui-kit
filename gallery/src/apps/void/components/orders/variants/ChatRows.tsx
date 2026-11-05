@@ -2,7 +2,7 @@
 // profile row already use. Renders bare rows: the variant decides what surface
 // they sit on.
 import { Text } from "@/components/ui";
-import { CountBadge } from "@/components/ui/CountBadge";
+import { CountBadge } from "@/components/ui/feedback/CountBadge";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { ChevronRight, MessageCircle } from "lucide-react-native";

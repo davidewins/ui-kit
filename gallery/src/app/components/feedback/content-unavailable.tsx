@@ -1,10 +1,10 @@
-import { ContentUnavailable } from "@/components/ui/ContentUnavailable";
+import { ContentUnavailable } from "@/components/ui/feedback/ContentUnavailable";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { Toast } from "@/lib/toast";
 
 export default function ContentUnavailablePage() {
   return (
-    <DemoPage usage='import { ContentUnavailable } from "@/components/ui/ContentUnavailable". iOS: SwiftUI ContentUnavailableView. For illustrated empty states use EmptyState.'>
+    <DemoPage usage='import { ContentUnavailable } from "@/components/ui/feedback/ContentUnavailable". iOS: SwiftUI ContentUnavailableView. For illustrated empty states use EmptyState.'>
       <Demo title="No results">
         <ContentUnavailable
           systemImage="magnifyingglass"

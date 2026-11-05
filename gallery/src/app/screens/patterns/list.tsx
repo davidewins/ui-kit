@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { HeaderIconButton } from "@/components/ui/HeaderIconButton";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
+import { EmptyState } from "@/components/ui/feedback/EmptyState";
+import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { SkeletonList } from "@/components/ui";
 import { View } from "@/components/ui";
 import { BottomSwitch } from "@/gallery/BottomSwitch";

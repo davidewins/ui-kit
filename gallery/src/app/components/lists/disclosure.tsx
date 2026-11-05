@@ -1,5 +1,5 @@
 import { Text, View } from "@/components/ui";
-import { Disclosure } from "@/components/ui/Disclosure";
+import { Disclosure } from "@/components/ui/lists/Disclosure";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useState } from "react";
@@ -14,7 +14,7 @@ export default function DisclosurePage() {
     </View>
   );
   return (
-    <DemoPage usage='import { Disclosure } from "@/components/ui/Disclosure". iOS: SwiftUI DisclosureGroup. Android: Compose ListItem + AnimatedVisibility.'>
+    <DemoPage usage='import { Disclosure } from "@/components/ui/lists/Disclosure". iOS: SwiftUI DisclosureGroup. Android: Compose ListItem + AnimatedVisibility.'>
       <Demo title="Order items (starts closed)">
         <Disclosure title="4 items in order #1042">
           <View style={{ paddingVertical: 4 }}>

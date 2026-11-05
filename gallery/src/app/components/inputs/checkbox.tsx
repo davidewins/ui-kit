@@ -1,5 +1,5 @@
-import { Checkbox } from "@/components/ui/Checkbox";
-import { ComposeHost } from "@/components/ui/NativeHost";
+import { Checkbox } from "@/components/ui/inputs/Checkbox";
+import { ComposeHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { DIETARY } from "@/gallery/demoData";
 import { Row, Text as MText, TriStateCheckbox } from "@expo/ui/jetpack-compose";
@@ -16,7 +16,7 @@ export default function CheckboxPage() {
   const all = tickets.length === TICKETS.length ? "on" : tickets.length === 0 ? "off" : "indeterminate";
 
   return (
-    <DemoPage usage='import { Checkbox } from "@/components/ui/Checkbox". iOS: SwiftUI checkmark circle. Android: Compose Checkbox.'>
+    <DemoPage usage='import { Checkbox } from "@/components/ui/inputs/Checkbox". iOS: SwiftUI checkmark circle. Android: Compose Checkbox.'>
       <Demo title="Dietary tags on a menu item" gap={4}>
         {DIETARY.map((d) => (
           <Checkbox key={d} label={d} value={diet.includes(d)} onValueChange={() => toggle(diet, setDiet, d)} />

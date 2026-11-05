@@ -10,7 +10,7 @@ Rules and screen recipes: [Native UI spec](https://linear.app/takeoversoftware/d
 | Path | What |
 | -- | -- |
 | `tokens.json` | Colour tokens, light + dark (spec §2.1). Generates `native/files/src/globals.css` |
-| `native/files/` | Canonical native files, at the same path they live in an app (`src/components/ui/SettingsRow.tsx` etc.), so imports work unchanged |
+| `native/files/` | Canonical native files, at the same path they live in an app (`src/components/ui/lists/SettingsRow.tsx` etc.), so imports work unchanged |
 | `native/seeds/` | App-owned files the kit depends on, copied once when missing (`useFontFamily`: Geist only) |
 | `bin/ui-kit.mjs` | `tokens`, `sync`, `check` |
 | `recipes/` | Reference screens copied in by hand, never synced (`recipes/auth`: Welcome / Email / Verify OTP + root session gate, from VOID) |
@@ -26,6 +26,8 @@ node ~/Desktop/os/ui-kit/bin/ui-kit.mjs tokens
 ```
 
 Each app has a `ui-kit.json` listing the kit files it uses, plus a `ui-kit.lock.json` written by sync (kit commit and a hash per file). Synced files start with a `ui-kit:` header line.
+
+`src/components/ui/` is grouped into the gallery's compartments: `primitives/` (Text, View, Pressable, lists, Image, Heading, Label...), `actions/`, `inputs/`, `lists/`, `feedback/`, `overlays/`, `surfaces/`, `layout/`, `native/`. Import a file by its folder (`@/components/ui/actions/Button`) or through the app's `@/components/ui` barrel.
 
 To change a component: edit it here, commit, sync into every app that lists it, typecheck each app. Never edit the copy inside an app; `check` fails on it.
 

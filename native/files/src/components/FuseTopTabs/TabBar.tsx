@@ -1,4 +1,4 @@
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { SegmentedControl } from "@/components/ui/inputs/SegmentedControl";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import React, { FC, RefObject, useState } from "react";

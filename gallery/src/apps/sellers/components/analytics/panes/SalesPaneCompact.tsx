@@ -13,7 +13,7 @@
 import { AreaChart } from "@/apps/sellers/components/analytics/AreaChart";
 import { alpha } from "@/apps/sellers/components/analytics/utils";
 import { EmptyState, Pressable, ScrollView, SectionTitle, Text, View } from "@/apps/sellers/components/ui";
-import { SkeletonBlock } from "@/components/ui/SkeletonBlock";
+import { SkeletonBlock } from "@/components/ui/feedback/SkeletonBlock";
 import { useAnalyticsChannels } from "@/apps/sellers/hooks/useAnalyticsChannels";
 import { useAnalyticsRevenue } from "@/apps/sellers/hooks/useAnalyticsRevenue";
 import { useThemeColors } from "@/hooks/useThemeColors";

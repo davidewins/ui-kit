@@ -1,10 +1,10 @@
 import { queryClient } from "@/apps/sellers/lib/queryClient";
-import { Card } from "@/components/ui/Card";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
-import { GlassButton } from "@/components/ui/GlassButton";
-import { SkeletonBlock } from "@/components/ui/SkeletonBlock";
-import { ActionMenu } from "@/components/ui/ActionMenu";
+import { Card } from "@/components/ui/surfaces/Card";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
+import { SkeletonBlock } from "@/components/ui/feedback/SkeletonBlock";
+import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { LoadErrorState } from "@/components/LoadErrorState";
 import { Badge, Pressable, ScrollView, SectionTitle, Text, View } from "@/apps/sellers/components/ui";
 import { ProductPhoto } from "@/apps/sellers/components/products/ProductPhoto";

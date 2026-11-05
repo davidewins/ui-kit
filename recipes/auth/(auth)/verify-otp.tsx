@@ -1,5 +1,5 @@
 import { Button, Text, View } from "@/components/ui";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
 import { useCreateAccount } from "@/hooks/useCreateAccount";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import Logger from "@/lib/Logger";

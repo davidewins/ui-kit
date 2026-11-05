@@ -17,8 +17,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { Text } from "@/components/ui/Text";
-import { View } from "@/components/ui/View";
+import { Text } from "@/components/ui/primitives/Text";
+import { View } from "@/components/ui/primitives/View";
 
 /**
  * NativeBottomBar - iOS-Calendar-style floating glass pill action bar.

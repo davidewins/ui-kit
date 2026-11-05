@@ -1,25 +1,25 @@
 // Primitives
-export { FlatList } from "./FlatList";
-export { Image } from "./Image";
-export { Pressable } from "./Pressable";
-export { SafeAreaView } from "./SafeAreaView";
-export { ScrollView } from "./ScrollView";
-export { Text } from "./Text";
-export { TextInput } from "./TextInput";
-export { View } from "./View";
+export { FlatList } from "./primitives/FlatList";
+export { Image } from "./primitives/Image";
+export { Pressable } from "./primitives/Pressable";
+export { SafeAreaView } from "./primitives/SafeAreaView";
+export { ScrollView } from "./primitives/ScrollView";
+export { Text } from "./primitives/Text";
+export { TextInput } from "./primitives/TextInput";
+export { View } from "./primitives/View";
 
 // Components
-export { Badge } from "./Badge";
-export { Button } from "./Button";
-export { Card } from "./Card";
-export { Divider } from "./Divider";
-export { EmptyState } from "./EmptyState";
-export { Heading } from "./Heading";
-export { Input } from "./Input";
-export { Label } from "./Label";
+export { Badge } from "./feedback/Badge";
+export { Button } from "./actions/Button";
+export { Card } from "./surfaces/Card";
+export { Divider } from "./layout/Divider";
+export { EmptyState } from "./feedback/EmptyState";
+export { Heading } from "./primitives/Heading";
+export { Input } from "./inputs/Input";
+export { Label } from "./primitives/Label";
 export {
   LegendList,
   type LegendListRef,
   type LegendListRenderItemProps,
-} from "./LegendList";
-export { Skeleton, SkeletonList } from "./Skeleton";
+} from "./primitives/LegendList";
+export { Skeleton, SkeletonList } from "./feedback/Skeleton";

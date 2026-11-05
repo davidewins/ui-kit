@@ -1,4 +1,4 @@
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { FilledTonalButton, Text as MText } from "@expo/ui/jetpack-compose";
 import { Label, Link } from "@expo/ui/swift-ui";

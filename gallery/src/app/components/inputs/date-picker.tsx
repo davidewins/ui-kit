@@ -1,7 +1,7 @@
 import { Text, View } from "@/components/ui";
-import { DateRow } from "@/components/ui/DateRow";
-import { ComposeHost, SwiftHost } from "@/components/ui/NativeHost";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
+import { DateRow } from "@/components/ui/inputs/DateRow";
+import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import {
@@ -30,7 +30,7 @@ export default function DatePickerPage() {
   const [opens, setOpens] = useState(() => at(11));
   const [pause, setPause] = useState(() => at(17, 30));
   return (
-    <DemoPage usage='import { DateRow } from "@/components/ui/DateRow". iOS: SwiftUI DatePicker (compact). Android: read-only value; native pickers are the Compose DateTimePicker and dialogs.'>
+    <DemoPage usage='import { DateRow } from "@/components/ui/inputs/DateRow". iOS: SwiftUI DatePicker (compact). Android: read-only value; native pickers are the Compose DateTimePicker and dialogs.'>
       <Demo title="DateRow">
         <View style={{ marginHorizontal: -20 }}>
           <SettingsGroup>

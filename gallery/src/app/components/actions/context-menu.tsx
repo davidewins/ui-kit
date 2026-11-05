@@ -1,7 +1,7 @@
 import { Text, View } from "@/components/ui";
-import { Badge } from "@/components/ui/Badge";
-import { ContextMenu } from "@/components/ui/ContextMenu";
-import { Tile } from "@/components/ui/Tile";
+import { Badge } from "@/components/ui/feedback/Badge";
+import { ContextMenu } from "@/components/ui/actions/ContextMenu";
+import { Tile } from "@/components/ui/surfaces/Tile";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { ORDERS } from "@/gallery/demoData";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -10,7 +10,7 @@ import { Toast } from "@/lib/toast";
 export default function ContextMenuPage() {
   const colors = useThemeColors();
   return (
-    <DemoPage usage='import { ContextMenu } from "@/components/ui/ContextMenu". Long press each order.'>
+    <DemoPage usage='import { ContextMenu } from "@/components/ui/actions/ContextMenu". Long press each order.'>
       <Demo title="Long press an order">
         {ORDERS.slice(0, 3).map((o) => (
           <ContextMenu

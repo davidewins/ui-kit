@@ -2,7 +2,7 @@
 // were written against the old inset/flat switch. ZESTY has one look now
 // (David, 4 Nov): groups and cards sit flat on the page. `raised` is the one
 // lifted card (analytics): card fill, hairline border, soft shadow.
-import { useRaisedCardStyle } from "@/components/ui/Card";
+import { useRaisedCardStyle } from "@/components/ui/surfaces/Card";
 import type { ViewStyle } from "react-native";
 
 const NONE: ViewStyle = { backgroundColor: "transparent", borderRadius: 0 };

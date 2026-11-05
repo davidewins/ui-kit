@@ -3,8 +3,8 @@
 // RIDERS' version (spacing, note line, screen-reader labels) plus SELLERS'
 // comingSoon tag: the one SelectRow for both onboarding flows.
 
-import { Text } from "@/components/ui/Text";
-import { View } from "@/components/ui/View";
+import { Text } from "@/components/ui/primitives/Text";
+import { View } from "@/components/ui/primitives/View";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { Check, type LucideIcon } from "lucide-react-native";

@@ -1,7 +1,7 @@
 import { Image, Text, View } from "@/components/ui";
-import { ActionMenu } from "@/components/ui/ActionMenu";
-import { GlassButton } from "@/components/ui/GlassButton";
-import { Sheet } from "@/components/ui/Sheet";
+import { ActionMenu } from "@/components/ui/actions/ActionMenu";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
+import { Sheet } from "@/components/ui/overlays/Sheet";
 import { useCreateAccount } from "@/apps/void/hooks/useCreateAccount";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import Logger from "@/lib/Logger";

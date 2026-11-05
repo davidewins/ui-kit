@@ -2,7 +2,7 @@
 // heading + muted body, then the field and the glass button. The header
 // title is "" in (auth)/_layout so the heading is the only title.
 import { Input, Text, View } from "@/apps/sellers/components/ui";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
 import Logger from "@/lib/Logger";
 import { supabase } from "@/lib/supabase";
 

@@ -1,7 +1,7 @@
 import { Text, View } from "@/components/ui";
-import { ActionMenu } from "@/components/ui/ActionMenu";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow } from "@/components/ui/SettingsRow";
+import { ActionMenu } from "@/components/ui/actions/ActionMenu";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { SECTIONS, entriesIn, hrefOf, search, sectionById, sectionHref, type Kind } from "@/gallery/catalog";
 import { useThemeColors } from "@/hooks/useThemeColors";

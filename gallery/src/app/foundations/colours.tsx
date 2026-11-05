@@ -1,7 +1,7 @@
 import { View } from "@/components/ui";
-import { SectionTitle } from "@/components/ui/SectionTitle";
-import { SettingsGroup } from "@/components/ui/SettingsGroup";
-import { SettingsRow, type SettingsIcon } from "@/components/ui/SettingsRow";
+import { SectionTitle } from "@/components/ui/lists/SectionTitle";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
+import { SettingsRow, type SettingsIcon } from "@/components/ui/lists/SettingsRow";
 import { ScrollView, StyleSheet, useColorScheme } from "react-native";
 import tokens from "../../../../tokens.json";
 

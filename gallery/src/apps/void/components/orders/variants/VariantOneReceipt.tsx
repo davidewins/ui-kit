@@ -25,8 +25,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ActionMenu } from "@/components/ui/ActionMenu";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { ActionMenu } from "@/components/ui/actions/ActionMenu";
+import { GlassButton } from "@/components/ui/actions/GlassButton";
 import { ChatRows } from "./ChatRows";
 import { OrderMiniMap } from "./OrderMiniMap";
 import { toneColor } from "./orderNarrative";
