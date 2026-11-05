@@ -195,6 +195,7 @@ export const ENTRIES: Entry[] = [
   c("navigation", "tab-view", "Tabs", AppWindow, "TabView Tab NavigationBar NavigationBarItem"),
   c("navigation", "toolbar", "Toolbar and app bar", PanelTop, "Toolbar ToolbarItem TopAppBar HorizontalFloatingToolbar"),
   c("navigation", "search", "Search", Search, "searchable SearchBar DockedSearchBar headerSearchBarOptions"),
+  c("navigation", "page-types", "Page types", SquareStack, "presentation card push modal formSheet pageSheet fullScreenModal transparentModal containedModal containedTransparentModal sheetAllowedDetents fitToContents"),
 
   // Surfaces
   c("surfaces", "card-and-tile", "Card, Tile and glass", Layers, "Card Tile GlassSurface"),
@@ -235,6 +236,23 @@ export const ENTRIES: Entry[] = [
   { title: "Edit", route: "screens/patterns/edit", section: "patterns", Icon: TextCursorInput },
   { title: "Create (modal)", route: "screens/patterns/create", section: "patterns", Icon: PanelBottom },
 ];
+
+// The screens the Page types page opens, one per expo-router presentation.
+// Not compartment rows: the root layout declares each on the Stack with its
+// own presentation, and the Page types page links to them.
+export const PAGE_TYPES = {
+  card: { title: "Push", route: "components/navigation/page-types/card" },
+  modal: { title: "Modal", route: "components/navigation/page-types/modal" },
+  formSheet: { title: "Form sheet", route: "components/navigation/page-types/form-sheet" },
+  fittedFormSheet: { title: "Fitted form sheet", route: "components/navigation/page-types/fitted-form-sheet" },
+  pageSheet: { title: "Page sheet", route: "components/navigation/page-types/page-sheet" },
+  fullScreenModal: { title: "Full screen modal", route: "components/navigation/page-types/full-screen-modal" },
+  transparentModal: { title: "Transparent modal", route: "components/navigation/page-types/transparent-modal" },
+  containedModal: { title: "Contained modal", route: "components/navigation/page-types/contained-modal" },
+  containedTransparentModal: { title: "Contained transparent modal", route: "components/navigation/page-types/contained-transparent-modal" },
+} as const;
+
+export type PageType = keyof typeof PAGE_TYPES;
 
 export const hrefOf = (e: Entry) => e.href ?? `/${e.route}`;
 export const sectionHref = (sec: Section) => `/${sec.route.replace(/\/index$/, "")}`;

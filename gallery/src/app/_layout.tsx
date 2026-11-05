@@ -1,7 +1,7 @@
 import "../globals.css";
 import { Toaster } from "@/components/Toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ENTRIES, SECTIONS } from "@/gallery/catalog";
+import { ENTRIES, PAGE_TYPES, SECTIONS } from "@/gallery/catalog";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import type { NativeStackNavigationOptions } from "expo-router";
 import { useFonts } from "expo-font";
@@ -39,6 +39,12 @@ const SCREEN_OPTIONS: Record<string, NativeStackNavigationOptions> = {
   "screens/delivering/earnings": { ...minimal },
   "screens/delivering/delivery/[id]": { ...minimal, title: "Active Delivery", headerTransparent: false },
 };
+
+// Page types: the root screenOptions above paint every page and give it a
+// header. Sheets and overlays undo both, so the native sheet material (or the
+// page underneath) shows through a transparent root and the copy carries the
+// title instead.
+const SEE_THROUGH = { headerShown: false, contentStyle: { backgroundColor: "transparent" } };
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -87,6 +93,15 @@ export default function RootLayout() {
             {ENTRIES.map((e) => (
               <Stack.Screen key={e.route} name={e.route} options={{ title: e.title, ...SCREEN_OPTIONS[e.route] }} />
             ))}
+            <Stack.Screen name={PAGE_TYPES.card.route} options={{ title: PAGE_TYPES.card.title, presentation: "card" }} />
+            <Stack.Screen name={PAGE_TYPES.modal.route} options={{ title: PAGE_TYPES.modal.title, presentation: "modal" }} />
+            <Stack.Screen name={PAGE_TYPES.formSheet.route} options={{ ...SEE_THROUGH, title: PAGE_TYPES.formSheet.title, presentation: "formSheet", sheetGrabberVisible: true, sheetAllowedDetents: [0.3, 0.5, 1], sheetInitialDetentIndex: 0 }} />
+            <Stack.Screen name={PAGE_TYPES.fittedFormSheet.route} options={{ ...SEE_THROUGH, title: PAGE_TYPES.fittedFormSheet.title, presentation: "formSheet", sheetGrabberVisible: true, sheetAllowedDetents: "fitToContents" }} />
+            <Stack.Screen name={PAGE_TYPES.pageSheet.route} options={{ title: PAGE_TYPES.pageSheet.title, presentation: "pageSheet" }} />
+            <Stack.Screen name={PAGE_TYPES.fullScreenModal.route} options={{ title: PAGE_TYPES.fullScreenModal.title, presentation: "fullScreenModal" }} />
+            <Stack.Screen name={PAGE_TYPES.transparentModal.route} options={{ ...SEE_THROUGH, title: PAGE_TYPES.transparentModal.title, presentation: "transparentModal", animation: "fade" }} />
+            <Stack.Screen name={PAGE_TYPES.containedModal.route} options={{ title: PAGE_TYPES.containedModal.title, presentation: "containedModal" }} />
+            <Stack.Screen name={PAGE_TYPES.containedTransparentModal.route} options={{ ...SEE_THROUGH, title: PAGE_TYPES.containedTransparentModal.title, presentation: "containedTransparentModal", animation: "fade" }} />
           </Stack>
         </ThemeProvider>
         <StatusBar style="auto" />
