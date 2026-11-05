@@ -11,6 +11,7 @@ export const MI = {
   list: require("@/assets/icons/list.xml"),
   moreVert: require("@/assets/icons/more_vert.xml"),
   person: require("@/assets/icons/person.xml"),
+  remove: require("@/assets/icons/remove.xml"),
   search: require("@/assets/icons/search.xml"),
   arrowDown: require("@/assets/icons/keyboard_arrow_down.xml"),
 };

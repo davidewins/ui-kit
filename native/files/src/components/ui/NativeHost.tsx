@@ -23,7 +23,8 @@ type Hex = `#${string}`;
 
 export function SwiftHost({ modifiers = [], ...props }: SwiftUIHostProps) {
   const colors = useThemeColors();
-  return <SwiftUIHost {...props} modifiers={[tint(colors.text), ...modifiers]} />;
+  // seedColor tints SwiftUI controls; tint() alone does not reach them (see ProgressBar).
+  return <SwiftUIHost seedColor={colors.text} {...props} modifiers={[tint(colors.text), ...modifiers]} />;
 }
 
 /** Material 3 roles mapped onto the kit tokens: black and white, red for errors. */

@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "e84a90f",
+  "rev": "881698d",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -53,7 +53,7 @@
     "src/components/ui/LegendList.tsx": "5649d8f8c1772e679ac85063807cc58b7d5a7562a189e1533f1873f6af9d706f",
     "src/components/ui/Menu.tsx": "7160e46ae1cbba58f7309b609ca1f949597fbc29835311d0db55c3c04e3b4802",
     "src/components/ui/NativeButton.tsx": "c5cc246efbc5722385abfd2c880cc4baf263279f8320c4239b1d39e815d82352",
-    "src/components/ui/NativeHost.tsx": "b2a64e8a1bd261cf74bf0245b6289e519d92deca36ff12c411110458205e4d4e",
+    "src/components/ui/NativeHost.tsx": "6ee1baa8582a719a4e3e3ae63f39d61379f502a7c9e88d71ffea5a5a5fa7f8cb",
     "src/components/ui/NativeTextField.tsx": "b88af001c57786227dc2c288e3125c11dcec5f0126d2dcbed4272b99d36aee5f",
     "src/components/ui/PickerRow.tsx": "d29df625654b4b9c9b53cbe97b668546aa3f80a09d3fc5e0e5a361343ba317a0",
     "src/components/ui/PillButton.tsx": "c3aab567e408cc942db284f1cbc000189ea4bfaf5cebad21950cc960ec7beeff",
