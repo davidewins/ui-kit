@@ -15,7 +15,7 @@ import { Switch } from "@/components/ui/Switch";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { Stack } from "expo-router";
-import { CalendarClock, Clock, Gauge, Layers, Palette, Power, Store, Timer } from "lucide-react-native";
+import { CalendarClock, Clock, Gauge, Layers, Palette, Store, Timer } from "lucide-react-native";
 import { useState } from "react";
 import { ScrollView } from "react-native";
 
@@ -59,19 +59,13 @@ export default function NativeControls() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <ActionMenu
-              accessibilityLabel="Store actions"
-              actions={[
-                { label: "Pause for 30 min", systemImage: "pause.circle", onPress: () => Toast.info("Paused for 30 min") },
-                { label: "Share store link", systemImage: "square.and.arrow.up", onPress: () => Toast.success("Link copied") },
-                { label: "Close for the day", systemImage: "xmark.circle", destructive: true, onPress: () => setClosing(true) },
-              ]}
-            />
-          ),
-        }}
+      <ActionMenu
+        accessibilityLabel="Store actions"
+        actions={[
+          { label: "Pause for 30 min", systemImage: "pause.circle", onPress: () => Toast.info("Paused for 30 min") },
+          { label: "Share store link", systemImage: "square.and.arrow.up", onPress: () => Toast.success("Link copied") },
+          { label: "Close for the day", systemImage: "xmark.circle", destructive: true, onPress: () => setClosing(true) },
+        ]}
       />
       <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: 64 }}>
         <SegmentedControl
@@ -133,9 +127,6 @@ export default function NativeControls() {
           <ColorRow label="Accent" Icon={Palette} value={accent} onChange={setAccent} />
         </SettingsGroup>
 
-        <SettingsGroup>
-          <SettingsRow label="Close for the day" Icon={Power} destructive onPress={() => setClosing(true)} />
-        </SettingsGroup>
       </ScrollView>
 
       <Sheet visible={closing} onClose={() => setClosing(false)}>

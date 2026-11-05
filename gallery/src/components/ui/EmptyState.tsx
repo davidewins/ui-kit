@@ -133,9 +133,11 @@ function EmptyStatePill({
       accessibilityLabel={label}
       style={({ pressed }) => ({
         marginTop: stacked ? 10 : 20,
-        height: 38,
-        paddingHorizontal: 18,
-        borderRadius: 19,
+        // Button xs: 32pt, grows with larger text instead of clipping.
+        minHeight: 32,
+        paddingHorizontal: 14,
+        paddingVertical: 4,
+        borderRadius: 999,
         borderCurve: "continuous",
         backgroundColor: secondary ? colors.surface : colors.primary,
         borderWidth: secondary ? 1 : 0,
@@ -148,7 +150,7 @@ function EmptyStatePill({
       })}
     >
       {plus ? <Plus size={15} strokeWidth={2.4} color={labelColor} /> : null}
-      <Text weight="semibold" style={{ fontSize: 14, color: labelColor }}>
+      <Text weight="semibold" style={{ fontSize: 13, color: labelColor }} maxFontSizeMultiplier={1.4}>
         {label}
       </Text>
     </Pressable>

@@ -1,5 +1,5 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/ui/SettingsRow.tsx. Edit it there and sync; local edits fail ui-kit:check.
-import { Pressable, Text, View } from "@/components/ui";
+import { Text, View } from "@/components/ui";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { ChevronRight } from "lucide-react-native";
@@ -88,6 +88,10 @@ export function SettingsRow({
   const blocked = loading || disabled;
   const glyphColor = destructive ? colors.error : colors.muted;
   const [pressed, setPressed] = useState(false);
+  // Pressed = the whole row fills edge to edge, as iOS Settings does, never a
+  // dim of the text alone. The border grey reads on the page colour (flat
+  // groups) and on the surface card (inset groups), light and dark.
+  const pressedFill = { backgroundColor: pressed ? colors.border : "transparent" };
 
   const rowStyle = {
     flexDirection: "row" as const,
@@ -178,7 +182,7 @@ export function SettingsRow({
       <Link href={href} asChild>
         <Link.Trigger>
           <RNPressable
-            style={{ ...rowStyle, opacity: pressed ? 0.6 : 1 }}
+            style={{ ...rowStyle, ...pressedFill }}
             onPressIn={() => setPressed(true)}
             onPressOut={() => setPressed(false)}
             onPress={() => {
@@ -198,9 +202,10 @@ export function SettingsRow({
   }
 
   return (
-    <Pressable
-      className="flex-row items-center active:opacity-60"
-      style={rowStyle}
+    <RNPressable
+      style={{ ...rowStyle, ...pressedFill }}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
       onPress={() => {
         Haptics.selectionAsync().catch(() => {});
         onPress?.();
@@ -211,6 +216,6 @@ export function SettingsRow({
       {...a11y}
     >
       {content}
-    </Pressable>
+    </RNPressable>
   );
 }

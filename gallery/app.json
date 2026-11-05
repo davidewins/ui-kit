@@ -1,20 +1,43 @@
 {
   "expo": {
-    "name": "ZESTY UI",
+    "name": "ZESTY",
     "slug": "ui-kit-gallery",
     "scheme": "uikitgallery",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
+    "icon": "./assets/icon.png",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.davidewins.zesty",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.davidewins.zesty",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#ffffff"
+      }
     },
     "plugins": [
       "expo-router",
       "expo-font",
       "expo-image",
       "expo-status-bar",
-      "expo-splash-screen",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-light.png",
+          "backgroundColor": "#ffffff",
+          "imageWidth": 240,
+          "dark": {
+            "image": "./assets/splash-dark.png",
+            "backgroundColor": "#000000"
+          }
+        }
+      ],
       "expo-audio",
       "expo-asset"
     ],
@@ -29,7 +52,7 @@
     },
     "owner": "davidewins",
     "runtimeVersion": {
-      "policy": "sdkVersion"
+      "policy": "appVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/a5c2dd97-4924-4663-b0a4-310b3eb3e10a"

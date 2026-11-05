@@ -3,6 +3,7 @@ import { GlassSurface } from "@/components/GlassSurface";
 import { Sparkline } from "@/components/analytics/Sparkline";
 import { WizardProgress } from "@/components/onboarding/WizardProgress";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Tile } from "@/components/ui/Tile";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
@@ -55,11 +56,29 @@ export default function Surfaces() {
       </OverPhoto>
 
       <SectionTitle>Card</SectionTitle>
+      <Card>
+        <Text weight="semibold">Card</Text>
+        <Text className="text-muted">A block of content on the page. No fill: grey is for small things only.</Text>
+      </Card>
+
+      <SectionTitle>Card raised</SectionTitle>
       <View style={pad}>
-        <Card>
-          <Text weight="semibold">Card</Text>
-          <Text className="text-muted">Same fill and radius as SettingsGroup.</Text>
+        <Card raised>
+          <Text weight="semibold">Card raised</Text>
+          <Text className="text-muted">Card fill, hairline border, soft shadow. For cards that must stand out (analytics).</Text>
         </Card>
+      </View>
+
+      <SectionTitle>Tile</SectionTitle>
+      <View style={{ ...pad, flexDirection: "row" }}>
+        <Tile className="flex-1">
+          <Text className="text-muted text-[13px]">Orders</Text>
+          <Text weight="semibold" style={{ fontSize: 21, fontVariant: ["tabular-nums"] }}>42</Text>
+        </Tile>
+        <Tile className="flex-1">
+          <Text className="text-muted text-[13px]">Revenue</Text>
+          <Text weight="semibold" style={{ fontSize: 21, fontVariant: ["tabular-nums"] }}>€1,280</Text>
+        </Tile>
       </View>
 
       <SectionTitle>Sparkline</SectionTitle>

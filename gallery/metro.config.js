@@ -6,6 +6,20 @@ const config = getDefaultConfig(__dirname);
 // The Colours screen reads ../tokens.json straight from the kit.
 config.watchFolders = [path.resolve(__dirname, "..")];
 
+// Native modules the copied app pages import that Expo Go doesn't ship
+// (TAK-1491). Mirrored in tsconfig paths.
+const STUBS = {
+  "posthog-react-native": "src/gallery/stubs/posthog-react-native.ts",
+  "@react-native-google-signin/google-signin": "src/gallery/stubs/google-signin.ts",
+  "react-native-mmkv": "src/gallery/stubs/react-native-mmkv.ts",
+  "react-native-bottom-tabs": "src/gallery/stubs/react-native-bottom-tabs.ts",
+};
+const resolveRequest = config.resolver.resolveRequest;
+config.resolver.resolveRequest = (context, moduleName, platform) =>
+  STUBS[moduleName]
+    ? { type: "sourceFile", filePath: path.resolve(__dirname, STUBS[moduleName]) }
+    : (resolveRequest ?? context.resolveRequest)(context, moduleName, platform);
+
 module.exports = withUniwindConfig(config, {
   cssEntryFile: "./src/globals.css",
   dtsFile: "./src/uniwind-types.d.ts",

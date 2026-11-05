@@ -1,53 +1,69 @@
 import { Button, View } from "@/components/ui";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { NativeButton } from "@/components/ui/NativeButton";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { ArrowRight, Plus, Trash2 } from "lucide-react-native";
+import { BottomSwitch } from "@/gallery/BottomSwitch";
+import { Plus } from "lucide-react-native";
+import { useState } from "react";
 import { ScrollView } from "react-native";
 
 const noop = () => {};
-const TONES = ["primary", "neutral", "danger", "glass"] as const;
-const SIZES = ["sm", "md", "lg"] as const;
+const KINDS = ["Big", "Small native"] as const;
 
-// GlassButton is the spec's button (§2.3). Button is the className variant.
-// No ghost or outline variants anywhere.
+// Big = the kit Button (GlassButton is the same spec under another name, so
+// it is not shown twice): the one main action at the bottom of a screen, or
+// two at most. Small native = Apple's SwiftUI Button in glass, for compact
+// in-content actions. There is no ghost variant anywhere.
 export default function Buttons() {
-  const pad = { paddingHorizontal: 20, gap: 12 };
+  const [kind, setKind] = useState(0);
 
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 48 }}>
-      <SectionTitle>GlassButton tones</SectionTitle>
-      <View style={pad}>
-        {TONES.map((tone) => (
-          <GlassButton key={tone} label={tone} tone={tone} onPress={noop} fullWidth />
-        ))}
-      </View>
-
-      <SectionTitle>GlassButton sizes</SectionTitle>
-      <View style={pad}>
-        {SIZES.map((size) => (
-          <GlassButton key={size} label={`Size ${size}`} size={size} onPress={noop} />
-        ))}
-      </View>
-
-      <SectionTitle>GlassButton states</SectionTitle>
-      <View style={pad}>
-        <GlassButton label="New item" leftIcon={<Plus />} onPress={noop} />
-        <GlassButton label="Continue" rightIcon={<ArrowRight />} onPress={noop} />
-        <GlassButton label="Delete" tone="danger" leftIcon={<Trash2 />} onPress={noop} />
-        <GlassButton label="Loading" loading onPress={noop} />
-        <GlassButton label="Disabled" disabled onPress={noop} />
-        <GlassButton label="Disabled solid" disabled disabledStyle="solid" onPress={noop} />
-      </View>
-
-      <SectionTitle>Button</SectionTitle>
-      <View style={pad}>
-        <Button onPress={noop}>Primary</Button>
-        <Button variant="secondary" onPress={noop}>Secondary</Button>
-        <Button variant="danger" onPress={noop}>Danger</Button>
-        <Button size="sm" onPress={noop}>Small</Button>
-        <Button loading onPress={noop}>Loading</Button>
-        <Button disabled onPress={noop}>Disabled</Button>
-      </View>
-    </ScrollView>
+    <View style={{ flex: 1 }}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 24 }}>
+        {KINDS[kind] === "Big" ? (
+          <>
+            <SectionTitle>Variants</SectionTitle>
+            <View style={{ paddingHorizontal: 20, gap: 12 }}>
+              <Button fullWidth size="lg" onPress={noop}>Primary</Button>
+              <Button fullWidth size="lg" variant="secondary" onPress={noop}>Secondary (glass)</Button>
+              <Button fullWidth size="lg" variant="outline" onPress={noop}>Outline</Button>
+              <Button fullWidth size="lg" variant="danger" onPress={noop}>Danger</Button>
+            </View>
+            <SectionTitle>Sizes</SectionTitle>
+            <View style={{ paddingHorizontal: 20, gap: 12, alignItems: "flex-start" }}>
+              <Button size="lg" onPress={noop}>Large</Button>
+              <Button size="md" onPress={noop}>Medium</Button>
+              <Button size="sm" leftIcon={<Plus />} onPress={noop}>Small</Button>
+              <Button size="xs" onPress={noop}>Extra small</Button>
+            </View>
+            <SectionTitle>States</SectionTitle>
+            <View style={{ paddingHorizontal: 20, gap: 12 }}>
+              <Button fullWidth size="lg" loading onPress={noop}>Loading</Button>
+              <Button fullWidth size="lg" disabled onPress={noop}>Disabled</Button>
+            </View>
+          </>
+        ) : (
+          <>
+            <SectionTitle>Tones</SectionTitle>
+            <View style={{ paddingHorizontal: 20, gap: 12, flexDirection: "row", flexWrap: "wrap" }}>
+              <NativeButton label="Add" systemImage="plus" tone="primary" onPress={noop} />
+              <NativeButton label="Edit" systemImage="pencil" onPress={noop} />
+              <NativeButton label="Remove" systemImage="trash" tone="destructive" onPress={noop} />
+            </View>
+            <SectionTitle>Sizes</SectionTitle>
+            <View style={{ paddingHorizontal: 20, gap: 12, flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}>
+              <NativeButton label="Mini" size="mini" onPress={noop} />
+              <NativeButton label="Small" size="small" onPress={noop} />
+              <NativeButton label="Regular" size="regular" onPress={noop} />
+            </View>
+            <SectionTitle>States</SectionTitle>
+            <View style={{ paddingHorizontal: 20, gap: 12, flexDirection: "row", flexWrap: "wrap" }}>
+              <NativeButton label="Disabled" tone="primary" disabled onPress={noop} />
+              <NativeButton label="Disabled" disabled onPress={noop} />
+            </View>
+          </>
+        )}
+      </ScrollView>
+      <BottomSwitch values={KINDS} selectedIndex={kind} onChange={setKind} accessibilityLabel="Button kind" />
+    </View>
   );
 }

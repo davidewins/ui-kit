@@ -5,8 +5,10 @@ import { StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 import { SETTINGS_ROW } from "./SettingsRow";
 
 /**
- * One inset-grouped card of SettingsRows, with the hairline separators
- * inserted for you so no screen can get the inset wrong.
+ * One group of SettingsRows, with the hairline separators inserted for you so
+ * no screen can get the inset wrong. ZESTY has one look (David, 4 Nov): the
+ * group sits flat on the page, no fill and no card, rows edge to edge, the
+ * hairline starting at the label. Grey fills belong to small controls only.
  *
  * Children that render null (a permission-gated or module-gated row) are
  * dropped by Children.toArray, so a hidden row never leaves a stray separator
@@ -21,17 +23,6 @@ export const SETTINGS_GROUP = {
   marginBottom: 18,
 } as const;
 
-let look: "inset" | "flat" = "inset";
-/**
- * Per-app group look. "inset" (default): the surface card with rounded
- * corners, as VOID, SELLERS and TKVR ship. "flat": no fill, edge to edge, and
- * hairlines that start at the text and run to the right edge, like an iOS
- * plain list (PREPPERS). Call once at startup, before first render.
- */
-export function setSettingsGroupLook(value: "inset" | "flat") {
-  look = value;
-}
-
 export function SettingsGroup({
   children,
   style,
@@ -42,29 +33,12 @@ export function SettingsGroup({
   /** Where hairlines start; rows without an icon pass their text's x (16). */
   separatorInset?: number;
 }) {
-  const colors = useThemeColors();
   const rows = Children.toArray(children);
 
   if (rows.length === 0) return null;
 
-  const flat = look === "flat";
-
   return (
-    <View
-      style={[
-        flat
-          ? { marginBottom: SETTINGS_GROUP.marginBottom }
-          : {
-              backgroundColor: colors.surface,
-              borderRadius: SETTINGS_GROUP.radius,
-              borderCurve: "continuous",
-              overflow: "hidden",
-              marginHorizontal: SETTINGS_GROUP.marginHorizontal,
-              marginBottom: SETTINGS_GROUP.marginBottom,
-            },
-        style,
-      ]}
-    >
+    <View style={[{ marginBottom: SETTINGS_GROUP.marginBottom }, style]}>
       {rows.map((row, index) => (
         <Fragment
           key={isValidElement(row) && row.key != null ? row.key : index}

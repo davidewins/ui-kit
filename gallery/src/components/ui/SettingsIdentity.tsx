@@ -50,20 +50,12 @@ export function SettingsIdentity({
   accessibilityLabel: string;
 }) {
   const colors = useThemeColors();
-
   return (
-    <View
-      style={{
-        backgroundColor: colors.surface,
-        borderRadius: SETTINGS_GROUP.radius,
-        borderCurve: "continuous",
-        overflow: "hidden",
-        marginHorizontal: SETTINGS_GROUP.marginHorizontal,
-        marginBottom: SETTINGS_GROUP.marginBottom,
-      }}
-    >
+    <View style={{ marginBottom: SETTINGS_GROUP.marginBottom }}>
       <Pressable
-        className="flex-row items-center gap-2 px-4 py-3.5 active:opacity-60"
+        className="flex-row items-center gap-2 px-4 py-3.5"
+        // Pressed fills the whole row, as SettingsRow does.
+        style={({ pressed }) => ({ backgroundColor: pressed ? colors.border : "transparent" })}
         onPress={() => {
           Haptics.selectionAsync().catch(() => {});
           onPress();

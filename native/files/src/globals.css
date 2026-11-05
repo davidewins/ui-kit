@@ -53,6 +53,7 @@
       --color-hue-mint: #00c7be;
       --color-hue-pink: #ff2d55;
       --color-hue-gray: #8e8e93;
+      --color-grouped-background: #f2f2f7;
     }
 
     @variant dark {
@@ -104,6 +105,7 @@
       --color-hue-mint: #66d4cf;
       --color-hue-pink: #ff375f;
       --color-hue-gray: #98989d;
+      --color-grouped-background: #000000;
     }
   }
 }

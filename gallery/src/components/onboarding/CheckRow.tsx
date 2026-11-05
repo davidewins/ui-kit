@@ -28,7 +28,8 @@ export function CheckRow({ checked, onPress, text, isLast = false }: Props) {
           Haptics.selectionAsync().catch(() => {});
           onPress();
         }}
-        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+        // Pressed fills the whole row, as SettingsRow does.
+          style={({ pressed }) => ({ backgroundColor: pressed ? colors.border : "transparent" })}
         accessibilityRole="checkbox"
         accessibilityLabel={text}
         accessibilityState={{ checked }}

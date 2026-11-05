@@ -1,11 +1,10 @@
 // Segmented control. iOS draws SwiftUI's segmented Picker through @expo/ui
-// (Liquid Glass on iOS 26, sized by SwiftUI); elsewhere a surface pill track
-// with the selected segment lifted onto the page colour.
+// (Liquid Glass on iOS 26, sized by SwiftUI); Android draws Material 3
+// segmented buttons through @expo/ui's community segmented control.
 //
 // Controlled: pass selectedIndex and update it in onChange. One selection
 // haptic per change, so callers never fire their own.
-import { Pressable, Text, View } from "@/components/ui";
-import { useThemeColors } from "@/hooks/useThemeColors";
+import { SegmentedControl as CommunitySegmentedControl } from "@expo/ui/community/segmented-control";
 import { Host, Picker, Text as SwiftText } from "@expo/ui/swift-ui";
 import {
   accessibilityLabel as a11yLabel,
@@ -15,7 +14,7 @@ import {
   tag,
 } from "@expo/ui/swift-ui/modifiers";
 import * as Haptics from "expo-haptics";
-import { Platform, type StyleProp, type ViewStyle } from "react-native";
+import { Platform, View, useColorScheme, type StyleProp, type ViewStyle } from "react-native";
 
 export interface SegmentedControlProps {
   values: readonly string[];
@@ -37,7 +36,7 @@ export function SegmentedControl({
   accessibilityLabel,
   style,
 }: SegmentedControlProps) {
-  const colors = useThemeColors();
+  const scheme = useColorScheme();
 
   const select = (index: number) => {
     if (index === selectedIndex) return;
@@ -69,50 +68,18 @@ export function SegmentedControl({
     );
   }
 
-  const height = size === "large" ? 44 : 32;
+  // Android: Material 3 segmented buttons through @expo/ui (the same control
+  // VOID's order screens use), not a hand-drawn pill.
+  // The label sits on a wrapper: SDK 57's community control has no prop for it.
   return (
-    <View
-      accessibilityRole="tablist"
-      accessibilityLabel={accessibilityLabel}
-      style={[
-        {
-          flexDirection: "row",
-          height,
-          padding: 2,
-          borderRadius: height / 2,
-          backgroundColor: colors.surface,
-          opacity: disabled ? 0.5 : 1,
-        },
-        style,
-      ]}
-    >
-      {values.map((label, i) => {
-        const selected = i === selectedIndex;
-        return (
-          <Pressable
-            key={label}
-            disabled={disabled}
-            onPress={() => select(i)}
-            accessibilityRole="tab"
-            accessibilityState={{ selected, disabled }}
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: (height - 4) / 2,
-              backgroundColor: selected ? colors.background : "transparent",
-            }}
-          >
-            <Text
-              weight={selected ? "semibold" : "medium"}
-              numberOfLines={1}
-              style={{ fontSize: size === "large" ? 15 : 13, color: selected ? colors.text : colors.muted }}
-            >
-              {label}
-            </Text>
-          </Pressable>
-        );
-      })}
+    <View accessibilityLabel={accessibilityLabel} style={style}>
+      <CommunitySegmentedControl
+        values={[...values]}
+        selectedIndex={selectedIndex}
+        onChange={(e) => select(e.nativeEvent.selectedSegmentIndex)}
+        enabled={!disabled}
+        appearance={scheme === "dark" ? "dark" : "light"}
+      />
     </View>
   );
 }

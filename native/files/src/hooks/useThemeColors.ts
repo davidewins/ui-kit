@@ -43,6 +43,7 @@ export function useThemeColors() {
   const infoBg = useCSSVariable("--color-info-bg") as string;
   const infoText = useCSSVariable("--color-info-text") as string;
   const card = useCSSVariable("--color-card") as string;
+  const groupedBackground = useCSSVariable("--color-grouped-background") as string;
   const tabBackground = useCSSVariable("--color-tab-background") as string;
   const tabIconDefault = useCSSVariable("--color-tab-icon-default") as string;
   const tabIconSelected = useCSSVariable("--color-tab-icon-selected") as string;
@@ -86,6 +87,7 @@ export function useThemeColors() {
 
       // Component Specific
       card,
+      groupedBackground,
       tabBackground,
       tabIconDefault,
       tabIconSelected,

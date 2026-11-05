@@ -152,7 +152,8 @@ export function SelectRow({
             Haptics.selectionAsync().catch(() => {});
             onPress?.();
           }}
-          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+          // Pressed fills the whole row, as SettingsRow does.
+          style={({ pressed }) => ({ backgroundColor: pressed ? colors.border : "transparent" })}
           accessibilityRole="radio"
           accessibilityLabel={label}
           accessibilityHint={description}

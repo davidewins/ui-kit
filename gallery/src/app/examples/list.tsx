@@ -4,7 +4,8 @@ import { HeaderIconButton } from "@/components/ui/HeaderIconButton";
 import { SettingsGroup } from "@/components/ui/SettingsGroup";
 import { SettingsRow } from "@/components/ui/SettingsRow";
 import { SkeletonList } from "@/components/ui";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { View } from "@/components/ui";
+import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { Stack, router } from "expo-router";
 import { Package, Plus } from "lucide-react-native";
 import { useState } from "react";
@@ -31,12 +32,15 @@ export default function ExampleList() {
           ),
         }}
       />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: 48, flexGrow: 1 }}>
-        <SegmentedControl values={STATES} selectedIndex={state} onChange={setState} accessibilityLabel="State" style={{ marginHorizontal: 16, marginBottom: 16 }} />
+      <View style={{ flex: 1 }}>
+      {STATES[state] === "Empty" ? (
+        <View style={{ flex: 1 }}>
+          <EmptyState art={{ image: require("../../assets/images/empty/box.png") }} title="No orders yet" body="New orders show up here as they come in" action={{ label: "New order", plus: true, onPress: () => router.push("/examples/create") }} />
+        </View>
+      ) : (
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}>
         {STATES[state] === "Loading" ? (
           <SkeletonList count={4} />
-        ) : STATES[state] === "Empty" ? (
-          <EmptyState art={{ image: require("../../assets/images/empty/box.png") }} title="No orders yet" body="New orders show up here as they come in" action={{ label: "New order", plus: true, onPress: () => router.push("/examples/create") }} />
         ) : (
           <SettingsGroup>
             {ORDERS.map((o) => (
@@ -45,6 +49,9 @@ export default function ExampleList() {
           </SettingsGroup>
         )}
       </ScrollView>
+      )}
+      <BottomSwitch values={STATES} selectedIndex={state} onChange={setState} accessibilityLabel="State" />
+      </View>
     </>
   );
 }

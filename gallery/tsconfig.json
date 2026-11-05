@@ -5,6 +5,18 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "posthog-react-native": [
+        "./src/gallery/stubs/posthog-react-native.ts"
+      ],
+      "@react-native-google-signin/google-signin": [
+        "./src/gallery/stubs/google-signin.ts"
+      ],
+      "react-native-mmkv": [
+        "./src/gallery/stubs/react-native-mmkv.ts"
+      ],
+      "react-native-bottom-tabs": [
+        "./src/gallery/stubs/react-native-bottom-tabs.ts"
       ]
     }
   },
