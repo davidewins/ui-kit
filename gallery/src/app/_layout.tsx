@@ -1,7 +1,9 @@
 import "../globals.css";
 import { Toaster } from "@/components/Toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ENTRIES, SECTIONS } from "@/gallery/catalog";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import type { NativeStackNavigationOptions } from "expo-router";
 import { useFonts } from "expo-font";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -14,6 +16,29 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const queryClient = new QueryClient();
+
+const minimal = { headerBackButtonDisplayMode: "minimal" as const };
+
+// Real app pages (TAK-1491): options copied from each app's layout. SELLERS
+// paints its header in the page colour, so its pages are opaque.
+const SCREEN_OPTIONS: Record<string, NativeStackNavigationOptions> = {
+  "screens/patterns/create": { presentation: "modal", headerTransparent: false },
+  "screens/patterns/detail": { title: "" },
+  "screens/sign-in/welcome": { headerShown: false },
+  "screens/sign-in/email": { ...minimal, title: "", headerTransparent: false, headerRight: undefined },
+  "screens/sign-in/verify-code": { ...minimal, title: "", headerTransparent: false, headerRight: undefined },
+  "screens/sign-in/forgot-password": { ...minimal, title: "", headerTransparent: false, headerRight: undefined },
+  "screens/ordering/orders": { ...minimal },
+  "screens/ordering/order/[id]": { ...minimal, title: "Order", headerTransparent: false },
+  "screens/account/notifications": { ...minimal },
+  "screens/account/gdpr": { ...minimal, headerTransparent: false },
+  "screens/account/country-code": { presentation: "modal", title: "Country Code", headerTransparent: false },
+  "screens/selling/analytics": { ...minimal, headerTransparent: false },
+  "screens/selling/product/[id]": { ...minimal, title: "", headerTransparent: false },
+  "screens/selling/storefronts": { ...minimal, headerTransparent: false },
+  "screens/delivering/earnings": { ...minimal },
+  "screens/delivering/delivery/[id]": { ...minimal, title: "Active Delivery", headerTransparent: false },
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -48,7 +73,6 @@ export default function RootLayout() {
     headerTitleStyle: colors.headerTitleStyle,
     contentStyle: { backgroundColor: colors.background },
   };
-  const minimal = { headerBackButtonDisplayMode: "minimal" as const };
 
   return (
     <SafeAreaProvider>
@@ -57,43 +81,12 @@ export default function RootLayout() {
         <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
           <Stack screenOptions={screen}>
             <Stack.Screen name="index" options={{ title: "ZESTY" }} />
-            <Stack.Screen name="colours" options={{ title: "Colours" }} />
-            <Stack.Screen name="type" options={{ title: "Type" }} />
-            <Stack.Screen name="buttons" options={{ title: "Buttons" }} />
-            <Stack.Screen name="rows" options={{ title: "Settings rows" }} />
-            <Stack.Screen name="inputs" options={{ title: "Inputs" }} />
-            <Stack.Screen name="states" options={{ title: "Badges and toasts" }} />
-            <Stack.Screen name="empty" options={{ title: "States" }} />
-            <Stack.Screen name="surfaces" options={{ title: "Surfaces" }} />
-            <Stack.Screen name="footer" options={{ title: "Sticky footer" }} />
-            <Stack.Screen name="compare-select" options={{ title: "Select rows" }} />
-            <Stack.Screen name="compare-status" options={{ title: "Status badges" }} />
-            <Stack.Screen name="compare-sounds" options={{ title: "Toast sounds" }} />
-            <Stack.Screen name="glass" options={{ title: "Liquid Glass" }} />
-            <Stack.Screen name="native" options={{ title: "Store settings" }} />
-            <Stack.Screen name="examples/list" options={{ title: "Orders" }} />
-            <Stack.Screen name="examples/create" options={{ title: "New product", presentation: "modal", headerTransparent: false }} />
-            <Stack.Screen name="examples/edit" options={{ title: "Edit product" }} />
-            <Stack.Screen name="examples/detail" options={{ title: "" }} />
-            {/* Real app pages (TAK-1491). Options copied from each app's layout. */}
-            <Stack.Screen name="void/(auth)/index" options={{ headerShown: false }} />
-            <Stack.Screen name="void/(auth)/email" options={{ ...minimal, title: "", headerTransparent: false, headerRight: undefined }} />
-            <Stack.Screen name="void/(auth)/verify-otp" options={{ ...minimal, title: "", headerTransparent: false, headerRight: undefined }} />
-            <Stack.Screen name="void/(protected)/orders/index" options={{ ...minimal, headerTitle: "Orders" }} />
-            <Stack.Screen name="void/(protected)/orders/[id]/index" options={{ ...minimal, headerTitle: "Order", headerTransparent: false }} />
-            <Stack.Screen name="void/(protected)/(tabs)/profile/notifications/index" options={{ ...minimal, headerTitle: "Notifications" }} />
-            {/* SELLERS paints its header in the page colour, so these are opaque. */}
-            <Stack.Screen name="sellers/(auth)/forgot-password" options={{ ...minimal, title: "", headerTransparent: false, headerRight: undefined }} />
-            <Stack.Screen name="sellers/(aux)/gdpr" options={{ ...minimal, title: "GDPR", headerTransparent: false }} />
-            <Stack.Screen name="sellers/(protected)/(tabs)/analytics/index" options={{ ...minimal, title: "Analytics", headerTransparent: false }} />
-            <Stack.Screen name="sellers/(protected)/products/[id]/index" options={{ ...minimal, title: "", headerTransparent: false }} />
-            <Stack.Screen name="sellers/(protected)/account/storefronts/index" options={{ ...minimal, title: "Storefronts", headerTransparent: false }} />
-            <Stack.Screen name="riders/(protected)/profile/earnings/index" options={{ ...minimal, headerTitle: "Earnings" }} />
-            <Stack.Screen name="riders/(protected)/delivery/[id]" options={{ ...minimal, headerTitle: "Active Delivery", headerTransparent: false }} />
-            <Stack.Screen
-              name="(protected)/profile/personal-info/country-code"
-              options={{ presentation: "modal", headerTitle: "Country Code", headerTransparent: false }}
-            />
+            {SECTIONS.map((sec) => (
+              <Stack.Screen key={sec.route} name={sec.route} options={{ title: sec.title }} />
+            ))}
+            {ENTRIES.map((e) => (
+              <Stack.Screen key={e.route} name={e.route} options={{ title: e.title, ...SCREEN_OPTIONS[e.route] }} />
+            ))}
           </Stack>
         </ThemeProvider>
         <StatusBar style="auto" />

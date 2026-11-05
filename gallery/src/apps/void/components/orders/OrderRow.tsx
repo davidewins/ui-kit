@@ -49,7 +49,7 @@ export const OrderRow: FC<Props> = ({ item, expanded = false }) => {
     <Pressable
       onPress={() =>
         router.push({
-          pathname: "/void/(protected)/orders/[id]",
+          pathname: "/screens/ordering/order/[id]",
           params: { id: item.id },
         })
       }

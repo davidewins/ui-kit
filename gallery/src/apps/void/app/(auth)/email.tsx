@@ -37,7 +37,7 @@ export default function Email() {
       Toast.success("Check your email for the verification code!");
 
       router.push({
-        pathname: "/void/(auth)/verify-otp",
+        pathname: "/screens/sign-in/verify-code",
         params: { email },
       });
     } catch (err: unknown) {

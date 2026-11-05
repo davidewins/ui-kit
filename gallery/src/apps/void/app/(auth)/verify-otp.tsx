@@ -38,7 +38,7 @@ export default function VerifyOTP() {
   // Redirect if no email provided
   if (!email) {
     Toast.error("No email provided");
-    router.replace("/void/(auth)/email");
+    router.replace("/screens/sign-in/email");
     return null;
   }
 

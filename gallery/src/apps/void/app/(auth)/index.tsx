@@ -112,7 +112,7 @@ export default function Welcome() {
         {renderImage()}
 
         <View className="items-center gap-4 mt-4">
-          <Link asChild href="/void/(auth)/email">
+          <Link asChild href="/screens/sign-in/email">
             <Pressable
               onPress={() => Haptics.selectionAsync()}
               accessibilityRole="button"

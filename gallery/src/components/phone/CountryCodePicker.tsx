@@ -37,7 +37,7 @@ export const CountryCodePicker: FC<Props> = ({ country, onChange }) => {
       onPress={() => {
         Haptics.selectionAsync();
         router.push({
-          pathname: "/(protected)/profile/personal-info/country-code",
+          pathname: "/screens/account/country-code",
           params: { current: country.iso2 },
         });
       }}

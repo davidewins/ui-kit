@@ -304,7 +304,7 @@ export function SalesPaneCompact() {
                 <Pressable
                   onPress={() => {
                     Haptics.selectionAsync().catch(() => {});
-                    router.push(`/sellers/(protected)/products/${p.id}`);
+                    router.push(`/screens/selling/product/${p.id}`);
                   }}
                   className=" active:bg-surface-elevated"
                   style={{ minHeight: 46, paddingVertical: 9 }}

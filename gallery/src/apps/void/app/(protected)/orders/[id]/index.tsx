@@ -33,7 +33,7 @@ export default function OrderDetails() {
     !id ||
     (!model.isLoading && !model.isRefetching && !model.error && !model.order);
   useEffect(() => {
-    if (notFound) router.replace("/void/(protected)/orders");
+    if (notFound) router.replace("/screens/ordering/orders");
   }, [notFound]);
 
   if (model.isLoading || notFound) {
@@ -52,7 +52,7 @@ export default function OrderDetails() {
         onRetry={model.refetch}
         retrying={model.isRefetching}
         secondaryLabel="View all orders"
-        onSecondary={() => router.replace("/void/(protected)/orders")}
+        onSecondary={() => router.replace("/screens/ordering/orders")}
       />
     );
   }

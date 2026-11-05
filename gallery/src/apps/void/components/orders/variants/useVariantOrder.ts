@@ -483,7 +483,7 @@ export function useVariantOrder(id: string): VariantOrderModel {
                 return;
               }
               Alert.alert("Order Cancelled", "Your order has been cancelled.", [
-                { text: "OK", onPress: () => router.replace("/void/(protected)/orders") },
+                { text: "OK", onPress: () => router.replace("/screens/ordering/orders") },
               ]);
             } catch {
               Alert.alert("Error", "Failed to cancel order. Please try again.");
