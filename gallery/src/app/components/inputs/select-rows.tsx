@@ -48,21 +48,21 @@ export default function CompareSelect() {
       <SectionTitle>A. GlassGroup (glass; grey card on phones without it)</SectionTitle>
       <GlassGroup style={{ marginHorizontal: 16 }}>{selectRows}</GlassGroup>
 
-      <SectionTitle inset={32}>C. VOID picker row (dropoff options)</SectionTitle>
+      <SectionTitle>C. VOID picker row (dropoff options)</SectionTitle>
       <SettingsGroup>
         {OPTIONS.map((o, i) => (
           <VoidPickerRow key={o.id} label={o.label} description={o.description} isSelected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} />
         ))}
       </SettingsGroup>
 
-      <SectionTitle inset={32}>C2. VOID picker row with an icon</SectionTitle>
+      <SectionTitle>C2. VOID picker row with an icon</SectionTitle>
       <SettingsGroup>
         {OPTIONS.map((o, i) => (
           <VoidPickerRow key={o.id} label={o.label} description={o.description} isSelected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} leading={icon(o)} />
         ))}
       </SettingsGroup>
 
-      <SectionTitle inset={32}>D. VOID option row with icon (appearance)</SectionTitle>
+      <SectionTitle>D. VOID option row with icon (appearance)</SectionTitle>
       <SettingsGroup>
         {OPTIONS.map((o, i) => (
           <VoidOptionRow key={o.id} label={o.label} selected={sel === o.id} isLast={i === OPTIONS.length - 1} onPress={() => setSel(o.id)} leading={icon(o)} />
@@ -86,7 +86,7 @@ export default function CompareSelect() {
         </View>
       </View>
 
-      <SectionTitle inset={32}>G. CheckRow (agree to statements)</SectionTitle>
+      <SectionTitle>G. CheckRow (agree to statements)</SectionTitle>
       <SettingsGroup>
         {["I have valid insurance for deliveries", "I'm over 18 and allowed to work in Ireland"].map((t, i) => (
           <CheckRow key={t} text={t} checked={agreed[i]} isLast={i === 1} onPress={() => setAgreed((a) => a.map((v, j) => (j === i ? !v : v)))} />

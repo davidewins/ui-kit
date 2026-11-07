@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "2358794",
+  "rev": "2f3508b",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -48,7 +48,7 @@
     "src/components/ui/actions/HeaderIconButton.tsx": "8ee7a450459caf9767873abd8e6952c80c490e63b5dbd91943c835dd5c6baf6f",
     "src/components/ui/primitives/Heading.tsx": "53b576aa6e0184f31e87c2280bda4f311b1b400037c7f2a96cb1474be5b97651",
     "src/components/ui/primitives/Image.tsx": "38d895cf361c6b9aac77d8b64b9e175d4ecc6dfbe1e7507b27d24a8873fd47db",
-    "src/components/ui/inputs/Input.tsx": "9d8349d32359363627e8774faad2594e2113e258a3d5c295c2d4e81e230af321",
+    "src/components/ui/inputs/Input.tsx": "954f533ddbbb9b1b4201f0e0d7c6a9d1a517a77478dc98877cccceb4bf60af28",
     "src/components/ui/primitives/Label.tsx": "206a645ae388dd5da4ba6c9b4982556c850f947bb0256d182cd22058c144b770",
     "src/components/ui/primitives/LegendList.tsx": "2057817b91e7d3ef11cde5bf0f8bb54b441ed35c09e621e20e991fc203ecd8b3",
     "src/components/ui/actions/Menu.tsx": "68e4e0c8206c0eb6e0743cb8aba89bb21586511092a3fdfc27199a1d07f1aa9e",
@@ -63,8 +63,8 @@
     "src/components/ui/inputs/RadioGroup.tsx": "044af775f6b9f7d856ab2fbe33977550963dc0706c26dd98d14fc1f2e27f5724",
     "src/components/ui/primitives/SafeAreaView.tsx": "ae99349694bfc996ff7cf63b9e3f4a119a89f747dbca94658c557be828ef58fe",
     "src/components/ui/primitives/ScrollView.tsx": "e75990378c8f0a726b10326ecdaa2b68be5bc3ceeaf4e359dc8a643b1f299e9e",
-    "src/components/ui/lists/SectionTitle.tsx": "6b45b35288da8375c0c9cbdbef65c428fd97eddaa032bd46ffbcd0e3df72c725",
-    "src/components/ui/inputs/SegmentedControl.tsx": "6d0cea37a86cdcbb8348af27743fe11f7293f42bfccf5c5a6c6af9dbcafc6cbf",
+    "src/components/ui/lists/SectionTitle.tsx": "3f952c0dc9e3c518e26118a40426910bce1ce488d1a9f8217eb3aaaacca08f31",
+    "src/components/ui/inputs/SegmentedControl.tsx": "7544bf56bd9ef44b2fa265c1656721f0cf6dd5d07328253c57e00a5f8b8a2513",
     "src/components/ui/lists/SettingsGroup.tsx": "292e747e0133df6058a108f22e5ad094551c82dcfc9e064857e7cf02ed07b32d",
     "src/components/ui/lists/SettingsIdentity.tsx": "316b1a202aade94250bedee1b0f9fa203fabf5740125bc3af029de258a0a1ac6",
     "src/components/ui/lists/SettingsRow.tsx": "cdd2c3e9312912e94a506158a72a8fd3bce4aafb8a5c10111052bb862967df09",

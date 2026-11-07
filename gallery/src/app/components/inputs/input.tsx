@@ -46,7 +46,7 @@ export default function Inputs() {
       <SectionTitle>SegmentedControl (spec §3.4, height 44)</SectionTitle>
       <SegmentedControl values={["Today", "Week", "Month"]} selectedIndex={range} onChange={setRange} size="large" style={{ marginHorizontal: 16 }} />
 
-      <SectionTitle inset={32}>SelectRow</SectionTitle>
+      <SectionTitle>SelectRow</SectionTitle>
       <SettingsGroup>
         {VEHICLES.map((v, i) => (
           <SelectRow

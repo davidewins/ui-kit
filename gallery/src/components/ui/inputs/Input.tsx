@@ -91,11 +91,15 @@ export const Input: React.FC<InputProps> = ({
           accessibilityState={accessibilityState}
           style={{
             paddingHorizontal: 16,
-            paddingVertical: 12,
+            // Single line: fixed height, no vertical padding, so iOS centres
+            // the line from the font's metrics. With padding, Geist's text and
+            // placeholder sat low in the box (David, 6 Nov).
+            ...(props.multiline
+              ? { paddingVertical: 12, minHeight: 100 }
+              : { paddingVertical: 0, height: 48 }),
             fontFamily: fontFamily("regular"),
             fontSize: 17,
             color: textColor,
-            minHeight: props.multiline ? 100 : 48,
             textAlignVertical: props.multiline ? "top" : "center",
           }}
           placeholderTextColor={mutedColor}

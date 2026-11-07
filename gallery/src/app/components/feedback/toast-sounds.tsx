@@ -57,7 +57,7 @@ export default function CompareSounds() {
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 48 }}>
       {(Object.keys(SETS) as (keyof typeof SETS)[]).map((set) => (
         <View key={set}>
-          <SectionTitle inset={32}>{LABEL[set]}</SectionTitle>
+          <SectionTitle>{LABEL[set]}</SectionTitle>
           <SettingsGroup>
             <SettingsRow label="Success" Icon={CircleCheck} onPress={() => play(SETS[set].success, "success")} />
             <SettingsRow label="Error" Icon={CircleAlert} onPress={() => play(SETS[set].error, "error")} />

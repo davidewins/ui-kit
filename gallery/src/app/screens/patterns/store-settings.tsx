@@ -95,7 +95,7 @@ export default function NativeControls() {
           </Card>
         </View>
 
-        <SectionTitle inset={32}>Orders</SectionTitle>
+        <SectionTitle>Orders</SectionTitle>
         <SettingsGroup>
           <SettingsRow
             label="Accept orders"
@@ -116,13 +116,13 @@ export default function NativeControls() {
           />
         </SettingsGroup>
 
-        <SectionTitle inset={32}>Hours</SectionTitle>
+        <SectionTitle>Hours</SectionTitle>
         <SettingsGroup>
           <DateRow label="Opens" Icon={Clock} mode="time" value={opens} onChange={setOpens} />
           <DateRow label="Pause until" Icon={CalendarClock} mode="datetime" value={pauseUntil} onChange={setPauseUntil} minimumDate={new Date()} />
         </SettingsGroup>
 
-        <SectionTitle inset={32}>Storefront</SectionTitle>
+        <SectionTitle>Storefront</SectionTitle>
         <SettingsGroup>
           <ColorRow label="Accent" Icon={Palette} value={accent} onChange={setAccent} />
         </SettingsGroup>

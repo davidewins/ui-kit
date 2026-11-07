@@ -19,7 +19,7 @@ export default function Rows() {
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 48 }}>
-      <SectionTitle inset={32}>SettingsIdentity</SectionTitle>
+      <SectionTitle>SettingsIdentity</SectionTitle>
       <SettingsIdentity
         leading={
           <View style={{ width: 50, height: 50, borderRadius: 25, overflow: "hidden", backgroundColor: colors.secondaryBackground }}>
@@ -33,7 +33,7 @@ export default function Rows() {
         accessibilityLabel="Edit profile"
       />
 
-      <SectionTitle inset={32}>SettingsRow</SectionTitle>
+      <SectionTitle>SettingsRow</SectionTitle>
       <SettingsGroup>
         <SettingsRow label="Navigates" Icon={Shield} onPress={noop} navigates />
         <SettingsRow label="Trailing text" Icon={Info} trailing="v1.4.2" />

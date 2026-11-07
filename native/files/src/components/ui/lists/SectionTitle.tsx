@@ -3,9 +3,9 @@
  * medium, muted: Linear's "In Progress", not an uppercase eyebrow.
  * See DESIGN.md (Eyebrows) before reaching for anything louder.
  *
- * `inset` matches the content it sits above: 20 for rows on the background,
- * 32 for rows inside a 16pt-inset card (so the text lines up with the
- * card's own padding).
+ * Flush with the content it sits above (David, 6 Nov): rows and cards both
+ * start at x=16, so the default inset is 16. Only pass `inset` when the
+ * title sits inside an already padded container.
  */
 import { useThemeColors } from "@/hooks/useThemeColors";
 import type { ReactNode } from "react";
@@ -15,7 +15,7 @@ import { View } from "../primitives/View";
 
 export function SectionTitle({
   children,
-  inset = 20,
+  inset = 16,
   trailing,
   style,
 }: {

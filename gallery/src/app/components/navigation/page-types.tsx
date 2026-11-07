@@ -42,9 +42,9 @@ const ANDROID: [PageType, string][] = [
 export default function PageTypesPage() {
   return (
     <DemoPage usage='<Stack.Screen name="..." options={{ presentation: "formSheet" }} /> in the _layout.tsx that owns the route. Each row opens a real route declared that way on the gallery root Stack.'>
-      <SectionTitle inset={32}>Same on iOS and Android</SectionTitle>
+      <SectionTitle>Same on iOS and Android</SectionTitle>
       <Rows types={[["card", undefined], ["transparentModal", undefined]]} />
-      <SectionTitle inset={32}>Different on Android</SectionTitle>
+      <SectionTitle>Different on Android</SectionTitle>
       <Rows types={ANDROID} />
       <Note>Android pushes modal like a normal screen, and pageSheet, fullScreenModal and containedModal fall back to modal. formSheet is a Material bottom sheet with no grabber and at most 3 detents. containedTransparentModal falls back to transparentModal.</Note>
     </DemoPage>

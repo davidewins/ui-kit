@@ -62,7 +62,7 @@ export default function Colours() {
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 48 }}>
       {groups.map((g) => (
         <View key={g.title}>
-          <SectionTitle inset={32}>{g.title}</SectionTitle>
+          <SectionTitle>{g.title}</SectionTitle>
           <SettingsGroup>
             {g.rows.map(([k, v]) => (
               <SettingsRow key={k} label={k} Icon={swatch(v)} trailing={v} />

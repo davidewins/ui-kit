@@ -1,18 +1,13 @@
-// Segmented control. iOS draws SwiftUI's segmented Picker through @expo/ui
-// (Liquid Glass on iOS 26, sized by SwiftUI); Android draws Material 3
-// segmented buttons through @expo/ui's community segmented control.
+// Segmented control. iOS draws UIKit's UISegmentedControl through
+// @react-native-segmented-control (the chunky one SELLERS shipped before
+// 19 Oct; David, 7 Nov: the SwiftUI Picker read too thin). Android draws
+// Material 3 segmented buttons through @expo/ui's community control.
 //
 // Controlled: pass selectedIndex and update it in onChange. One selection
 // haptic per change, so callers never fire their own.
 import { SegmentedControl as CommunitySegmentedControl } from "@expo/ui/community/segmented-control";
-import { Host, Picker, Text as SwiftText } from "@expo/ui/swift-ui";
-import {
-  accessibilityLabel as a11yLabel,
-  controlSize,
-  disabled as disabledModifier,
-  pickerStyle,
-  tag,
-} from "@expo/ui/swift-ui/modifiers";
+import { useThemeColors } from "@/hooks/useThemeColors";
+import NativeSegmentedControl from "@react-native-segmented-control/segmented-control";
 import * as Haptics from "expo-haptics";
 import { Platform, View, useColorScheme, type StyleProp, type ViewStyle } from "react-native";
 
@@ -37,6 +32,7 @@ export function SegmentedControl({
   style,
 }: SegmentedControlProps) {
   const scheme = useColorScheme();
+  const colors = useThemeColors();
 
   const select = (index: number) => {
     if (index === selectedIndex) return;
@@ -46,25 +42,18 @@ export function SegmentedControl({
 
   if (Platform.OS === "ios") {
     return (
-      <Host matchContents={{ vertical: true }} style={style}>
-        <Picker
-          label={accessibilityLabel ?? ""}
-          selection={selectedIndex}
-          onSelectionChange={(v: number) => select(v)}
-          modifiers={[
-            pickerStyle("segmented"),
-            controlSize(size),
-            disabledModifier(disabled),
-            ...(accessibilityLabel ? [a11yLabel(accessibilityLabel)] : []),
-          ]}
-        >
-          {values.map((label, i) => (
-            <SwiftText key={label} modifiers={[tag(i)]}>
-              {label}
-            </SwiftText>
-          ))}
-        </Picker>
-      </Host>
+      <NativeSegmentedControl
+        values={[...values]}
+        selectedIndex={selectedIndex}
+        enabled={!disabled}
+        onChange={(e) => select(e.nativeEvent.selectedSegmentIndex)}
+        appearance={scheme === "dark" ? "dark" : "light"}
+        tintColor={colors.tint}
+        fontStyle={{ color: colors.text }}
+        activeFontStyle={{ color: colors.onTint }}
+        accessibilityLabel={accessibilityLabel}
+        style={[{ height: size === "large" ? 44 : 36 }, style]}
+      />
     );
   }
 
