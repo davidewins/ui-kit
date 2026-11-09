@@ -21,25 +21,17 @@ export default function TextFieldPage() {
 
   return (
     <DemoPage usage='import { NativeTextField } from "@/components/ui/inputs/NativeTextField". iOS: SwiftUI TextField / SecureField. Android: Compose OutlinedTextField.'>
-      <Demo title="Email" gap={16}>
+      {/* One form, not a heading per field: each field already carries its
+          own label (David, 9 Nov: "too many eyebrows"). */}
+      <Demo title="Form" gap={16}>
         <NativeTextField label="Email" value={email} onChangeText={setEmail} keyboard="email" placeholder="you@example.com" />
-      </Demo>
-      <Demo title="Password (secure)">
         <NativeTextField label="Password" value={password} onChangeText={setPassword} secure hint="At least 8 characters." />
-      </Demo>
-      <Demo title="Phone with hint">
         <NativeTextField label="Mobile" value={phone} onChangeText={setPhone} keyboard="phone" placeholder="087 123 4567" hint="Your rider calls this number if they can't find you." />
-      </Demo>
-      <Demo title="Error">
         <NativeTextField label="Eircode" value={eircode} onChangeText={setEircode} error={eircodeError} />
-      </Demo>
-      <Demo title="Disabled">
         <NativeTextField label="Store ID" value="bao-house-swords" onChangeText={() => {}} disabled hint="Set by VOID when the store was created." />
       </Demo>
       {isIOS ? <IOSMultiline /> : <AndroidRaw />}
-      <Text weight="medium" style={{ fontSize: 13, color: colors.muted, paddingHorizontal: 20, paddingTop: 16 }}>
-        {isIOS ? "Android: Compose OutlinedTextField, TextField and BasicTextField." : "iOS: SwiftUI TextField and SecureField."}
-      </Text>
+      <Note>{isIOS ? "Android: Compose OutlinedTextField, TextField and BasicTextField." : "iOS: SwiftUI TextField and SecureField."}</Note>
     </DemoPage>
   );
 }
