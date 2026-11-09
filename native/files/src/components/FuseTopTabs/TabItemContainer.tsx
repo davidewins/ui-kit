@@ -1,13 +1,12 @@
 import React, { FC, PropsWithChildren } from "react";
-import { Platform, useWindowDimensions } from "react-native";
-import Animated, {
-  Extrapolation,
-  interpolate,
-  SharedValue,
-  useAnimatedStyle,
-} from "react-native-reanimated";
+import { useWindowDimensions, View } from "react-native";
+import type { SharedValue } from "react-native-reanimated";
 
-const _translateXGap = 20;
+// One pane of the horizontal pager. Panes slide side by side with the swipe
+// on every platform (David, 9 Nov: "they're not sliding"). The old iOS-only
+// "fuse" effect faded the outgoing pane out over the first 70% of the swipe
+// and the incoming one in over the last 30%, which read as a cross-fade.
+// The shared values stay in Props so FuseTopTabs' call site is unchanged.
 
 type Props = {
   index: number;
@@ -17,52 +16,7 @@ type Props = {
   isHorizontalListScrollingX: SharedValue<boolean>;
 };
 
-export const TabItemContainer: FC<PropsWithChildren<Props>> = ({
-  children,
-  index,
-  activeTabIndex,
-  prevActiveTabIndex,
-  horizontalListOffsetX,
-  isHorizontalListScrollingX,
-}) => {
+export const TabItemContainer: FC<PropsWithChildren<Props>> = ({ children }) => {
   const { width } = useWindowDimensions();
-
-  const rContainerStyle = useAnimatedStyle(() => {
-    if (Platform.OS === "android") return {};
-
-    if (
-      Math.abs(activeTabIndex.get() - prevActiveTabIndex.get()) > 1 &&
-      index !== activeTabIndex.get() &&
-      !isHorizontalListScrollingX.get()
-    ) {
-      return { opacity: 0 };
-    }
-
-    const progress = horizontalListOffsetX.get() / width;
-    const fadeOut = interpolate(progress, [index, index + 0.7], [1, 0], Extrapolation.CLAMP);
-    const fadeIn = interpolate(progress, [index - 0.3, index], [0, 1], Extrapolation.CLAMP);
-    const translateXOut = interpolate(
-      progress,
-      [index, index + 0.7],
-      [0, width * 0.7 - _translateXGap],
-      Extrapolation.CLAMP
-    );
-    const translateXIn = interpolate(
-      progress,
-      [index - 0.3, index],
-      [-width * 0.3 + _translateXGap, 0],
-      Extrapolation.CLAMP
-    );
-
-    return {
-      opacity: fadeOut * fadeIn,
-      transform: [{ translateX: translateXOut + translateXIn }],
-    };
-  });
-
-  return (
-    <Animated.View style={[{ width, flex: 1 }, rContainerStyle]}>
-      {children}
-    </Animated.View>
-  );
+  return <View style={{ width, flex: 1 }}>{children}</View>;
 };
