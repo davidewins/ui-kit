@@ -1,6 +1,7 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/GlassSurface.tsx. Edit it there and sync; local edits fail ui-kit:check.
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { BlurView } from "expo-blur";
+import { useUniwind } from "uniwind";
 import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import { FC, ReactNode } from "react";
 import { Platform, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
@@ -44,6 +45,13 @@ export const GlassSurface: FC<Props> = ({
   blurIntensity = 28,
 }) => {
   const colors = useThemeColors();
+  // Native glass and blur follow the phone's appearance by default. When the
+  // app forces Light or Dark (ZESTY's Appearance menu, a store app's theme),
+  // they must follow the app instead, or a chip turns light glass on a dark
+  // page (David, 9 Nov: "chips aren't set up properly for dark mode").
+  const { theme, hasAdaptiveThemes } = useUniwind();
+  const scheme = hasAdaptiveThemes ? "auto" : theme === "dark" ? "dark" : "light";
+  const blurTint = scheme === "auto" ? "systemMaterial" : scheme === "dark" ? "systemMaterialDark" : "systemMaterialLight";
 
   const fillLayer = fill ? (
     <View
@@ -60,6 +68,7 @@ export const GlassSurface: FC<Props> = ({
       <GlassView
         isInteractive={isInteractive}
         glassEffectStyle="regular"
+        colorScheme={scheme}
         style={style}
       >
         {fillLayer}
@@ -70,7 +79,7 @@ export const GlassSurface: FC<Props> = ({
 
   if (Platform.OS === "ios") {
     return (
-      <BlurView intensity={blurIntensity} tint="systemMaterial" style={style}>
+      <BlurView intensity={blurIntensity} tint={blurTint} style={style}>
         {fillLayer}
         {children}
       </BlurView>

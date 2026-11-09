@@ -10,7 +10,7 @@ import { Pencil, Share } from "lucide-react-native";
 export default function HeaderMenu() {
   const colors = useThemeColors();
   return (
-    <DemoPage usage='import { ActionMenu } from "@/components/ui/actions/ActionMenu". Render it in the screen body, never inside headerRight.'>
+    <DemoPage inline usage='import { ActionMenu } from "@/components/ui/actions/ActionMenu". Render it in the screen body, never inside headerRight.'>
       <ActionMenu
         accessibilityLabel="Order actions"
         title="Order #1042"

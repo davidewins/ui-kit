@@ -6,9 +6,9 @@ import { MI } from "@/gallery/composeIcons";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { Icon, Row, Switch as MSwitch, SyncSwitch, Text as MText } from "@expo/ui/jetpack-compose";
 import { fillMaxWidth } from "@expo/ui/jetpack-compose/modifiers";
-import { SyncToggle, Toggle, useNativeState, VStack } from "@expo/ui/swift-ui";
-import { toggleStyle } from "@expo/ui/swift-ui/modifiers";
-import { BellRing, Store, Timer } from "lucide-react-native";
+import { SyncToggle, Toggle, useNativeState } from "@expo/ui/swift-ui";
+import { labelsHidden, toggleStyle } from "@expo/ui/swift-ui/modifiers";
+import { BellRing, DoorOpen, Receipt, Store, Timer } from "lucide-react-native";
 import { useState } from "react";
 import { View } from "react-native";
 
@@ -38,11 +38,20 @@ function IOSToggles() {
   return (
     <>
       <Demo title="SwiftUI Toggle with label">
-        <SwiftHost matchContents={{ vertical: true }}>
-          <VStack>
-            <Toggle isOn={label} onIsOnChange={setLabel} label="Leave at door" systemImage="door.left.hand.open" />
-          </VStack>
-        </SwiftHost>
+        {/* Shown as a settings row, the way apps use it (David, 9 Nov). */}
+        <View style={{ marginHorizontal: -20 }}>
+          <SettingsGroup>
+            <SettingsRow
+              label="Leave at door"
+              Icon={DoorOpen}
+              accessory={
+                <SwiftHost matchContents>
+                  <Toggle isOn={label} onIsOnChange={setLabel} label="Leave at door" modifiers={[labelsHidden()]} />
+                </SwiftHost>
+              }
+            />
+          </SettingsGroup>
+        </View>
       </Demo>
       <Demo title="Button style">
         <SwiftHost matchContents>
@@ -50,9 +59,19 @@ function IOSToggles() {
         </SwiftHost>
       </Demo>
       <Demo title="SyncToggle (state lives on the native side)">
-        <SwiftHost matchContents={{ vertical: true }}>
-          <SyncToggle isOn={sync} label="Show prices with VAT" />
-        </SwiftHost>
+        <View style={{ marginHorizontal: -20 }}>
+          <SettingsGroup>
+            <SettingsRow
+              label="Show prices with VAT"
+              Icon={Receipt}
+              accessory={
+                <SwiftHost matchContents>
+                  <SyncToggle isOn={sync} label="Show prices with VAT" modifiers={[labelsHidden()]} />
+                </SwiftHost>
+              }
+            />
+          </SettingsGroup>
+        </View>
       </Demo>
       <Note>Android: Compose Switch (with a thumb icon) and SyncSwitch.</Note>
     </>
