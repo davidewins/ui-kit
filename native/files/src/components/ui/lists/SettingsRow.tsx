@@ -49,7 +49,8 @@ export type SettingsIcon = ComponentType<{
 
 export interface SettingsRowProps {
   label: string;
-  Icon: SettingsIcon;
+  /** Leave out for a plain text row (option lists): the label starts at 16. */
+  Icon?: SettingsIcon;
   onPress?: () => void;
   /** Destination: the row becomes a Link with a long-press peek preview. */
   href?: Href;
@@ -107,19 +108,21 @@ export function SettingsRow({
 
   const content = (
     <>
-      <View
-        style={{ width: SETTINGS_ROW.glyphWidth, alignItems: "center" }}
-      >
-        {loading ? (
-          <ActivityIndicator size="small" color={colors.muted} />
-        ) : (
-          <Icon
-            size={SETTINGS_ROW.iconSize}
-            color={glyphColor}
-            strokeWidth={SETTINGS_ROW.iconStrokeWidth}
-          />
-        )}
-      </View>
+      {Icon || loading ? (
+        <View
+          style={{ width: SETTINGS_ROW.glyphWidth, alignItems: "center" }}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color={colors.muted} />
+          ) : Icon ? (
+            <Icon
+              size={SETTINGS_ROW.iconSize}
+              color={glyphColor}
+              strokeWidth={SETTINGS_ROW.iconStrokeWidth}
+            />
+          ) : null}
+        </View>
+      ) : null}
 
       <Text
         weight="medium"
