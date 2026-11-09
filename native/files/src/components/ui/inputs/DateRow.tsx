@@ -17,7 +17,8 @@ export type DateRowMode = "date" | "time" | "datetime";
 
 export interface DateRowProps {
   label: string;
-  Icon: SettingsIcon;
+  /** Optional, like SettingsRow: leave out for a plain row. */
+  Icon?: SettingsIcon;
   value: Date;
   onChange: (value: Date) => void;
   mode?: DateRowMode;
