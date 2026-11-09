@@ -16,7 +16,8 @@ export interface SegmentedControlProps {
   values: readonly string[];
   selectedIndex: number;
   onChange: (index: number) => void;
-  /** "large" (44pt) for a page-level switch, "regular" (32pt) inside content. */
+  /** 44pt by default, the ZESTY size (David, 9 Nov: "needs to be fatter").
+   *  "regular" (36pt) only where a smaller control is genuinely needed. */
   size?: "regular" | "large";
   disabled?: boolean;
   accessibilityLabel?: string;
@@ -27,7 +28,7 @@ export function SegmentedControl({
   values,
   selectedIndex,
   onChange,
-  size = "regular",
+  size = "large",
   disabled = false,
   accessibilityLabel,
   style,
