@@ -51,10 +51,18 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   // One look (David, 4 Nov): a block of content on the page, no grey fill.
   // `raised` is the one lifted variant (analytics). Small grey tiles are Tile.
+  //
+  // A flat card has no edge, so it adds no side padding: its content lines up
+  // with the page's own 16pt inset instead of indenting twice (David, 9 Nov).
+  // A raised card has an edge, so it keeps p-4 inside it. Any padding class
+  // passed in replaces the default: "p-4 p-0" resolves by stylesheet order,
+  // not string order, so the default must not be there at all.
   const raisedStyle = useRaisedCardStyle();
+  const hasPadding = /(^|\s)p[xytrbl]?-/.test(className);
+  const base = hasPadding ? "" : raised ? "p-4 " : "py-4 ";
   return (
     <View
-      className={`p-4 ${className}`}
+      className={`${base}${className}`}
       style={raised ? raisedStyle : undefined}
       accessibilityRole={accessibilityRole}
       accessibilityLabel={accessibilityLabel}

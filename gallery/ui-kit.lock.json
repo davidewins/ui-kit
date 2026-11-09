@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "2f3508b",
+  "rev": "73ed9eb",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -26,7 +26,7 @@
     "src/components/ui/actions/ActionMenu.tsx": "af9ef1574a8fa570befcaf0ae3c46b6fba95ec7c7af5c3c7d2917467b4e63c05",
     "src/components/ui/feedback/Badge.tsx": "149c83114c502d658a6294c0a92f6585a63c343b84d1eaee91366ea42382d3ae",
     "src/components/ui/actions/Button.tsx": "61ffffdf1994380cce2fe9da3884488620bc410a7cde77810e438a1c085126a3",
-    "src/components/ui/surfaces/Card.tsx": "ecb4adc842f4fa6831b5d6a6308074f81b9cd2ce346f3f3353920ae96fbb5259",
+    "src/components/ui/surfaces/Card.tsx": "94d7aa8780e2756232ffbe3688d71196ef1ec81119a9dfbf6f9b831c01e2e6d9",
     "src/components/ui/lists/Carousel.tsx": "5f087e2a1606d5798dd4c2d624bb3e68313708acaed83e338cc80fce95d11d31",
     "src/components/ui/lists/CheckForUpdatesRow.tsx": "b90fcefb6b8e921c99c963f26f0ba113fe60dfcd4bb0f8b7d6c63f09ae06f9b5",
     "src/components/ui/inputs/Checkbox.tsx": "dbbc1c70f900c39c9cc9d3e377d392e2cb4d7df8bddb99d48378040edf3d2e4f",
