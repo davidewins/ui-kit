@@ -200,6 +200,17 @@ export function SettingsRow({
     );
   }
 
+  // A row with nothing to do (a Switch, Stepper or Slider row) is not a
+  // button: otherwise tapping its control also lit the whole row and fired a
+  // second haptic (David, 9 Nov: "my tap is being registered in 2 places").
+  if (!onPress && !onLongPress) {
+    return (
+      <View style={rowStyle}>
+        {content}
+      </View>
+    );
+  }
+
   return (
     <RNPressable
       style={{ ...rowStyle, ...pressedFill }}
