@@ -10,17 +10,20 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { router } from "expo-router";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useHeaderHeight } from "expo-router/react-navigation";
 
 const SHEETS: PageType[] = ["formSheet", "fittedFormSheet"];
 const OVERLAYS: PageType[] = ["transparentModal", "containedTransparentModal"];
 
 export function PageTypeScreen({ type }: { type: PageType }) {
   const insets = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
   const done = () => router.back();
 
   if (type === "fittedFormSheet") {
     return (
-      <View style={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: insets.bottom + 12, gap: 20 }}>
+      // The sheet's header sits over its content; start below it.
+      <View style={{ paddingHorizontal: 20, paddingTop: headerHeight + 12, paddingBottom: insets.bottom + 12, gap: 20 }}>
         <Copy type={type} />
         <Button fullWidth onPress={done}>Done</Button>
       </View>
@@ -29,7 +32,11 @@ export function PageTypeScreen({ type }: { type: PageType }) {
 
   if (SHEETS.includes(type)) {
     return (
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: insets.bottom + 12, gap: 20 }}>
+      // Clears the sheet's header, like RIDERS' chat/report formSheet.
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 12, paddingBottom: insets.bottom + 12, gap: 20 }}
+      >
         <Copy type={type} />
         <Button fullWidth onPress={done}>Done</Button>
       </ScrollView>

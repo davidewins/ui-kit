@@ -30,6 +30,8 @@ export default function Index() {
       <Stack.Screen
         options={{
           headerSearchBarOptions: {
+            // Top, under the title (David, 9 Nov); the segmented control keeps the bottom.
+            placement: "stacked",
             placeholder: "Search components and screens",
             hideWhenScrolling: false,
             autoCapitalize: "none",
