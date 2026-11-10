@@ -197,3 +197,23 @@ export function SkeletonTable({ rows = 5, numbers = 3, dense = true }: { rows?: 
     </View>
   );
 }
+
+/** MetricGrid's shape: rows of three cells (label, value, change) split by hairlines. */
+export function SkeletonMetricGrid({ rows = 2 }: { rows?: number }) {
+  const colors = useThemeColors();
+  return (
+    <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
+      {Array.from({ length: rows }, (_, r) => (
+        <View key={r} style={{ flexDirection: "row", borderTopWidth: r ? StyleSheet.hairlineWidth : 0, borderColor: colors.border }}>
+          {[0, 1, 2].map((c) => (
+            <View key={c} style={{ flex: 1, paddingVertical: 10, paddingLeft: c ? 12 : 0, borderLeftWidth: c ? StyleSheet.hairlineWidth : 0, borderColor: colors.border, gap: 1 }}>
+              <Line box={15} bar={9} width="60%" />
+              <Line box={22} bar={14} width="50%" />
+              <Line box={15} bar={9} width="70%" />
+            </View>
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+}

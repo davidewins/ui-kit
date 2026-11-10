@@ -7,7 +7,7 @@ import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { BASKET, SHOP_ORDERS, euro, productById } from "@/gallery/demo/data";
-import { DemoScreen, MEDIA_INSET, MediaRow, Summary, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, MEDIA_INSET, MediaRow, MetricGrid, Summary, useStates } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
@@ -67,23 +67,53 @@ export default function Order() {
           </Card>
         </View>
 
-        <SettingsGroup>
-          {STEPS.map((s, i) => (
-            <SettingsRow key={s.label} label={s.label} Icon={i < reached ? Check : Circle} trailing={i < reached ? s.at : "To come"} />
-          ))}
-        </SettingsGroup>
+        <DataTable
+          dense
+          columns={[
+            { key: "done", label: "", width: 18, align: "left" },
+            { key: "step", label: "Tracking" },
+            { key: "at", label: "", width: 100 },
+          ]}
+          rows={STEPS.map((st, i) => ({
+            done: i < reached ? <Check size={14} color={colors.success} strokeWidth={2.5} /> : <Circle size={12} color={colors.muted} strokeWidth={2} />,
+            step: st.label,
+            at: i < reached ? st.at : "To come",
+          }))}
+          muted={STEPS.map((_, i) => i).filter((i) => i >= reached)}
+          highlight={reached - 1}
+        />
 
-        <SectionTitle>Items</SectionTitle>
+        <MetricGrid
+          items={[
+            { label: "Courier", value: "DPD" },
+            { label: "Tracking", value: "15502 8841" },
+            { label: "Parcels", value: `${state === "Processing" ? 0 : 1} of 1` },
+            { label: "Paid with", value: "Visa", unit: "4242" },
+            { label: "Placed", value: "09:41", unit: "today" },
+            { label: "Return by", value: "10 Dec" },
+          ]}
+        />
+
+        <SectionTitle>{`${lines.reduce((n, l) => n + l.qty, 0)} items`}</SectionTitle>
         <SettingsGroup separatorInset={MEDIA_INSET}>
           {lines.map((l) => {
             const p = productById(l.product);
-            return <MediaRow key={l.product} image={p.photos[0]} title={p.name} subtitle={l.size ? `Size ${l.size}, ${l.qty} ×` : `${l.qty} ×`} trailing={euro(p.price * l.qty)} href={`/screens/shop/product/${p.id}`} />;
+            return (
+              <MediaRow
+                key={l.product}
+                image={p.photos[0]}
+                title={p.name}
+                subtitle={[p.colour, l.size ? `size ${l.size}` : null, `${l.qty} × ${euro(p.price)}`].filter(Boolean).join(", ")}
+                trailing={euro(p.price * l.qty)}
+                href={`/screens/shop/product/${p.id}`}
+              />
+            );
           })}
         </SettingsGroup>
 
         <SettingsGroup>
-          <SettingsRow label="14 Clanbrassil Street, Dublin 8" Icon={MapPin} />
-          <SettingsRow label="Message support" Icon={MessageCircle} navigates onPress={() => Toast.info("Chat with us")} />
+          <SettingsRow label="14 Clanbrassil Street, Dublin 8" Icon={MapPin} trailing="Leave at door" />
+          <SettingsRow label="Message support" Icon={MessageCircle} trailing="Replies in 5 min" navigates onPress={() => Toast.info("Chat with us")} />
         </SettingsGroup>
 
         <Summary lines={[["Subtotal", euro(subtotal)], ["Delivery", "Free"]]} total={["Paid", euro(subtotal)]} />

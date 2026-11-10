@@ -1,14 +1,15 @@
-import { Badge, EmptyState } from "@/components/ui";
+import { Badge, EmptyState, View } from "@/components/ui";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { Chip } from "@/components/ui/inputs/Chip";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
-import { ART, BOOKINGS, type Booking, DAYS, STATUS_BADGE, clientById, euro, serviceById } from "@/gallery/demo/data";
-import { ChipRow, DemoScreen, MEDIA_INSET, MediaRow, StatTiles, TimeColumn, useStates } from "@/gallery/demo/parts";
+import { ART, BOOKINGS, type Booking, DAYS, STAFF_LOAD, STATUS_BADGE, clientById, euro, serviceById } from "@/gallery/demo/data";
+import { ChipRow, DemoScreen, MEDIA_INSET, MediaRow, MetricGrid, TimeColumn, useStates } from "@/gallery/demo/parts";
+import { Gauge } from "@/components/ui/feedback/Gauge";
 import { Stack, router } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";
-import { SkeletonTiles, SkeletonTitle, SkeletonMediaRows } from "@/gallery/demo/skeletons";
+import { SkeletonBars, SkeletonMediaRows, SkeletonMetricGrid, SkeletonTitle } from "@/gallery/demo/skeletons";
 
 const STATES = ["Busy", "Loading", "Day off"] as const;
 
@@ -31,7 +32,7 @@ export default function Schedule() {
           key={b.id}
           leading={<TimeColumn start={b.start} end={b.end} struck={b.status === "Cancelled"} />}
           title={c.name}
-          subtitle={`${s.name} with ${b.staff}`}
+          subtitle={`${s.name}, ${s.price ? euro(s.price) : "free"}, ${b.staff}, ${c.visits === 1 ? "first visit" : `visit ${c.visits + 1}`}`}
           accessory={b.status === "Confirmed" ? undefined : <Badge variant={STATUS_BADGE[b.status]}>{b.status}</Badge>}
           href={`/screens/bookings/booking/${b.id}`}
         />
@@ -55,7 +56,8 @@ export default function Schedule() {
         </ChipRow>
         {state === "Loading" ? (
           <>
-            <SkeletonTiles />
+            <SkeletonMetricGrid rows={2} />
+            <SkeletonBars count={3} twoUp />
             <SkeletonTitle />
             <SkeletonMediaRows count={3} lead="time" />
             <SkeletonTitle />
@@ -71,7 +73,23 @@ export default function Schedule() {
           />
         ) : (
           <>
-            <StatTiles items={[{ value: String(live.length), label: "Bookings" }, { value: "6.5 h", label: "Booked" }, { value: euro(revenue), label: "Expected" }]} />
+            <MetricGrid
+              items={[
+                { label: "Bookings", value: String(live.length), delta: "+2 on last Wed", good: true },
+                { label: "Booked", value: "5.4", unit: "h of 22", delta: "25% full", good: false },
+                { label: "Expected", value: euro(revenue), delta: "+€85", good: true },
+                { label: "Free slots", value: "9" },
+                { label: "Walk-ins", value: "1" },
+                { label: "No-shows", value: "0", unit: "this week" },
+              ]}
+            />
+            <View style={{ flexDirection: "row", columnGap: 12, marginHorizontal: 16, marginBottom: 6 }}>
+              {STAFF_LOAD.map((st) => (
+                <View key={st.name} style={{ flex: 1 }}>
+                  <Gauge variant="bar" label={st.name} value={st.booked} max={st.shift} valueLabel={`${Math.round((st.booked / st.shift) * 100)}%`} />
+                </View>
+              ))}
+            </View>
             <SectionTitle>Morning</SectionTitle>
             <SettingsGroup separatorInset={MEDIA_INSET}>{rows(morning)}</SettingsGroup>
             <SectionTitle>Afternoon</SectionTitle>

@@ -264,16 +264,34 @@ export interface Client {
   phone: string;
   visits: number;
   lastVisit: string;
+  spent: number;
+  since: string;
+  noShows: number;
   note?: string;
 }
 
+/** Hours booked today out of hours on shift, per stylist. */
+export const STAFF_LOAD = [
+  { name: "Aisling", booked: 2.0, shift: 8 },
+  { name: "Rory", booked: 1.1, shift: 6 },
+  { name: "Saoirse", booked: 2.3, shift: 8 },
+] as const;
+
+/** A client's past visits, newest first. */
+export const VISITS = [
+  { date: "12 Oct", service: "Cut and finish", staff: "Aisling", paid: "€55" },
+  { date: "31 Aug", service: "Full colour", staff: "Saoirse", paid: "€140" },
+  { date: "19 Jul", service: "Cut and finish", staff: "Aisling", paid: "€55" },
+  { date: "2 Jun", service: "Blow dry", staff: "Aisling", paid: "€35" },
+] as const;
+
 export const CLIENTS: Client[] = [
-  { id: "c1", name: "Aoife Byrne", phone: "+353 87 123 4567", visits: 14, lastVisit: "12 Oct", note: "Prefers Aisling. Sensitive scalp, use the gentle shampoo." },
-  { id: "c2", name: "Cian Murphy", phone: "+353 86 222 1934", visits: 6, lastVisit: "2 Nov" },
-  { id: "c3", name: "Niamh Kelly", phone: "+353 85 774 0021", visits: 22, lastVisit: "29 Oct", note: "Always books colour with a cut." },
-  { id: "c4", name: "Seán O'Brien", phone: "+353 83 410 7788", visits: 3, lastVisit: "18 Sep" },
-  { id: "c5", name: "Róisín Doyle", phone: "+353 87 900 1200", visits: 9, lastVisit: "5 Nov" },
-  { id: "c6", name: "Tadhg Nolan", phone: "+353 89 455 6612", visits: 1, lastVisit: "New" },
+  { id: "c1", name: "Aoife Byrne", phone: "+353 87 123 4567", visits: 14, lastVisit: "12 Oct", spent: 742, since: "2023", noShows: 0, note: "Prefers Aisling. Sensitive scalp, use the gentle shampoo." },
+  { id: "c2", name: "Cian Murphy", phone: "+353 86 222 1934", visits: 6, lastVisit: "2 Nov", spent: 120, since: "2025", noShows: 1 },
+  { id: "c3", name: "Niamh Kelly", phone: "+353 85 774 0021", visits: 22, lastVisit: "29 Oct", spent: 2_310, since: "2021", noShows: 0, note: "Always books colour with a cut." },
+  { id: "c4", name: "Seán O'Brien", phone: "+353 83 410 7788", visits: 3, lastVisit: "18 Sep", spent: 165, since: "2025", noShows: 0 },
+  { id: "c5", name: "Róisín Doyle", phone: "+353 87 900 1200", visits: 9, lastVisit: "5 Nov", spent: 395, since: "2024", noShows: 2 },
+  { id: "c6", name: "Tadhg Nolan", phone: "+353 89 455 6612", visits: 1, lastVisit: "New", spent: 0, since: "2026", noShows: 0 },
 ];
 
 export const clientById = (id?: string) => CLIENTS.find((c) => c.id === id) ?? CLIENTS[0];

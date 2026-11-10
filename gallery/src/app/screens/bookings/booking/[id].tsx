@@ -6,12 +6,12 @@ import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsIdentity } from "@/components/ui/lists/SettingsIdentity";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
-import { STATUS_BADGE, bookingById, clientById, euro, serviceById } from "@/gallery/demo/data";
-import { Avatar, DemoScreen, useStates } from "@/gallery/demo/parts";
+import { STATUS_BADGE, VISITS, bookingById, clientById, euro, serviceById } from "@/gallery/demo/data";
+import { Avatar, DataTable, DemoScreen, MetricGrid, useStates } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
-import { CalendarDays, Clock, Euro, Scissors, User } from "lucide-react-native";
+import { CalendarDays, Scissors } from "lucide-react-native";
 import { useState } from "react";
 
 const STATES = ["Confirmed", "Checked in", "Cancelled"] as const;
@@ -55,26 +55,46 @@ export default function BookingDetail() {
             leading={<Avatar name={c.name} size={60} />}
             title={c.name}
             subtitle={c.phone}
-            caption={`${c.visits} visits, last ${c.lastVisit}`}
+            caption={`Client since ${c.since}, last in ${c.lastVisit}`}
             onPress={() => router.push("/screens/bookings/clients")}
             accessibilityLabel={`${c.name}, client`}
           />
-        <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
+        <View style={{ flexDirection: "row", gap: 6, marginHorizontal: 16, marginBottom: 12 }}>
           <Badge variant={STATUS_BADGE[state]}>{state}</Badge>
+          <Badge>Booked online, 3 Nov</Badge>
+          {c.noShows ? <Badge variant="warning">{`${c.noShows} no-show${c.noShows > 1 ? "s" : ""}`}</Badge> : null}
         </View>
         <SettingsGroup>
-          <SettingsRow label={s.name} Icon={Scissors} trailing={`${s.minutes} min`} />
-          <SettingsRow label="With" Icon={User} trailing={b.staff} />
-          <SettingsRow label="Wednesday 12 Nov" Icon={CalendarDays} trailing={`${b.start} to ${b.end}`} />
-          <SettingsRow label="Price" Icon={Euro} trailing={s.price ? euro(s.price) : "Free"} />
-          <SettingsRow label="Booked online" Icon={Clock} trailing="3 Nov" />
+          <SettingsRow label={`${s.name}, ${s.minutes} min`} Icon={Scissors} trailing={s.price ? euro(s.price) : "Free"} />
+          <SettingsRow label={`Wed 12 Nov, ${b.start} to ${b.end}`} Icon={CalendarDays} trailing={b.staff} />
         </SettingsGroup>
+        <MetricGrid
+          items={[
+            { label: "Visits", value: String(c.visits) },
+            { label: "Spent", value: euro(c.spent) },
+            { label: "Average", value: c.visits ? euro(Math.round(c.spent / c.visits)) : "€0" },
+            { label: "Every", value: c.visits > 5 ? "6" : "9", unit: "weeks" },
+            { label: "Usually with", value: "Aisling" },
+            { label: "No-shows", value: String(c.noShows), delta: c.noShows ? "Ask for a deposit" : undefined, good: false },
+          ]}
+        />
         {c.note ? (
           <>
             <SectionTitle>Note</SectionTitle>
-            <Text weight="medium" style={{ fontSize: 15, lineHeight: 22, color: colors.muted, marginHorizontal: 16, marginBottom: 18 }}>{c.note}</Text>
+            <Text weight="medium" style={{ fontSize: 15, lineHeight: 21, color: colors.muted, marginHorizontal: 16, marginBottom: 6 }}>{c.note}</Text>
           </>
         ) : null}
+        <SectionTitle>Past visits</SectionTitle>
+        <DataTable
+          dense
+          columns={[
+            { key: "date", label: "Date", width: 52, align: "left" },
+            { key: "service", label: "Service" },
+            { key: "staff", label: "With", width: 64, align: "left" },
+            { key: "paid", label: "Paid", width: 44 },
+          ]}
+          rows={VISITS}
+        />
       </DemoScreen>
       <ConfirmDialog
         visible={cancelling}

@@ -6,7 +6,7 @@ import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsIdentity } from "@/components/ui/lists/SettingsIdentity";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
-import { Avatar, DemoScreen, useStates } from "@/gallery/demo/parts";
+import { Avatar, DemoScreen, MetricGrid, useStates } from "@/gallery/demo/parts";
 import { Toast } from "@/lib/toast";
 import { router } from "expo-router";
 import { Bell, CircleHelp, CreditCard, MailWarning, MapPin, MoonStar, Package, Shield, Star } from "lucide-react-native";
@@ -36,6 +36,16 @@ export default function Account() {
           caption="Member since March 2024"
           onPress={() => router.push("/screens/profile/edit-profile")}
           accessibilityLabel="Edit your details"
+        />
+        <MetricGrid
+          items={[
+            { label: "Orders", value: "14", delta: "2 on the way", good: true },
+            { label: "Bookings", value: "22", delta: "Next: Wed 09:30", good: true },
+            { label: "Workouts", value: "61", delta: "5 this week", good: true },
+            { label: "Points", value: "1,240", delta: "€12 to spend", good: true },
+            { label: "Saved", value: "€212" },
+            { label: "Member since", value: "2024" },
+          ]}
         />
         {state === "Email not verified" ? (
           <SettingsGroup>

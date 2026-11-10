@@ -1,6 +1,6 @@
-import { EmptyState } from "@/components/ui";
+import { Badge, EmptyState } from "@/components/ui";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
-import { ART, BOOKINGS, CLIENTS } from "@/gallery/demo/data";
+import { ART, BOOKINGS, CLIENTS, euro } from "@/gallery/demo/data";
 import { Avatar, DemoScreen, MEDIA_INSET, MediaRow, useStates } from "@/gallery/demo/parts";
 import { Stack, router } from "expo-router";
 import { useState } from "react";
@@ -37,8 +37,9 @@ export default function Clients() {
                   key={c.id}
                   leading={<Avatar name={c.name} />}
                   title={c.name}
-                  subtitle={c.visits === 1 ? "First visit" : `${c.visits} visits, last ${c.lastVisit}`}
-                  trailing={next ? next.start : undefined}
+                  subtitle={c.visits === 1 ? `New, ${c.phone}` : `${c.visits} visits, ${euro(c.spent)}, last ${c.lastVisit}`}
+                  trailing={next ? `Today ${next.start}` : undefined}
+                  accessory={c.noShows ? <Badge variant="warning">{`${c.noShows} no-show`}</Badge> : undefined}
                   href={next ? `/screens/bookings/booking/${next.id}` : "/screens/bookings/new-booking"}
                 />
               );
