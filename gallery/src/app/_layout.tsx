@@ -24,6 +24,7 @@ const minimal = { headerBackButtonDisplayMode: "minimal" as const };
 // paints its header in the page colour, so its pages are opaque.
 const SCREEN_OPTIONS: Record<string, NativeStackNavigationOptions> = {
   "screens/patterns/create": { presentation: "modal", headerTransparent: false },
+  "screens/creator/account/[id]": { ...minimal },
   "screens/fitness/new-workout": { presentation: "modal", headerTransparent: false },
   "screens/bookings/new-booking": { presentation: "modal", headerTransparent: false },
   "screens/fitness/workout/[id]": { ...minimal, title: "" },

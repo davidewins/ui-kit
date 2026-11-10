@@ -79,6 +79,7 @@ import {
   Wand,
   Clapperboard,
   Music,
+  Megaphone,
   type LucideIcon,
 } from "lucide-react-native";
 
@@ -129,6 +130,7 @@ export const SECTIONS: Section[] = [
   s("components", "layout", "Layout", LayoutGrid),
   s("components", "data", "Data and media", ChartColumn),
   s("components", "native", "Native hosts", Cpu),
+  s("screens", "creator", "Creator (TKVR redo)", Megaphone),
   s("screens", "motion", "Transitions", Clapperboard),
   s("screens", "fitness", "Fitness", Dumbbell),
   s("screens", "shop", "Shop", ShoppingBag),
@@ -235,6 +237,10 @@ export const ENTRIES: Entry[] = [
   // Native hosts
   c("native", "host", "Host and RNHostView", Cpu, "Host RNHostView SwiftHost ComposeHost"),
   c("native", "native-state", "Native state", Timer, "useNativeState SyncToggle SyncSwitch worklet"),
+
+  // Creator: TKVR's social pages, redone
+  { title: "Social calendar", route: "screens/creator/calendar", section: "creator", Icon: CalendarDays, keywords: "TKVR social posts month MonthCalendar schedule", states: ["Busy month", "Loading", "Empty day"] },
+  { title: "Social account", route: "screens/creator/account/[id]", href: "/screens/creator/account/ig", section: "creator", Icon: Megaphone, keywords: "TKVR instagram followers reach results disconnect", states: ["Connected", "Login expired", "Loading", "No posts"] },
 
   // Transitions
   { title: "Apple zoom", route: "screens/motion/zoom", section: "motion", Icon: Music, keywords: "AppleZoom zoom transition Link.Preview peek menu native apple music" },
