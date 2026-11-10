@@ -17,7 +17,7 @@ import { frame } from "@expo/ui/swift-ui/modifiers";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { haptic } from "@/lib/haptics";
 import { Platform } from "react-native";
-import { ComposeHost, SwiftHost } from "../native/NativeHost";
+import { ComposeHost, SwiftSystemHost } from "../native/NativeHost";
 
 export interface ConfirmDialogProps {
   visible: boolean;
@@ -68,7 +68,7 @@ export function ConfirmDialog({
       if (!presented) onClose();
     };
     return (
-      <SwiftHost style={OFFSCREEN}>
+      <SwiftSystemHost kind="filled" style={OFFSCREEN}>
         {variant === "sheet" ? (
           <ConfirmationDialog title={title} titleVisibility="visible" isPresented={visible} onIsPresentedChange={onChange}>
             <ConfirmationDialog.Trigger>{trigger}</ConfirmationDialog.Trigger>
@@ -90,7 +90,7 @@ export function ConfirmDialog({
             ) : null}
           </Alert>
         )}
-      </SwiftHost>
+      </SwiftSystemHost>
     );
   }
 

@@ -27,6 +27,17 @@ export function SwiftHost({ modifiers = [], ...props }: SwiftUIHostProps) {
   return <SwiftUIHost seedColor={colors.text} {...props} modifiers={[tint(colors.text), ...modifiers]} />;
 }
 
+/** For SwiftUI controls the system fills with the tint and labels in white:
+ *  Toggle tracks and Alert / ConfirmationDialog buttons. SwiftHost's tint is
+ *  the text colour, white in dark mode, so those drew white on white.
+ *  - "toggle": no tint, system track (same as kit Switch).
+ *  - "filled": muted grey tint (alerts, button-style toggles), which holds a white label in light and dark. */
+export function SwiftSystemHost({ kind, ...props }: SwiftUIHostProps & { kind: "toggle" | "filled" }) {
+  const colors = useThemeColors();
+  if (kind === "toggle") return <SwiftUIHost {...props} />;
+  return <SwiftUIHost seedColor={colors.muted} {...props} modifiers={[tint(colors.muted), ...(props.modifiers ?? [])]} />;
+}
+
 /** Material 3 roles mapped onto the kit tokens: black and white, red for errors. */
 export function useComposeColors(): Partial<MaterialColors> {
   const c = useThemeColors();

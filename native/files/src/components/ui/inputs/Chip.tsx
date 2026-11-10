@@ -1,7 +1,6 @@
 // Selectable chip, from VOID's AcquisitionSourcePicker SourceChip. Selected:
-// solid tint pill with a check. Unselected: interactive Liquid Glass (BlurView,
-// then card, on older phones). 40pt tall, Medium 14 / SemiBold when selected.
-import { GlassSurface } from "@/components/GlassSurface";
+// solid tint pill with a check. Unselected: filled surface pill (never see-through
+// glass, which reads as a ghost button). 40pt tall, Medium 14 / SemiBold when selected.
 import { PressableScale } from "@/components/PressableScale";
 import { Text, View } from "@/components/ui";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -52,14 +51,9 @@ export function Chip({
       }}
       style={{ height: 40 }}
     >
-      {selected ? (
-        <View style={[styles.chip, { backgroundColor: colors.tint }]}>{content}</View>
-      ) : (
-        <GlassSurface isInteractive={!disabled} style={styles.chip}>
-          {/* Spec 1.10: dim the children, never the glass. */}
-          <View style={[styles.row, { opacity: disabled ? 0.5 : 1 }]}>{content}</View>
-        </GlassSurface>
-      )}
+      <View style={[styles.chip, { backgroundColor: selected ? colors.tint : colors.surface }]}>
+        <View style={[styles.row, { opacity: disabled ? 0.5 : 1 }]}>{content}</View>
+      </View>
     </PressableScale>
   );
 }

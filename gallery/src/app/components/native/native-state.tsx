@@ -1,5 +1,5 @@
 import { Text } from "@/components/ui";
-import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { ComposeHost, SwiftHost, SwiftSystemHost } from "@/components/ui/native/NativeHost";
 import { NativeButton } from "@/components/ui/actions/NativeButton";
 import { Demo, DemoPage, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -49,9 +49,9 @@ export default function NativeStatePage() {
       </Demo>
       <Demo title="A synced toggle">
         {isIOS ? (
-          <SwiftHost matchContents={{ vertical: true }}>
+          <SwiftSystemHost kind="toggle" matchContents={{ vertical: true }}>
             <SyncToggle isOn={vat} label="Show prices with VAT" />
-          </SwiftHost>
+          </SwiftSystemHost>
         ) : (
           <ComposeHost matchContents={{ vertical: true }}>
             <Row modifiers={[fillMaxWidth()]} horizontalArrangement="spaceBetween" verticalAlignment="center">

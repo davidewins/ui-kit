@@ -1,4 +1,4 @@
-import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { ComposeHost, SwiftHost, SwiftSystemHost } from "@/components/ui/native/NativeHost";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { Switch } from "@/components/ui/inputs/Switch";
@@ -45,18 +45,18 @@ function IOSToggles() {
               label="Leave at door"
               Icon={DoorOpen}
               accessory={
-                <SwiftHost matchContents>
+                <SwiftSystemHost kind="toggle" matchContents>
                   <Toggle isOn={label} onIsOnChange={setLabel} label="Leave at door" modifiers={[labelsHidden()]} />
-                </SwiftHost>
+                </SwiftSystemHost>
               }
             />
           </SettingsGroup>
         </View>
       </Demo>
       <Demo title="Button style">
-        <SwiftHost matchContents>
+        <SwiftSystemHost kind="filled" matchContents>
           <Toggle isOn={vegan} onIsOnChange={setVegan} label="Vegan only" systemImage="leaf" modifiers={[toggleStyle("button")]} />
-        </SwiftHost>
+        </SwiftSystemHost>
       </Demo>
       <Demo title="SyncToggle (state lives on the native side)">
         <View style={{ marginHorizontal: -20 }}>
@@ -65,9 +65,9 @@ function IOSToggles() {
               label="Show prices with VAT"
               Icon={Receipt}
               accessory={
-                <SwiftHost matchContents>
+                <SwiftSystemHost kind="toggle" matchContents>
                   <SyncToggle isOn={sync} label="Show prices with VAT" modifiers={[labelsHidden()]} />
-                </SwiftHost>
+                </SwiftSystemHost>
               }
             />
           </SettingsGroup>

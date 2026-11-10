@@ -69,7 +69,7 @@ export default function CompareSelect() {
         ))}
       </SettingsGroup>
 
-      <SectionTitle>F. Chip (kit): glass, solid when selected</SectionTitle>
+      <SectionTitle>F. Chip (kit): grey pill, solid when selected</SectionTitle>
       <View style={{ paddingHorizontal: 16, flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
         {OPTIONS.map((o) => (
           <Chip key={o.id} label={o.label} icon={o.icon} selected={sel === o.id} onPress={() => setSel(o.id)} />

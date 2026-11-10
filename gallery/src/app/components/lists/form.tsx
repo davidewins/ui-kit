@@ -1,4 +1,4 @@
-import { ComposeHost, SwiftHost } from "@/components/ui/native/NativeHost";
+import { ComposeHost, SwiftHost, SwiftSystemHost } from "@/components/ui/native/NativeHost";
 import { Demo, DemoPage, Frame, Note, isIOS } from "@/gallery/DemoPage";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Column, HorizontalDivider, ListItem, Text as MText } from "@expo/ui/jetpack-compose";
@@ -30,7 +30,7 @@ function SwiftForm() {
     <>
       <Demo title="Payout details">
         <Frame height={470}>
-          <SwiftHost style={{ flex: 1 }}>
+          <SwiftSystemHost kind="toggle" style={{ flex: 1 }}>
             <Form modifiers={[scrollContentBackground("hidden")]}>
               <Section title="Bank account" footer={<Text>Payouts land every Monday. Changing the account pauses the next payout for 24 hours.</Text>}>
                 <LabeledContent label="Account holder">{value("Bao House Ltd")}</LabeledContent>
@@ -42,7 +42,7 @@ function SwiftForm() {
                 <LabeledContent label="Commission">{value("5%")}</LabeledContent>
               </Section>
             </Form>
-          </SwiftHost>
+          </SwiftSystemHost>
         </Frame>
       </Demo>
       <Note>Android: Compose ListItems with dividers; apps use SettingsGroup.</Note>
