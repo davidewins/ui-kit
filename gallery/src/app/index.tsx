@@ -4,7 +4,9 @@ import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { SECTIONS, entriesIn, hrefOf, search, sectionById, sectionHref, type Kind } from "@/gallery/catalog";
+import { useCheckForUpdates } from "@/hooks/useCheckForUpdates";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import Constants from "expo-constants";
 import { Stack, type Href } from "expo-router";
 import { useState } from "react";
 import { ScrollView } from "react-native";
@@ -20,6 +22,7 @@ const LABELS = ["Automatic", "Light", "Dark"];
 // by the @expo/ui / kit component it shows.
 export default function Index() {
   const colors = useThemeColors();
+  const { checkForUpdates } = useCheckForUpdates();
   const [tab, setTab] = useState(1);
   const [query, setQuery] = useState("");
   const results = search(query);
@@ -40,15 +43,18 @@ export default function Index() {
           },
         }}
       />
-      {/* Appearance lives in the header "..." menu, not as a lone action row. */}
+      {/* Appearance and Check for Updates live in the header "..." menu, not as lone action rows. */}
       <ActionMenu
-        accessibilityLabel="Appearance"
-        title="Appearance"
-        actions={APPEARANCES.map((a, i) => ({
-          label: LABELS[i],
-          systemImage: a === "dark" ? "moon" : a === "light" ? "sun.max" : "circle.lefthalf.filled",
-          onPress: () => Uniwind.setTheme(a),
-        }))}
+        accessibilityLabel="More"
+        title={`ZESTY v${Constants.expoConfig?.version}`}
+        actions={[
+          ...APPEARANCES.map((a, i) => ({
+            label: LABELS[i],
+            systemImage: a === "dark" ? "moon" : a === "light" ? "sun.max" : "circle.lefthalf.filled",
+            onPress: () => Uniwind.setTheme(a),
+          })),
+          { label: "Check for Updates", systemImage: "arrow.down.circle", onPress: checkForUpdates },
+        ] as const}
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
