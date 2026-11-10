@@ -39,8 +39,8 @@ export default function Workouts() {
             layout="inline"
             art={{ image: ART.magnifier }}
             title={`No ${kind === "All" ? "" : kind + " "}workouts`}
-            body="Try another type, or make your own"
-            action={{ label: "New workout", plus: true, onPress: () => router.push("/screens/fitness/new-workout") }}
+            body={kind === "All" ? "Make your own and it shows up here" : "Try another type, or make your own"}
+            action={{ label: "New workout", onPress: () => router.push("/screens/fitness/new-workout") }}
             secondary={kind === "All" ? undefined : { label: "Show all", onPress: () => setKind("All") }}
           />
         ) : (
@@ -48,7 +48,7 @@ export default function Workouts() {
             data={shown}
             keyOf={(w) => w.id}
             render={(w, width) => (
-              <PhotoTile image={w.photo} title={w.name} subtitle={`${w.kind} · ${w.minutes} min`} width={width} ratio={0.8} href={`/screens/fitness/workout/${w.id}`} />
+              <PhotoTile image={w.photo} title={w.name} subtitle={`${w.kind}, ${w.minutes} min`} width={width} ratio={0.8} href={`/screens/fitness/workout/${w.id}`} />
             )}
           />
         )}

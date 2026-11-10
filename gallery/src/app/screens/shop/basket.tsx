@@ -2,21 +2,19 @@
 // (BasketItem, BasketSectionHeader, BasketFooter, CreditToggleRow,
 // BasketEmptyState), laid out exactly as VOID's (protected)/basket.tsx, with
 // checkout in the same screen. Data is the Shop's products in VOID's basket store.
-import { BasketEmptyState } from "@/apps/void/components/basket/BasketEmptyState";
 import { BasketFooter } from "@/apps/void/components/basket/BasketFooter";
 import { BasketSectionHeader } from "@/apps/void/components/basket/BasketSectionHeader";
 import { CreditToggleRow } from "@/apps/void/components/basket/CreditToggleRow";
 import BasketItem from "@/apps/void/components/BasketItem";
 import useBasketStore from "@/apps/void/context/store/basketStore";
 import type { BasketItemInterface } from "@/apps/void/types/basket";
-import { View } from "@/components/ui";
+import { EmptyState, View } from "@/components/ui";
 import { PRODUCTS } from "@/gallery/demo/data";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Stack, router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Image, Pressable, SectionList } from "react-native";
 
 type FulfillmentType = "pickup" | "platform_delivery" | "vendor_delivery";
@@ -56,7 +54,8 @@ export default function ShopBasket() {
   const tip = useBasketStore((s) => s.tip);
   const [fulfillmentType, setFulfillmentType] = useState<FulfillmentType>("platform_delivery");
 
-  useEffect(() => {
+  // Before the first paint, so the bag never flashes empty.
+  useLayoutEffect(() => {
     if (useBasketStore.getState().items.length === 0) useBasketStore.setState({ items: SEED });
   }, []);
 
@@ -76,10 +75,7 @@ export default function ShopBasket() {
           headerRight: () =>
             items.length > 0 ? (
               <Pressable
-                onPress={() => {
-                  Haptics.selectionAsync();
-                  Toast.info("Notes, dropoff and promo code");
-                }}
+                onPress={() => Toast.info("Notes, dropoff and promo code")}
                 hitSlop={12}
                 accessibilityRole="button"
                 accessibilityLabel="Order options"
@@ -115,7 +111,14 @@ export default function ShopBasket() {
           className="bg-background"
         />
       ) : (
-        <BasketEmptyState />
+        // VOID's BasketEmptyState, with its button pointed at the Shop (VOID's
+        // own goes to its home tab, which the gallery doesn't have).
+        <EmptyState
+          art={{ image: require("@/apps/void/assets/images/empty/shopping-cart.png") }}
+          action={{ label: "Browse the shop", onPress: () => router.dismissTo("/screens/shop/home") }}
+          title="Your basket is empty"
+          body="Browse the shop and add items to get started."
+        />
       )}
 
       <CreditToggleRow availableCredit={null} />
@@ -144,7 +147,6 @@ export default function ShopBasket() {
         deliveryEta={fulfillmentType === "pickup" ? null : "25-35 min"}
         prepTimeMins={15}
         handlePlaceOrder={() => {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           useBasketStore.setState({ items: [] });
           router.push("/screens/shop/order/4821");
         }}

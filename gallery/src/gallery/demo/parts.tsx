@@ -11,7 +11,7 @@ import * as Haptics from "expo-haptics";
 import { Image, type ImageProps } from "expo-image";
 
 type ImageSource = ImageProps["source"];
-import { type Href, Link, router, useLocalSearchParams } from "expo-router";
+import { type Href, Link, useLocalSearchParams } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
 import { type ReactNode, useState } from "react";
 import { Pressable, ScrollView, useWindowDimensions } from "react-native";
@@ -21,12 +21,6 @@ export const RADIUS = 24;
 const THUMB = 52;
 /** Pass to SettingsGroup when it holds MediaRows: hairlines start at the text. */
 export const MEDIA_INSET = SETTINGS_ROW.paddingHorizontal + THUMB + SETTINGS_ROW.gap;
-
-const go = (href?: Href, onPress?: () => void) => () => {
-  Haptics.selectionAsync().catch(() => {});
-  onPress?.();
-  if (href) router.push(href);
-};
 
 /** Full-width photo at the top of a detail screen. It is the landing spot
  *  of the Apple zoom from whichever tile opened the page. */
@@ -44,7 +38,7 @@ export function Hero({ source, height = 240 }: { source: ImageSource; height?: n
 export function TitleBlock({ title, subtitle, figure }: { title: string; subtitle?: string; figure?: string }) {
   const colors = useThemeColors();
   return (
-    <View style={{ paddingHorizontal: 20, paddingTop: 18, paddingBottom: 18, gap: 4 }}>
+    <View style={{ paddingHorizontal: GUTTER, paddingTop: 16, paddingBottom: 12, gap: 4 }}>
       <Text weight="semibold" style={{ fontSize: 24, letterSpacing: -0.5 }}>{title}</Text>
       {subtitle ? <Text weight="medium" style={{ fontSize: 15, color: colors.muted }}>{subtitle}</Text> : null}
       {figure ? (
@@ -54,7 +48,10 @@ export function TitleBlock({ title, subtitle, figure }: { title: string; subtitl
   );
 }
 
-/** A SettingsRow with a photo: same padding and pressed fill, 72pt tall. */
+/** A SettingsRow with a photo: same padding and pressed fill, 72pt tall.
+ *  With `href` it is a Link like SettingsRow's (asChild, Trigger, plain-object
+ *  pressed style), its photo zooms into the page's Hero and press and hold
+ *  peeks. With only `onPress` it is a plain row. */
 export function MediaRow({
   image,
   leading,
@@ -76,14 +73,25 @@ export function MediaRow({
   onPress?: () => void;
 }) {
   const colors = useThemeColors();
+  const [pressed, setPressed] = useState(false);
   const tappable = !!(href || onPress);
-  return (
+  const thumb = image ? (
+    <Image source={image} style={{ width: THUMB, height: THUMB, borderRadius: 14, borderCurve: "continuous" }} contentFit="cover" />
+  ) : (
+    <View style={{ width: THUMB }}>{leading}</View>
+  );
+  const row = (
     <Pressable
       disabled={!tappable}
-      onPress={go(href, onPress)}
-      accessibilityRole={tappable ? "button" : undefined}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      onPress={() => {
+        Haptics.selectionAsync().catch(() => {});
+        onPress?.();
+      }}
+      accessibilityRole={href ? "link" : tappable ? "button" : undefined}
       accessibilityLabel={[title, subtitle, trailing].filter(Boolean).join(", ")}
-      style={({ pressed }) => ({
+      style={{
         flexDirection: "row",
         alignItems: "center",
         minHeight: 72,
@@ -91,9 +99,9 @@ export function MediaRow({
         paddingHorizontal: SETTINGS_ROW.paddingHorizontal,
         columnGap: SETTINGS_ROW.gap,
         backgroundColor: pressed && tappable ? colors.border : "transparent",
-      })}
+      }}
     >
-      {image ? <Image source={image} style={{ width: THUMB, height: THUMB, borderRadius: 14 }} contentFit="cover" /> : <View style={{ width: THUMB }}>{leading}</View>}
+      {href && image ? <Link.AppleZoom>{thumb}</Link.AppleZoom> : thumb}
       <View style={{ flex: 1, gap: 2 }}>
         <Text weight="medium" numberOfLines={1} style={{ fontSize: SETTINGS_ROW.labelFontSize, letterSpacing: SETTINGS_ROW.labelLetterSpacing }}>
           {title}
@@ -104,6 +112,13 @@ export function MediaRow({
       {accessory}
       {href ? <ChevronRight size={SETTINGS_ROW.chevronSize} color={colors.muted} strokeWidth={SETTINGS_ROW.chevronStrokeWidth} /> : null}
     </Pressable>
+  );
+  if (!href) return row;
+  return (
+    <Link href={href} asChild>
+      <Link.Trigger>{row}</Link.Trigger>
+      {image ? <Link.Preview /> : null}
+    </Link>
   );
 }
 
@@ -164,6 +179,7 @@ export function PhotoTile({
   badge?: ReactNode;
 }) {
   const colors = useThemeColors();
+  const [pressed, setPressed] = useState(false);
   const photo = (
     <View style={{ width, height: width / ratio, borderRadius: 20, borderCurve: "continuous", overflow: "hidden", backgroundColor: colors.surface }}>
       <Image source={image} style={{ flex: 1 }} contentFit="cover" transition={150} />
@@ -183,10 +199,13 @@ export function PhotoTile({
     <Link href={href} asChild>
       <Link.Trigger>
         <Pressable
+          onPressIn={() => setPressed(true)}
+          onPressOut={() => setPressed(false)}
           onPress={() => Haptics.selectionAsync().catch(() => {})}
           accessibilityRole="link"
           accessibilityLabel={[title, subtitle].filter(Boolean).join(", ")}
-          style={{ gap: 8 }}
+          // Plain-object style: Link's clone drops function styles.
+          style={{ gap: 8, transform: [{ scale: pressed ? 0.97 : 1 }] }}
         >
           <Link.AppleZoom>{photo}</Link.AppleZoom>
           {caption}
@@ -207,7 +226,7 @@ export function Summary({ lines, total }: { lines: readonly [string, string][]; 
     </View>
   );
   return (
-    <View style={{ marginHorizontal: 20, marginBottom: 24, gap: 10 }}>
+    <View style={{ marginHorizontal: GUTTER, marginBottom: 24, gap: 10 }}>
       {lines.map(([l, v]) => line(l, v))}
       <View style={{ height: 1, backgroundColor: colors.border, marginVertical: 2 }} />
       {line(total[0], total[1], true)}
@@ -229,10 +248,12 @@ export function ChipRow({ children }: { children: ReactNode }) {
 /** The page's state (loaded, empty, sold out...) from the link the gallery
  *  opened it with (?state=). Nothing is drawn on the page: it looks exactly as
  *  it would in an app. */
-export function useStates<T extends readonly string[]>(values: T) {
+export function useStates<T extends readonly string[]>(values: T, fromData?: T[number]) {
   const { state } = useLocalSearchParams<{ state?: string }>();
+  if (__DEV__ && state && !values.includes(state)) console.warn(`useStates: unknown state "${state}"`);
+  // Opened from a row (no ?state=): show what that row's data says.
   return {
-    state: (values.includes(state ?? "") ? state : values[0]) as T[number],
+    state: (values.includes(state ?? "") ? state : (fromData ?? values[0])) as T[number],
   };
 }
 

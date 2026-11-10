@@ -17,7 +17,7 @@ export function CompartmentIndex({ id }: { id: string }) {
         {entriesIn(id).flatMap((e) =>
           e.states
             ? e.states.map((st) => (
-                <SettingsRow key={`${e.route}-${st}`} label={e.title} trailing={st} Icon={e.Icon} href={hrefOf(e, st) as Href} navigates />
+                <SettingsRow key={`${e.route}-${st}`} label={`${e.title}, ${st.toLowerCase()}`} Icon={e.Icon} href={hrefOf(e, st) as Href} navigates />
               ))
             : [<SettingsRow key={e.route} label={e.title} Icon={e.Icon} href={hrefOf(e) as Href} navigates />],
         )}

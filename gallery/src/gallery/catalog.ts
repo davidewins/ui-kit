@@ -248,7 +248,7 @@ export const ENTRIES: Entry[] = [
   { title: "Live workout", route: "screens/fitness/session", section: "fitness", Icon: Timer, keywords: "session sets stepper rest", states: ["Lifting", "Resting", "Finished"] },
   { title: "Progress", route: "screens/fitness/history", section: "fitness", Icon: Trophy, keywords: "history chart personal best", states: ["Loaded", "Loading", "Empty"] },
   { title: "New workout", route: "screens/fitness/new-workout", section: "fitness", Icon: Plus, keywords: "create modal" },
-  { title: "Shop", route: "screens/shop/home", section: "shop", Icon: Store, keywords: "ecommerce home grid", states: ["Loaded", "Loading", "Offline"] },
+  { title: "Shop", route: "screens/shop/home", section: "shop", Icon: Store, keywords: "ecommerce home grid", states: ["Loaded", "Loading", "Couldn't load"] },
   { title: "Product", route: "screens/shop/product/[id]", href: "/screens/shop/product/pace", section: "shop", Icon: Tag, keywords: "sizes carousel", states: ["In stock", "Sold out"] },
   { title: "Bag and checkout", route: "screens/shop/basket", section: "shop", Icon: ShoppingCart, keywords: "basket cart checkout VOID BasketFooter" },
   { title: "Order", route: "screens/shop/order/[id]", href: "/screens/shop/order/4821", section: "shop", Icon: Package, keywords: "tracking status", states: ["Processing", "On the way", "Delivered"] },

@@ -33,7 +33,6 @@ export default function WorkoutDetail() {
         ]}
       />
       <DemoScreen
-       
         secondary={state === "Not started"}
         footer={
           <InsetFooter
@@ -45,7 +44,7 @@ export default function WorkoutDetail() {
         <Hero source={w.photo} />
         <TitleBlock title={w.name} subtitle={`${w.kind} with ${w.coach}`} />
         {state !== "Not started" ? (
-          <View style={{ marginHorizontal: 20, marginTop: -6, marginBottom: 16 }}>
+          <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
             <Badge variant={state === "Done today" ? "success" : "default"}>{state === "Done today" ? "Done today, 47 min" : "Thursday, 07:00"}</Badge>
           </View>
         ) : null}

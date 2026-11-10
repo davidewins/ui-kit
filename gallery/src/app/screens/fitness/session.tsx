@@ -2,7 +2,6 @@ import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
 import { Card, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { Gauge } from "@/components/ui/feedback/Gauge";
-import { ProgressBar } from "@/components/ui/feedback/ProgressBar";
 import { StepperRow } from "@/components/ui/inputs/StepperRow";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
@@ -11,7 +10,6 @@ import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { workoutById } from "@/gallery/demo/data";
 import { DemoScreen, MEDIA_INSET, MediaRow, StatTiles, TitleBlock, useStates } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { haptic } from "@/lib/haptics";
 import { Toast } from "@/lib/toast";
 import { router } from "expo-router";
 import { Check, Circle, Hash, Trophy, Weight } from "lucide-react-native";
@@ -47,7 +45,7 @@ export default function Session() {
   const footer =
     state === "Lifting" ? (
       <InsetFooter
-        primaryCta={{ label: "Log set 3", onPress: () => { haptic("success"); Toast.success(`Set 3 logged, ${weight} kg × ${reps}`); } }}
+        primaryCta={{ label: "Log set 3", onPress: () => Toast.success(`Set 3 logged, ${weight} kg × ${reps}`) }}
         secondaryCta={{ label: "Skip exercise", onPress: () => Toast.info("Up next: Romanian deadlift") }}
       />
     ) : state === "Resting" ? (
@@ -84,26 +82,18 @@ export default function Session() {
           <>
             <View style={{ marginHorizontal: 16, marginBottom: 18 }}>
               <Card raised>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text weight="medium" style={{ fontSize: 15, color: colors.muted }}>{state === "Resting" ? "Rest" : ex.name}</Text>
-                  <Text weight="medium" style={{ fontSize: 15, color: colors.muted, fontVariant: ["tabular-nums"] }}>{clock(elapsed)}</Text>
-                </View>
-                <Text weight="semibold" style={{ fontSize: 44, letterSpacing: -1, marginTop: 4, fontVariant: ["tabular-nums"] }}>
+                <Text weight="medium" style={{ fontSize: 15, color: colors.muted }}>{state === "Resting" ? "Rest" : ex.name}</Text>
+                <Text weight="semibold" style={{ fontSize: 44, lineHeight: 50, letterSpacing: -1, marginTop: 2, fontVariant: ["tabular-nums"] }}>
                   {state === "Resting" ? clock(rest) : "Set 3 of 4"}
                 </Text>
-                <Text weight="medium" style={{ fontSize: 15, color: colors.muted, marginTop: 2, marginBottom: 14 }}>
+                <Text weight="medium" style={{ fontSize: 15, color: colors.muted, marginTop: 2 }}>
                   {state === "Resting" ? `Next: ${ex.name}, set 3 of 4` : `Last time ${ex.weight} kg × ${ex.reps}`}
                 </Text>
-                <ProgressBar value={state === "Resting" ? rest / 90 : 2 / 18} accessibilityLabel={state === "Resting" ? "Rest left" : "Workout progress"} />
               </Card>
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-around", marginHorizontal: 16, marginBottom: 20 }}>
-              {state === "Resting" ? (
-                <Gauge label="Rest" value={rest} max={90} valueLabel={clock(rest)} tone={rest <= 10 ? "warning" : "default"} />
-              ) : (
-                <Gauge label="Sets" value={2} max={18} valueLabel="2/18" />
-              )}
+              <Gauge label="Sets" value={2} max={18} valueLabel="2/18" />
               <Gauge label="Volume" value={960} max={6240} valueLabel="960" />
               <Gauge label="Time" value={elapsed} max={45 * 60} valueLabel={`${Math.floor(elapsed / 60)}m`} />
             </View>

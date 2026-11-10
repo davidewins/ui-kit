@@ -10,7 +10,7 @@ import { haptic } from "@/lib/haptics";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { Check } from "lucide-react-native";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { Pressable } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -28,6 +28,7 @@ export default function Today() {
   const colors = useThemeColors();
   const { state } = useStates(STATES);
   const rest = state === "Rest day";
+  const [pressed, setPressed] = useState(false);
   const next = workoutById(rest ? "upper-push" : "lower-power");
 
   if (state === "New") {
@@ -45,7 +46,7 @@ export default function Today() {
 
   return (
     <DemoScreen
-      footer={rest ? undefined : <InsetFooter primaryCta={{ label: `Start ${next.name.toLowerCase()}`, onPress: () => router.push("/screens/fitness/session") }} />}
+      footer={rest ? undefined : <InsetFooter primaryCta={{ label: "Start workout", onPress: () => router.push("/screens/fitness/session") }} />}
     >
       <Enter i={0}>
         <View style={{ flexDirection: "row", justifyContent: "space-around", marginHorizontal: 16, marginBottom: 20 }}>
@@ -56,17 +57,24 @@ export default function Today() {
       </Enter>
 
       <Enter i={1}>
-        <WeekStrip />
+        <WeekStrip rest={rest} />
       </Enter>
 
       <Enter i={2}>
         <View style={{ marginHorizontal: 16, marginBottom: 20 }}>
           <Link href={`/screens/fitness/workout/${next.id}`} asChild>
             <Link.Trigger>
-              <Pressable onPress={() => haptic("selection")} accessibilityRole="link" accessibilityLabel={`${next.name}, ${next.minutes} minutes`}>
+              <Pressable
+                onPressIn={() => setPressed(true)}
+                onPressOut={() => setPressed(false)}
+                onPress={() => haptic("selection")}
+                accessibilityRole="link"
+                accessibilityLabel={`${next.name}, ${next.minutes} minutes`}
+                style={{ transform: [{ scale: pressed ? 0.98 : 1 }] }}
+              >
                 <Card raised>
                   <Link.AppleZoom>
-                    <Image source={next.photo} style={{ height: 156, borderRadius: 14, borderCurve: "continuous" }} contentFit="cover" />
+                    <Image source={next.photo} style={{ height: 156, borderRadius: 8 }} contentFit="cover" />
                   </Link.AppleZoom>
                   <View style={{ flexDirection: "row", alignItems: "flex-end", marginTop: 12 }}>
                     <View style={{ flex: 1, gap: 2 }}>
@@ -100,12 +108,13 @@ export default function Today() {
 
 /** Monday to Sunday: filled when trained, grey when planned, empty on rest
  *  days, today ringed. */
-function WeekStrip() {
+function WeekStrip({ rest }: { rest: boolean }) {
   const colors = useThemeColors();
   return (
-    <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 20, marginBottom: 20 }}>
+    <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 16, marginBottom: 20 }}>
       {WEEK_DAYS.map((d, i) => {
-        const plan = WEEK_PLAN[i];
+        // On a rest day today (Friday) is a rest day, not a planned session.
+        const plan = rest && i === 4 ? "rest" : WEEK_PLAN[i];
         const today = i === 4;
         return (
           <View key={i} style={{ alignItems: "center", gap: 6 }}>

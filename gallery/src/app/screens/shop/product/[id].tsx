@@ -10,7 +10,6 @@ import { PRODUCTS, productById, euro } from "@/gallery/demo/data";
 import { DemoScreen, GUTTER, PhotoGrid, PhotoTile, RADIUS, TitleBlock, useStates } from "@/gallery/demo/parts";
 import { priceLine } from "@/gallery/demo/shop";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { haptic } from "@/lib/haptics";
 import { Toast } from "@/lib/toast";
 import { Image } from "expo-image";
 import { Link, router, useLocalSearchParams } from "expo-router";
@@ -43,7 +42,6 @@ export default function Product() {
         ]}
       />
       <DemoScreen
-       
         footer={
           soldOut ? (
             <InsetFooter primaryCta={{ label: "Tell me when it's back", onPress: () => Toast.success("We'll email you when it's back") }} />
@@ -53,7 +51,6 @@ export default function Product() {
                 label: needsSize ? "Choose a size" : `Add to bag, ${euro(p.price)}`,
                 disabled: needsSize,
                 onPress: () => {
-                  haptic("success");
                   Toast.success(`${p.name}${size ? `, size ${size}` : ""} added to your bag`);
                 },
               }}
@@ -61,17 +58,19 @@ export default function Product() {
           )
         }
       >
-        <Link.AppleZoomTarget>
         <Carousel
           data={photos}
           keyExtractor={(_, i) => String(i)}
           itemWidth={width - GUTTER * 2 - 24}
           height={300}
-          renderItem={(src) => <Image source={src} style={{ flex: 1, borderRadius: RADIUS }} contentFit="cover" />}
+          renderItem={(src, i) => {
+            const photo = <Image source={src} style={{ flex: 1, borderRadius: RADIUS, borderCurve: "continuous" }} contentFit="cover" />;
+            // Only the first photo is the zoom target, so a tile lands on it.
+            return i === 0 ? <Link.AppleZoomTarget>{photo}</Link.AppleZoomTarget> : photo;
+          }}
         />
-        </Link.AppleZoomTarget>
         <TitleBlock title={p.name} subtitle={p.colour} figure={priceLine(p)} />
-        <View style={{ marginHorizontal: 20, marginTop: -8, marginBottom: 18, flexDirection: "row", gap: 8 }}>
+        <View style={{ marginHorizontal: 16, marginBottom: 18, flexDirection: "row", gap: 8 }}>
           <Badge variant={soldOut ? "error" : p.stock === "Low stock" ? "warning" : "success"}>{soldOut ? "Sold out" : p.stock}</Badge>
         </View>
 
@@ -86,7 +85,7 @@ export default function Product() {
           </>
         ) : null}
 
-        <Text weight="medium" style={{ fontSize: 15, lineHeight: 22, color: colors.muted, marginHorizontal: 20, marginBottom: 18 }}>{p.description}</Text>
+        <Text weight="medium" style={{ fontSize: 15, lineHeight: 22, color: colors.muted, marginHorizontal: 16, marginBottom: 18 }}>{p.description}</Text>
 
         <SettingsGroup>
           <SettingsRow label="Free delivery over €50" Icon={Truck} trailing="2 to 3 days" />

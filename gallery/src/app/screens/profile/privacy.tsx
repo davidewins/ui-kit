@@ -56,12 +56,13 @@ export default function Privacy() {
         ) : null}
 
         <SectionTitle>What we collect</SectionTitle>
-        <SettingsGroup>
+        {/* The note belongs to this group, so the group's gap moves under it. */}
+        <SettingsGroup style={{ marginBottom: 8 }}>
           <SettingsRow label="Usage analytics" Icon={ChartNoAxesColumn} accessory={<Switch value={analytics} onValueChange={setAnalytics} />} />
           <SettingsRow label="Personalised offers" Icon={Sparkles} accessory={<Switch value={personal} onValueChange={setPersonal} />} />
           <SettingsRow label="Crash reports" Icon={Bug} accessory={<Switch value={crashes} onValueChange={setCrashes} />} />
         </SettingsGroup>
-        <Text weight="medium" style={{ fontSize: 13, lineHeight: 18, color: colors.muted, marginHorizontal: 20, marginTop: -8, marginBottom: 18 }}>
+        <Text weight="medium" style={{ fontSize: 13, lineHeight: 18, color: colors.muted, marginHorizontal: 16, marginBottom: 18 }}>
           Analytics never include your name or email. Changes apply from your next visit.
         </Text>
 

@@ -1,7 +1,7 @@
 // Gallery-only: loading skeletons shaped like each demo page's real content
 // (DESIGN.md §5.6: same row height, same separators, same edges), built from
 // the kit Skeleton. One per row type the pages use.
-import { View } from "@/components/ui";
+import { Card, View } from "@/components/ui";
 import { Skeleton } from "@/components/ui/feedback/Skeleton";
 import { SETTINGS_ROW } from "@/components/ui/lists/SettingsRow";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -15,21 +15,46 @@ function Hairline({ inset }: { inset: number }) {
   return <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginLeft: inset }} />;
 }
 
-/** Two text lines at MediaRow's 15 / 13 sizes. */
-function Lines({ first = "55%", second = "35%" }: { first?: `${number}%`; second?: `${number}%` }) {
+/** A bar centred in the line box of real text, so skeleton and text take
+ *  the same height (15pt text = 19pt box, 13pt = 17pt). */
+function Line({ box, bar, width }: { box: number; bar: number; width: number | `${number}%` }) {
   return (
-    <View style={{ flex: 1, gap: 7 }}>
-      <Skeleton width={first} height={13} radius={4} />
-      <Skeleton width={second} height={11} radius={4} />
+    <View style={{ height: box, justifyContent: "center" }}>
+      <Skeleton width={width} height={bar} radius={4} />
     </View>
   );
+}
+
+/** Two text lines at MediaRow's 15 / 13 sizes, gap 2. */
+function Lines({ first = "55%", second = "35%" }: { first?: `${number}%`; second?: `${number}%` }) {
+  return (
+    <View style={{ flex: 1, gap: 2 }}>
+      <Line box={19} bar={12} width={first} />
+      <Line box={17} bar={10} width={second} />
+    </View>
+  );
+}
+
+/** The 16pt chevron slot at the end of a row that opens something. */
+function ChevronSlot() {
+  return <View style={{ width: SETTINGS_ROW.chevronSize }} />;
 }
 
 type Lead = "photo" | "avatar" | "time";
 
 /** MediaRow-shaped rows: 72pt, photo / avatar / time column, two lines, an
  *  optional trailing figure or badge, hairlines from the text. */
-export function SkeletonMediaRows({ count = 4, lead = "photo", trailing }: { count?: number; lead?: Lead; trailing?: "figure" | "badge" }) {
+export function SkeletonMediaRows({
+  count = 4,
+  lead = "photo",
+  trailing,
+  chevron = true,
+}: {
+  count?: number;
+  lead?: Lead;
+  trailing?: "figure" | "badge";
+  chevron?: boolean;
+}) {
   return (
     <View style={{ marginBottom: 18 }}>
       {Array.from({ length: count }, (_, i) => (
@@ -41,14 +66,15 @@ export function SkeletonMediaRows({ count = 4, lead = "photo", trailing }: { cou
             ) : lead === "avatar" ? (
               <Skeleton width={THUMB} height={THUMB} radius={THUMB / 2} />
             ) : (
-              <View style={{ width: THUMB, gap: 7 }}>
-                <Skeleton width={40} height={13} radius={4} />
-                <Skeleton width={34} height={11} radius={4} />
+              <View style={{ width: THUMB, gap: 2 }}>
+                <Line box={19} bar={12} width={40} />
+                <Line box={17} bar={10} width={34} />
               </View>
             )}
             <Lines first={i % 2 ? "48%" : "62%"} second={i % 3 ? "38%" : "28%"} />
             {trailing === "figure" ? <Skeleton width={44} height={13} radius={4} /> : null}
             {trailing === "badge" ? <Skeleton width={68} height={22} radius={11} /> : null}
+            {chevron ? <ChevronSlot /> : null}
           </View>
         </View>
       ))}
@@ -57,7 +83,7 @@ export function SkeletonMediaRows({ count = 4, lead = "photo", trailing }: { cou
 }
 
 /** SettingsRow-shaped rows: 52pt, icon, label, optional badge. */
-export function SkeletonSettingsRows({ count = 4, badge = false }: { count?: number; badge?: boolean }) {
+export function SkeletonSettingsRows({ count = 4, badge = false, chevron = true }: { count?: number; badge?: boolean; chevron?: boolean }) {
   return (
     <View style={{ marginBottom: 18 }}>
       {Array.from({ length: count }, (_, i) => (
@@ -69,6 +95,7 @@ export function SkeletonSettingsRows({ count = 4, badge = false }: { count?: num
               <Skeleton width={i % 2 ? "44%" : "58%"} height={13} radius={4} />
             </View>
             {badge ? <Skeleton width={72} height={22} radius={11} /> : null}
+            {chevron ? <ChevronSlot /> : null}
           </View>
         </View>
       ))}
@@ -83,11 +110,11 @@ export function SkeletonPhotoGrid({ count = 4, ratio = 1 }: { count?: number; ra
   return (
     <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 12, rowGap: 20, marginHorizontal: GUTTER, marginBottom: 24 }}>
       {Array.from({ length: count }, (_, i) => (
-        <View key={i} style={{ width: w, gap: 10 }}>
+        <View key={i} style={{ width: w, gap: 8 }}>
           <Skeleton width={w} height={w / ratio} radius={20} />
-          <View style={{ gap: 7, paddingHorizontal: 2 }}>
-            <Skeleton width={i % 2 ? "70%" : "82%"} height={13} radius={4} />
-            <Skeleton width="40%" height={11} radius={4} />
+          <View style={{ gap: 2, paddingHorizontal: 2 }}>
+            <Line box={19} bar={12} width={i % 2 ? "70%" : "82%"} />
+            <Line box={17} bar={10} width="40%" />
           </View>
         </View>
       ))}
@@ -95,14 +122,21 @@ export function SkeletonPhotoGrid({ count = 4, ratio = 1 }: { count?: number; ra
   );
 }
 
-/** A raised headline card: label, big figure, a chart strip. */
+/** The raised headline card on Progress: label (15), figure (34), trend
+ *  line (13) and the 64pt chart, inside the same Card raised. */
 export function SkeletonChartCard() {
   return (
-    <View style={{ marginHorizontal: GUTTER, marginBottom: 18, gap: 8 }}>
-      <Skeleton width="30%" height={13} radius={4} />
-      <Skeleton width="45%" height={30} radius={6} />
-      <Skeleton width="38%" height={11} radius={4} />
-      <Skeleton width="100%" height={64} radius={10} style={{ marginTop: 6 }} />
+    <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
+      <Card raised>
+        <Line box={19} bar={12} width="30%" />
+        <View style={{ height: 41, justifyContent: "center", marginTop: 2 }}>
+          <Skeleton width="45%" height={30} radius={6} />
+        </View>
+        <View style={{ marginBottom: 14 }}>
+          <Line box={17} bar={10} width="38%" />
+        </View>
+        <Skeleton width="100%" height={64} radius={10} />
+      </Card>
     </View>
   );
 }
@@ -112,15 +146,19 @@ export function SkeletonTiles() {
   return (
     <View style={{ flexDirection: "row", gap: 10, marginHorizontal: GUTTER, marginBottom: 18 }}>
       {[0, 1, 2].map((i) => (
-        <Skeleton key={i} height={58} radius={16} style={{ flex: 1 }} />
+        <Skeleton key={i} height={66} radius={16} style={{ flex: 1 }} />
       ))}
     </View>
   );
 }
 
-/** A section title's line, at SectionTitle's position. */
+/** SectionTitle's box: 16 in, 24 above, 6 below, a 20pt line. */
 export function SkeletonTitle() {
-  return <Skeleton width={96} height={13} radius={4} style={{ marginHorizontal: 20, marginTop: 6, marginBottom: 10 }} />;
+  return (
+    <View style={{ paddingHorizontal: GUTTER, marginTop: 24, marginBottom: 6, height: 20, justifyContent: "center" }}>
+      <Skeleton width={96} height={12} radius={4} />
+    </View>
+  );
 }
 
 /** Bar gauges: a label line over a thin track, at the gauges' 12pt rhythm. */

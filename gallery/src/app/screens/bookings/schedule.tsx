@@ -59,7 +59,7 @@ export default function Schedule() {
             <SkeletonTitle />
             <SkeletonMediaRows count={3} lead="time" />
             <SkeletonTitle />
-            <SkeletonMediaRows count={3} lead="time" />
+            <SkeletonMediaRows count={4} lead="time" />
           </>
         ) : state === "Day off" ? (
           <EmptyState

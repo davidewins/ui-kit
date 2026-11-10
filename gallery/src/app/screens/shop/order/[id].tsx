@@ -6,7 +6,7 @@ import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
-import { BASKET, euro, productById } from "@/gallery/demo/data";
+import { BASKET, SHOP_ORDERS, euro, productById } from "@/gallery/demo/data";
 import { DemoScreen, MEDIA_INSET, MediaRow, Summary, useStates } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
@@ -27,10 +27,14 @@ const STEPS = [
 export default function Order() {
   const colors = useThemeColors();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { state } = useStates(STATES);
+  const order = SHOP_ORDERS.find((o) => o.id === id) ?? SHOP_ORDERS[0];
+  // A refunded order was delivered first; its page reads as delivered.
+  const { state } = useStates(STATES, order.status === "Refunded" ? "Delivered" : order.status);
+  // #4821 is the bag from the Shop; the others are one of each item.
+  const lines = order.id === "4821" ? BASKET : order.items.map((product) => ({ product, qty: 1, size: undefined as string | undefined }));
   const [cancelling, setCancelling] = useState(false);
   const reached = state === "Processing" ? 1 : state === "On the way" ? 3 : 4;
-  const subtotal = BASKET.reduce((n, l) => n + productById(l.product).price * l.qty, 0);
+  const subtotal = order.total;
   const headline = state === "Processing" ? "Arriving Thursday" : state === "On the way" ? "Arriving today" : "Delivered";
   const sub = state === "Processing" ? "We're packing it now" : state === "On the way" ? "Between 13:00 and 15:00" : "Left with a neighbour at no. 16";
 
@@ -45,7 +49,6 @@ export default function Order() {
         ]}
       />
       <DemoScreen
-       
         secondary={state === "Delivered"}
         footer={
           state === "On the way" ? (
@@ -72,7 +75,7 @@ export default function Order() {
 
         <SectionTitle>Items</SectionTitle>
         <SettingsGroup separatorInset={MEDIA_INSET}>
-          {BASKET.map((l) => {
+          {lines.map((l) => {
             const p = productById(l.product);
             return <MediaRow key={l.product} image={p.photos[0]} title={p.name} subtitle={l.size ? `Size ${l.size}, ${l.qty} ×` : `${l.qty} ×`} trailing={euro(p.price * l.qty)} href={`/screens/shop/product/${p.id}`} />;
           })}

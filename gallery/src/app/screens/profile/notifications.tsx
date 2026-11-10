@@ -34,7 +34,6 @@ export default function Notifications() {
 
   return (
     <DemoScreen
-     
       footer={blocked ? <InsetFooter primaryCta={{ label: "Turn on in Settings", onPress: () => Toast.info("Opening Settings") }} /> : undefined}
     >
       {blocked ? (

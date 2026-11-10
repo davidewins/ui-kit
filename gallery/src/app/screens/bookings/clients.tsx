@@ -26,7 +26,7 @@ export default function Clients() {
             art={{ image: ART.people }}
             title={q ? `No one called "${q}"` : "No clients yet"}
             body={q ? "Check the spelling, or add them with a new booking" : "Clients are added when they book"}
-            action={{ label: "New booking", plus: true, onPress: () => router.push("/screens/bookings/new-booking") }}
+            action={{ label: "New booking", onPress: () => router.push("/screens/bookings/new-booking") }}
           />
         ) : (
           <SettingsGroup separatorInset={MEDIA_INSET}>

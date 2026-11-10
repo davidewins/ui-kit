@@ -47,9 +47,9 @@ export default function History() {
           <SkeletonTitle />
           <SkeletonBars count={4} />
           <SkeletonTitle />
-          <SkeletonSettingsRows count={3} />
+          <SkeletonSettingsRows count={3} chevron={false} />
           <SkeletonTitle />
-          <SkeletonMediaRows count={4} trailing="figure" />
+          <SkeletonMediaRows count={5} trailing="figure" />
         </>
       ) : (
         <>
@@ -64,7 +64,7 @@ export default function History() {
 
           <SectionTitle>By area</SectionTitle>
           <View style={{ marginHorizontal: 16, marginBottom: 18, gap: 12 }}>
-            <Gauge variant="bar" label="Legs" value={3} max={3} valueLabel="3 of 3 sessions" />
+            <Gauge variant="bar" label="Legs" value={3} max={3} valueLabel="3 of 3" />
             <Gauge variant="bar" label="Push" value={1} max={2} valueLabel="1 of 2" />
             <Gauge variant="bar" label="Core" value={1} max={3} valueLabel="1 of 3" tone="warning" />
             <Gauge variant="bar" label="Mobility" value={1} max={2} valueLabel="1 of 2" />

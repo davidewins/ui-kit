@@ -9,7 +9,6 @@ import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { STATUS_BADGE, bookingById, clientById, euro, serviceById } from "@/gallery/demo/data";
 import { Avatar, DemoScreen, useStates } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { haptic } from "@/lib/haptics";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
 import { CalendarDays, Clock, Euro, Scissors, User } from "lucide-react-native";
@@ -25,17 +24,18 @@ export default function BookingDetail() {
   const b = bookingById(id);
   const c = clientById(b.client);
   const s = serviceById(b.service);
-  const { state } = useStates(STATES);
+  // An unconfirmed booking has the same page and actions as a confirmed one.
+  const { state } = useStates(STATES, b.status === "Unconfirmed" ? "Confirmed" : b.status);
   const [cancelling, setCancelling] = useState(false);
 
   const footer =
     state === "Confirmed" ? (
       <InsetFooter
-        primaryCta={{ label: "Check in", onPress: () => { haptic("success"); Toast.success(`${c.name.split(" ")[0]} checked in`); } }}
+        primaryCta={{ label: "Check in", onPress: () => Toast.success(`${c.name.split(" ")[0]} checked in`) }}
         secondaryCta={{ label: "Reschedule", onPress: () => router.push("/screens/bookings/new-booking") }}
       />
     ) : state === "Checked in" ? (
-      <InsetFooter primaryCta={{ label: s.price ? `Take payment, ${euro(s.price)}` : "Finish", onPress: () => { haptic("success"); Toast.success("Paid"); } }} />
+      <InsetFooter primaryCta={{ label: s.price ? `Take payment, ${euro(s.price)}` : "Finish", onPress: () => Toast.success("Paid") }} />
     ) : (
       <InsetFooter primaryCta={{ label: "Book again", onPress: () => router.push("/screens/bookings/new-booking") }} />
     );
@@ -59,7 +59,7 @@ export default function BookingDetail() {
             onPress={() => router.push("/screens/bookings/clients")}
             accessibilityLabel={`${c.name}, client`}
           />
-        <View style={{ marginHorizontal: 20, marginBottom: 16 }}>
+        <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
           <Badge variant={STATUS_BADGE[state]}>{state}</Badge>
         </View>
         <SettingsGroup>
@@ -72,7 +72,7 @@ export default function BookingDetail() {
         {c.note ? (
           <>
             <SectionTitle>Note</SectionTitle>
-            <Text weight="medium" style={{ fontSize: 15, lineHeight: 22, color: colors.muted, marginHorizontal: 20, marginBottom: 18 }}>{c.note}</Text>
+            <Text weight="medium" style={{ fontSize: 15, lineHeight: 22, color: colors.muted, marginHorizontal: 16, marginBottom: 18 }}>{c.note}</Text>
           </>
         ) : null}
       </DemoScreen>

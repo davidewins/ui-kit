@@ -1,10 +1,8 @@
-import { Badge } from "@/components/ui";
+import { Badge, View } from "@/components/ui";
 import { EmptyState } from "@/components/ui/feedback/EmptyState";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
-import { } from "@/components/ui";
-import { View } from "@/components/ui";
 import { useStates } from "@/gallery/demo/parts";
 import { Stack, router } from "expo-router";
 import { Package, Plus } from "lucide-react-native";
@@ -32,25 +30,23 @@ export default function ExampleList() {
           ),
         }}
       />
-      <View style={{ flex: 1 }}>
       {state === "Empty" ? (
         <View style={{ flex: 1 }}>
-          <EmptyState art={{ image: require("@/assets/images/empty/box.png") }} title="No orders yet" body="New orders show up here as they come in" action={{ label: "New order", plus: true, onPress: () => router.push("/screens/patterns/create") }} />
+          <EmptyState art={{ image: require("@/assets/images/empty/box.png") }} title="No orders yet" body="New orders show up here as they come in" action={{ label: "New order", onPress: () => router.push("/screens/patterns/create") }} />
         </View>
       ) : (
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}>
-        {state === "Loading" ? (
-          <SkeletonSettingsRows count={4} badge />
-        ) : (
-          <SettingsGroup>
-            {ORDERS.map((o) => (
-              <SettingsRow key={o.id} label={`#${o.id}  ${o.who}`} Icon={Package} navigates href="/screens/patterns/detail" accessory={<Badge variant={o.variant}>{o.status}</Badge>} />
-            ))}
-          </SettingsGroup>
-        )}
-      </ScrollView>
+        <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: 32 }}>
+          {state === "Loading" ? (
+            <SkeletonSettingsRows count={4} badge />
+          ) : (
+            <SettingsGroup>
+              {ORDERS.map((o) => (
+                <SettingsRow key={o.id} label={`#${o.id}, ${o.who}`} Icon={Package} navigates href="/screens/patterns/detail" accessory={<Badge variant={o.variant}>{o.status}</Badge>} />
+              ))}
+            </SettingsGroup>
+          )}
+        </ScrollView>
       )}
-      </View>
     </>
   );
 }
