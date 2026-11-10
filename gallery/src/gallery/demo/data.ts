@@ -133,6 +133,14 @@ export const WORKOUTS: Workout[] = [
   },
 ];
 
+/** How hard each workout works each area, 0 to 1 (drawn as bar gauges). */
+export const FOCUS: Record<WorkoutKind, { area: string; load: number }[]> = {
+  Strength: [{ area: "Legs", load: 0.9 }, { area: "Glutes", load: 0.75 }, { area: "Back", load: 0.45 }, { area: "Core", load: 0.3 }],
+  HIIT: [{ area: "Heart rate", load: 0.95 }, { area: "Legs", load: 0.6 }, { area: "Core", load: 0.5 }],
+  Yoga: [{ area: "Mobility", load: 0.9 }, { area: "Balance", load: 0.6 }, { area: "Core", load: 0.4 }],
+  Core: [{ area: "Abs", load: 0.9 }, { area: "Obliques", load: 0.7 }, { area: "Lower back", load: 0.4 }],
+};
+
 export const workoutById = (id?: string) => WORKOUTS.find((w) => w.id === id) ?? WORKOUTS[0];
 
 export const SESSIONS = [

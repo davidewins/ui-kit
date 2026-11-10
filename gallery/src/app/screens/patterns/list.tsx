@@ -3,13 +3,13 @@ import { EmptyState } from "@/components/ui/feedback/EmptyState";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
-import { SkeletonList } from "@/components/ui";
+import { } from "@/components/ui";
 import { View } from "@/components/ui";
-import { BottomSwitch } from "@/gallery/BottomSwitch";
+import { useStates } from "@/gallery/demo/parts";
 import { Stack, router } from "expo-router";
 import { Package, Plus } from "lucide-react-native";
-import { useState } from "react";
 import { ScrollView } from "react-native";
+import { SkeletonSettingsRows } from "@/gallery/demo/skeletons";
 
 const ORDERS = [
   { id: "1042", who: "Aoife M.", status: "Preparing", variant: "warning" as const },
@@ -22,7 +22,7 @@ const STATES = ["Loaded", "Loading", "Empty"] as const;
 // Recipe §3.1: tab root list. New = header Plus (opens the §3.2 create modal),
 // skeleton while loading, EmptyState when empty.
 export default function ExampleList() {
-  const [state, setState] = useState(0);
+  const { state } = useStates(STATES);
   return (
     <>
       <Stack.Screen
@@ -33,14 +33,14 @@ export default function ExampleList() {
         }}
       />
       <View style={{ flex: 1 }}>
-      {STATES[state] === "Empty" ? (
+      {state === "Empty" ? (
         <View style={{ flex: 1 }}>
           <EmptyState art={{ image: require("@/assets/images/empty/box.png") }} title="No orders yet" body="New orders show up here as they come in" action={{ label: "New order", plus: true, onPress: () => router.push("/screens/patterns/create") }} />
         </View>
       ) : (
       <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}>
-        {STATES[state] === "Loading" ? (
-          <SkeletonList count={4} />
+        {state === "Loading" ? (
+          <SkeletonSettingsRows count={4} badge />
         ) : (
           <SettingsGroup>
             {ORDERS.map((o) => (
@@ -50,7 +50,6 @@ export default function ExampleList() {
         )}
       </ScrollView>
       )}
-      <BottomSwitch values={STATES} selectedIndex={state} onChange={setState} accessibilityLabel="State" />
       </View>
     </>
   );

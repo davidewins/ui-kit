@@ -18,7 +18,7 @@ const files = [];
 })(appDir);
 
 const SPECIAL = new Set(["_layout", "index", "+not-found"]);
-const onDisk = new Set(files.filter((f) => !SPECIAL.has(f)));
+const onDisk = new Set(files.filter((f) => !SPECIAL.has(f) && !f.endsWith("/_layout")));
 
 const listed = new Set();
 for (const [, kind, id] of catalog.matchAll(/s\("(\w+)", "([\w-]+)"/g)) listed.add(kind === "foundations" ? "foundations/index" : `${kind}/${id}/index`);

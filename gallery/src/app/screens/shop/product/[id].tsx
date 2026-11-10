@@ -1,5 +1,5 @@
-import { Badge, Text, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
+import { Badge, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { Chip } from "@/components/ui/inputs/Chip";
 import { Carousel } from "@/components/ui/lists/Carousel";
@@ -13,7 +13,7 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { haptic } from "@/lib/haptics";
 import { Toast } from "@/lib/toast";
 import { Image } from "expo-image";
-import { router, useLocalSearchParams } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import { RotateCcw, Ruler, Truck } from "lucide-react-native";
 import { useState } from "react";
 import { useWindowDimensions } from "react-native";
@@ -27,7 +27,7 @@ export default function Product() {
   const { width } = useWindowDimensions();
   const { id } = useLocalSearchParams<{ id: string }>();
   const p = productById(id);
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [size, setSize] = useState<string | null>(null);
   const soldOut = state === "Sold out" || p.stock === "Sold out";
   const needsSize = !!p.sizes && !size;
@@ -43,7 +43,7 @@ export default function Product() {
         ]}
       />
       <DemoScreen
-        bar={bar}
+       
         footer={
           soldOut ? (
             <InsetFooter primaryCta={{ label: "Tell me when it's back", onPress: () => Toast.success("We'll email you when it's back") }} />
@@ -61,6 +61,7 @@ export default function Product() {
           )
         }
       >
+        <Link.AppleZoomTarget>
         <Carousel
           data={photos}
           keyExtractor={(_, i) => String(i)}
@@ -68,6 +69,7 @@ export default function Product() {
           height={300}
           renderItem={(src) => <Image source={src} style={{ flex: 1, borderRadius: RADIUS }} contentFit="cover" />}
         />
+        </Link.AppleZoomTarget>
         <TitleBlock title={p.name} subtitle={p.colour} figure={priceLine(p)} />
         <View style={{ marginHorizontal: 20, marginTop: -8, marginBottom: 18, flexDirection: "row", gap: 8 }}>
           <Badge variant={soldOut ? "error" : p.stock === "Low stock" ? "warning" : "success"}>{soldOut ? "Sold out" : p.stock}</Badge>

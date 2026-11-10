@@ -1,70 +1,159 @@
-import { EmptyState } from "@/components/ui";
-import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
-import { StepButtons } from "@/components/ui/inputs/StepperRow";
-import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
-import { ART, BASKET, euro, productById } from "@/gallery/demo/data";
-import { DemoScreen, MEDIA_INSET, MediaRow, Summary, useStates } from "@/gallery/demo/parts";
-import { haptic } from "@/lib/haptics";
+// VOID's basket screen, remixed for the Shop demo: VOID's own components
+// (BasketItem, BasketSectionHeader, BasketFooter, CreditToggleRow,
+// BasketEmptyState), laid out exactly as VOID's (protected)/basket.tsx, with
+// checkout in the same screen. Data is the Shop's products in VOID's basket store.
+import { BasketEmptyState } from "@/apps/void/components/basket/BasketEmptyState";
+import { BasketFooter } from "@/apps/void/components/basket/BasketFooter";
+import { BasketSectionHeader } from "@/apps/void/components/basket/BasketSectionHeader";
+import { CreditToggleRow } from "@/apps/void/components/basket/CreditToggleRow";
+import BasketItem from "@/apps/void/components/BasketItem";
+import useBasketStore from "@/apps/void/context/store/basketStore";
+import type { BasketItemInterface } from "@/apps/void/types/basket";
+import { View } from "@/components/ui";
+import { PRODUCTS } from "@/gallery/demo/data";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
-import { router } from "expo-router";
-import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { Stack, router } from "expo-router";
+import { useEffect, useState } from "react";
+import { Image, Pressable, SectionList } from "react-native";
 
-const STATES = ["Items", "Empty"] as const;
-const DELIVERY = 0;
+type FulfillmentType = "pickup" | "platform_delivery" | "vendor_delivery";
 
-// Bag: each line with its own quantity buttons (down to zero removes it), the
-// totals, and Checkout in the footer. Empty sends you back to the shop.
-export default function Basket() {
-  const { state, bar } = useStates(STATES);
-  const [lines, setLines] = useState(BASKET);
-  const subtotal = lines.reduce((n, l) => n + productById(l.product).price * l.qty, 0);
+const STORE = {
+  vendorId: "v-kinetic",
+  storefrontId: "s-kinetic",
+  fulfillmentLocationId: "l-grafton",
+  storefrontName: "Kinetic Running",
+  locationAddress: "41 Grafton Street, Dublin 2",
+};
 
-  const change = (i: number, by: number) => {
-    haptic("selection");
-    const next = lines.map((l, j) => (j === i ? { ...l, qty: l.qty + by } : l));
-    if (next[i].qty === 0) Toast.info(`${productById(lines[i].product).name} removed`);
-    setLines(next.filter((l) => l.qty > 0));
+// The Shop's bag: three products, VOID's item shape, prices in cents.
+const SEED = (["pace", "studio", "shades"] as const).map((id, i) => {
+  const p = PRODUCTS.find((x) => x.id === id)!;
+  return {
+    ...STORE,
+    productId: p.id,
+    name: p.name,
+    price: p.price * 100,
+    basePrice: p.price * 100,
+    quantity: i === 2 ? 2 : 1,
+    thumbnail: Image.resolveAssetSource(p.photos[0] as number)?.uri ?? "",
+    current_stock: 12,
+    track_stock: true,
+    is_out_of_stock: false,
+    configKey: "",
   };
+});
 
-  if (state === "Empty" || lines.length === 0) {
-    return (
-      <DemoScreen scroll={false} bar={bar}>
-        <EmptyState
-          art={{ image: ART.bag }}
-          title="Your bag is empty"
-          body="Things you add show up here"
-          action={{ label: "Start shopping", onPress: () => router.push("/screens/shop/home") }}
-        />
-      </DemoScreen>
-    );
-  }
+const SERVICE_FEE = 99;
+const DELIVERY_FEE = 349;
+
+export default function ShopBasket() {
+  const colors = useThemeColors();
+  const items = useBasketStore((s) => s.items);
+  const tip = useBasketStore((s) => s.tip);
+  const [fulfillmentType, setFulfillmentType] = useState<FulfillmentType>("platform_delivery");
+
+  useEffect(() => {
+    if (useBasketStore.getState().items.length === 0) useBasketStore.setState({ items: SEED });
+  }, []);
+
+  const subtotalCents = items.reduce((n, i) => n + i.price * i.quantity, 0);
+  const deliveryFeeCents = fulfillmentType === "pickup" ? 0 : DELIVERY_FEE;
+  const total = subtotalCents + SERVICE_FEE + tip + deliveryFeeCents;
+
+  const sections =
+    items.length > 0
+      ? [{ key: "store", title: STORE.storefrontName, address: STORE.locationAddress, data: items as BasketItemInterface[] }]
+      : [];
 
   return (
-    <DemoScreen bar={bar} footer={<InsetFooter primaryCta={{ label: `Checkout, ${euro(subtotal + DELIVERY)}`, onPress: () => router.push("/screens/shop/checkout") }} />}>
-      <SettingsGroup separatorInset={MEDIA_INSET}>
-        {lines.map((l, i) => {
-          const p = productById(l.product);
-          return (
-            <MediaRow
-              key={l.product}
-              image={p.photos[0]}
-              title={p.name}
-              subtitle={[l.size ? `Size ${l.size}` : p.colour, `${l.qty} × ${euro(p.price)}`].join(", ")}
-              trailing={euro(p.price * l.qty)}
-              accessory={
-                <StepButtons
-                  label={`${p.name} quantity`}
-                  onDecrement={() => change(i, -1)}
-                  onIncrement={() => change(i, 1)}
-                  canDecrement
-                  canIncrement={l.qty < 5}
-                />
-              }
+    <View className="bg-background flex-1">
+      <Stack.Screen
+        options={{
+          headerRight: () =>
+            items.length > 0 ? (
+              <Pressable
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  Toast.info("Notes, dropoff and promo code");
+                }}
+                hitSlop={12}
+                accessibilityRole="button"
+                accessibilityLabel="Order options"
+              >
+                <Ionicons name="options-outline" size={22} color={colors.tint} />
+              </Pressable>
+            ) : null,
+        }}
+      />
+      {sections.length > 0 ? (
+        <SectionList
+          style={{ flex: 1 }}
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: 12 }}
+          sections={sections}
+          keyExtractor={(item, index) => `${item.productId}-${index}`}
+          renderItem={({ item }) => <BasketItem item={item} currentStock={item.current_stock ?? 0} onUpdate={async () => {}} />}
+          renderSectionHeader={({ section }) => (
+            <BasketSectionHeader
+              section={section}
+              fulfillment={{
+                items,
+                fulfillmentType,
+                deliveryAvailable: true,
+                vendorUsesOwnDelivery: false,
+                pickupAvailable: true,
+                onFulfillmentTypeChange: setFulfillmentType,
+              }}
+              arrival={fulfillmentType === "pickup" ? "Ready in 15 min" : "25-35 min"}
             />
-          );
-        })}
-      </SettingsGroup>
-      <Summary lines={[["Subtotal", euro(subtotal)], ["Delivery", DELIVERY ? euro(DELIVERY) : "Free"]]} total={["Total", euro(subtotal + DELIVERY)]} />
-    </DemoScreen>
+          )}
+          stickySectionHeadersEnabled={false}
+          className="bg-background"
+        />
+      ) : (
+        <BasketEmptyState />
+      )}
+
+      <CreditToggleRow availableCredit={null} />
+
+      <BasketFooter
+        items={items}
+        totalCost={subtotalCents}
+        serviceFee={SERVICE_FEE}
+        tip={tip}
+        deliveryFee={deliveryFeeCents}
+        fulfillmentType={fulfillmentType}
+        deliveryAvailable
+        vendorUsesOwnDelivery={false}
+        deliveryStatusMessage={null}
+        onFulfillmentTypeChange={setFulfillmentType}
+        storeStatus={{ isOpen: true, statusText: "Open until 20:00" }}
+        openingHoursData={null}
+        vendorNote=""
+        riderNote=""
+        paymentSheetInitialized
+        isLoading={false}
+        hasOutOfStockItems={false}
+        canUseStripe
+        canAcceptCards
+        initError={null}
+        deliveryEta={fulfillmentType === "pickup" ? null : "25-35 min"}
+        prepTimeMins={15}
+        handlePlaceOrder={() => {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          useBasketStore.setState({ items: [] });
+          router.push("/screens/shop/order/4821");
+        }}
+        onRetryPaymentSetup={() => {}}
+        promoCode={null}
+        discountAmountCents={0}
+        creditApplied={0}
+        amountDueOnCard={total}
+      />
+    </View>
   );
 }

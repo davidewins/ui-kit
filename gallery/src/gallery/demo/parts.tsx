@@ -6,13 +6,12 @@ import { Text, View } from "@/components/ui";
 import { SETTINGS_ROW } from "@/components/ui/lists/SettingsRow";
 import { Tile } from "@/components/ui/surfaces/Tile";
 import { useInsetFooterSpace } from "@/components/onboarding/shells/InsetShell";
-import { BottomSwitch } from "@/gallery/BottomSwitch";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { Image, type ImageProps } from "expo-image";
 
 type ImageSource = ImageProps["source"];
-import { type Href, router } from "expo-router";
+import { type Href, Link, router, useLocalSearchParams } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
 import { type ReactNode, useState } from "react";
 import { Pressable, ScrollView, useWindowDimensions } from "react-native";
@@ -29,12 +28,15 @@ const go = (href?: Href, onPress?: () => void) => () => {
   if (href) router.push(href);
 };
 
-/** Full-width photo at the top of a detail screen. */
+/** Full-width photo at the top of a detail screen. It is the landing spot
+ *  of the Apple zoom from whichever tile opened the page. */
 export function Hero({ source, height = 240 }: { source: ImageSource; height?: number }) {
   return (
-    <View style={{ marginHorizontal: GUTTER, height, borderRadius: RADIUS, borderCurve: "continuous", overflow: "hidden" }}>
-      <Image source={source} style={{ flex: 1 }} contentFit="cover" transition={150} />
-    </View>
+    <Link.AppleZoomTarget>
+      <View style={{ marginHorizontal: GUTTER, height, borderRadius: RADIUS, borderCurve: "continuous", overflow: "hidden" }}>
+        <Image source={source} style={{ flex: 1 }} contentFit="cover" transition={150} />
+      </View>
+    </Link.AppleZoomTarget>
   );
 }
 
@@ -141,7 +143,9 @@ export function PhotoGrid<T>({
   );
 }
 
-/** A photo with a title and a muted line under it; pushes `href`. */
+/** A photo with a title and a muted line under it. With `href` it opens the
+ *  page with Apple's zoom (iOS 18+: the photo grows into the page's Hero and
+ *  shrinks back), and press and hold peeks at it. */
 export function PhotoTile({
   image,
   title,
@@ -160,22 +164,36 @@ export function PhotoTile({
   badge?: ReactNode;
 }) {
   const colors = useThemeColors();
+  const photo = (
+    <View style={{ width, height: width / ratio, borderRadius: 20, borderCurve: "continuous", overflow: "hidden", backgroundColor: colors.surface }}>
+      <Image source={image} style={{ flex: 1 }} contentFit="cover" transition={150} />
+      {badge ? <View style={{ position: "absolute", top: 10, left: 10 }}>{badge}</View> : null}
+    </View>
+  );
+  const caption = (
+    <View style={{ gap: 2, paddingHorizontal: 2 }}>
+      <Text weight="medium" numberOfLines={1} style={{ fontSize: 15, letterSpacing: -0.2 }}>{title}</Text>
+      {subtitle ? <Text weight="medium" numberOfLines={1} style={{ fontSize: 13, color: colors.muted, fontVariant: ["tabular-nums"] }}>{subtitle}</Text> : null}
+    </View>
+  );
+  if (!href) return <View style={{ gap: 8 }}>{photo}{caption}</View>;
+  // SettingsRow's Link pattern: asChild, Trigger, a Pressable that owns onPress
+  // (the Link navigates; onPress only adds the haptic). Only the photo zooms.
   return (
-    <Pressable
-      onPress={go(href)}
-      accessibilityRole="button"
-      accessibilityLabel={[title, subtitle].filter(Boolean).join(", ")}
-      style={({ pressed }) => ({ opacity: pressed ? 0.85 : 1, gap: 8 })}
-    >
-      <View style={{ width, height: width / ratio, borderRadius: 20, borderCurve: "continuous", overflow: "hidden", backgroundColor: colors.surface }}>
-        <Image source={image} style={{ flex: 1 }} contentFit="cover" transition={150} />
-        {badge ? <View style={{ position: "absolute", top: 10, left: 10 }}>{badge}</View> : null}
-      </View>
-      <View style={{ gap: 1, paddingHorizontal: 2 }}>
-        <Text weight="medium" numberOfLines={1} style={{ fontSize: 15, letterSpacing: -0.2 }}>{title}</Text>
-        {subtitle ? <Text weight="medium" numberOfLines={1} style={{ fontSize: 13, color: colors.muted, fontVariant: ["tabular-nums"] }}>{subtitle}</Text> : null}
-      </View>
-    </Pressable>
+    <Link href={href} asChild>
+      <Link.Trigger>
+        <Pressable
+          onPress={() => Haptics.selectionAsync().catch(() => {})}
+          accessibilityRole="link"
+          accessibilityLabel={[title, subtitle].filter(Boolean).join(", ")}
+          style={{ gap: 8 }}
+        >
+          <Link.AppleZoom>{photo}</Link.AppleZoom>
+          {caption}
+        </Pressable>
+      </Link.Trigger>
+      <Link.Preview />
+    </Link>
   );
 }
 
@@ -208,48 +226,44 @@ export function ChipRow({ children }: { children: ReactNode }) {
   );
 }
 
-/** The state switch every demo screen has at the bottom (Loaded / Loading / Empty, and so on). */
+/** The page's state (loaded, empty, sold out...) from the link the gallery
+ *  opened it with (?state=). Nothing is drawn on the page: it looks exactly as
+ *  it would in an app. */
 export function useStates<T extends readonly string[]>(values: T) {
-  const [i, setI] = useState(0);
+  const { state } = useLocalSearchParams<{ state?: string }>();
   return {
-    state: values[i] as T[number],
-    bar: <BottomSwitch values={values} selectedIndex={i} onChange={setI} accessibilityLabel="Screen state" />,
+    state: (values.includes(state ?? "") ? state : values[0]) as T[number],
   };
 }
 
 /**
- * Every demo screen's frame: scrolling content, an optional sticky footer
- * (InsetFooter, which floats over the content) and the state switch under it.
+ * Every demo screen's frame, the same as an app screen: scrolling content
+ * and, when the page has one, the kit's sticky InsetFooter floating over it.
  */
 export function DemoScreen({
   children,
   footer,
   secondary = false,
-  bar,
   scroll = true,
 }: {
   children: ReactNode;
   footer?: ReactNode;
   /** The footer has a second button. */
   secondary?: boolean;
-  bar?: ReactNode;
   /** False for a screen that fills itself (EmptyState). */
   scroll?: boolean;
 }) {
   const space = useInsetFooterSpace({ secondary });
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        {scroll ? (
-          <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: footer ? space : 32 }}>
-            {children}
-          </ScrollView>
-        ) : (
-          children
-        )}
-        {footer}
-      </View>
-      {bar}
+      {scroll ? (
+        <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: footer ? space : 32 }}>
+          {children}
+        </ScrollView>
+      ) : (
+        children
+      )}
+      {footer}
     </View>
   );
 }

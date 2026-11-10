@@ -1,10 +1,11 @@
-import { Badge, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
+import { Badge, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
+import { Gauge } from "@/components/ui/feedback/Gauge";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
-import { workoutById } from "@/gallery/demo/data";
+import { FOCUS, workoutById } from "@/gallery/demo/data";
 import { DemoScreen, Hero, StatTiles, TitleBlock, useStates } from "@/gallery/demo/parts";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
@@ -17,7 +18,7 @@ const STATES = ["Not started", "In your plan", "Done today"] as const;
 export default function WorkoutDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const w = workoutById(id);
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
 
   return (
     <>
@@ -32,7 +33,7 @@ export default function WorkoutDetail() {
         ]}
       />
       <DemoScreen
-        bar={bar}
+       
         secondary={state === "Not started"}
         footer={
           <InsetFooter
@@ -49,6 +50,12 @@ export default function WorkoutDetail() {
           </View>
         ) : null}
         <StatTiles items={[{ value: `${w.minutes} min`, label: "Length" }, { value: String(w.exercises.length), label: "Exercises" }, { value: w.level, label: "Level" }]} />
+        <SectionTitle>Focus</SectionTitle>
+        <View style={{ marginHorizontal: 16, marginBottom: 18, gap: 12 }}>
+          {FOCUS[w.kind].map((f) => (
+            <Gauge key={f.area} variant="bar" label={f.area} value={f.load} valueLabel={f.load >= 0.8 ? "High" : f.load >= 0.5 ? "Medium" : "Light"} />
+          ))}
+        </View>
         <SectionTitle>Exercises</SectionTitle>
         <SettingsGroup>
           {w.exercises.map((e) => (

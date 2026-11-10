@@ -1,5 +1,5 @@
-import { Card, Text, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
+import { Card, Text, View } from "@/components/ui";
 import { DateRow } from "@/components/ui/inputs/DateRow";
 import { Switch } from "@/components/ui/inputs/Switch";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
@@ -23,7 +23,7 @@ function at(h: number) {
 // arrives, the rows go quiet, and the footer opens iOS Settings.
 export default function Notifications() {
   const colors = useThemeColors();
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const blocked = state === "Off in Settings";
   const [push, setPush] = useState({ orders: true, reminders: true, messages: true, offers: false });
   const [email, setEmail] = useState({ receipts: true, news: false });
@@ -34,7 +34,7 @@ export default function Notifications() {
 
   return (
     <DemoScreen
-      bar={bar}
+     
       footer={blocked ? <InsetFooter primaryCta={{ label: "Turn on in Settings", onPress: () => Toast.info("Opening Settings") }} /> : undefined}
     >
       {blocked ? (

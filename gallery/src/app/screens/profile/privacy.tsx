@@ -1,5 +1,5 @@
-import { Card, Text, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
+import { Card, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { ProgressBar } from "@/components/ui/feedback/ProgressBar";
 import { Switch } from "@/components/ui/inputs/Switch";
@@ -20,7 +20,7 @@ const STATES = ["Default", "Preparing export", "Export ready"] as const;
 // account in the header menu behind a confirm that names the consequence.
 export default function Privacy() {
   const colors = useThemeColors();
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [analytics, setAnalytics] = useState(true);
   const [personal, setPersonal] = useState(false);
   const [crashes, setCrashes] = useState(true);
@@ -39,7 +39,7 @@ export default function Privacy() {
         accessibilityLabel="Account data actions"
         actions={[{ label: "Delete account", systemImage: "trash", destructive: true, onPress: () => setDeleting(true) }]}
       />
-      <DemoScreen bar={bar} footer={footer}>
+      <DemoScreen footer={footer}>
         {state !== "Default" ? (
           <View style={{ marginHorizontal: 16, marginBottom: 18 }}>
             <Card raised>

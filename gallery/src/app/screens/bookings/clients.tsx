@@ -1,24 +1,25 @@
-import { EmptyState, SkeletonList } from "@/components/ui";
+import { EmptyState } from "@/components/ui";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { ART, BOOKINGS, CLIENTS } from "@/gallery/demo/data";
 import { Avatar, DemoScreen, MEDIA_INSET, MediaRow, useStates } from "@/gallery/demo/parts";
 import { Stack, router } from "expo-router";
 import { useState } from "react";
+import { SkeletonMediaRows } from "@/gallery/demo/skeletons";
 
 const STATES = ["Loaded", "Loading", "Empty"] as const;
 
 // Clients A to Z with header search; each row opens their next booking.
 export default function Clients() {
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [q, setQ] = useState("");
   const shown = state === "Empty" ? [] : CLIENTS.filter((c) => c.name.toLowerCase().includes(q.trim().toLowerCase())).sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <>
       <Stack.Screen options={{ headerSearchBarOptions: { placeholder: "Search clients", onChangeText: (e) => setQ(e.nativeEvent.text) } }} />
-      <DemoScreen bar={bar}>
+      <DemoScreen>
         {state === "Loading" ? (
-          <SkeletonList count={6} />
+          <SkeletonMediaRows count={6} lead="avatar" trailing="figure" />
         ) : shown.length === 0 ? (
           <EmptyState
             layout="inline"

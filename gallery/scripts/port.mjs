@@ -57,8 +57,8 @@ for (const [f, text] of copied) {
         if (!spec.startsWith("@/") && !spec.startsWith(".")) return all;
         const r = resolve(spec, f);
         if (r && kitFiles.has(r)) return `${pre}${q}@/${path.relative(src, r).replace(/\.tsx?$/, "")}${q}`;
-        if (!spec.startsWith("@/")) return all;
         if (r === path.join(src, "components/ui/index.tsx")) return `${pre}${q}@/components/ui${q}`;
+        if (!spec.startsWith("@/")) return all;
         return r && copied.has(r) ? `${pre}${q}@/apps/${app.toLowerCase()}/${spec.slice(2)}${q}` : all;
       })
     : text;

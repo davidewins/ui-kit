@@ -71,12 +71,14 @@ import {
   Trophy,
   Activity,
   ShoppingCart,
-  CreditCard,
   CalendarDays,
   CalendarPlus,
   Users,
   Clock,
   UserPen,
+  Wand,
+  Clapperboard,
+  Music,
   type LucideIcon,
 } from "lucide-react-native";
 
@@ -101,6 +103,10 @@ export interface Entry {
   Icon: LucideIcon;
   /** Extra search terms: the @expo/ui and kit names on the page. */
   keywords?: string;
+  /** Screen states (loaded, empty, sold out...). The compartment lists one row
+   *  per state and opens the page with ?state=, so the page itself carries no
+   *  switch and looks exactly as it would in an app. */
+  states?: readonly string[];
 }
 
 const s = (kind: Kind, id: string, title: string, Icon: LucideIcon): Section => ({
@@ -123,6 +129,7 @@ export const SECTIONS: Section[] = [
   s("components", "layout", "Layout", LayoutGrid),
   s("components", "data", "Data and media", ChartColumn),
   s("components", "native", "Native hosts", Cpu),
+  s("screens", "motion", "Transitions", Clapperboard),
   s("screens", "fitness", "Fitness", Dumbbell),
   s("screens", "shop", "Shop", ShoppingBag),
   s("screens", "bookings", "Bookings", CalendarDays),
@@ -229,28 +236,32 @@ export const ENTRIES: Entry[] = [
   c("native", "host", "Host and RNHostView", Cpu, "Host RNHostView SwiftHost ComposeHost"),
   c("native", "native-state", "Native state", Timer, "useNativeState SyncToggle SyncSwitch worklet"),
 
+  // Transitions
+  { title: "Apple zoom", route: "screens/motion/zoom", section: "motion", Icon: Music, keywords: "AppleZoom zoom transition Link.Preview peek menu native apple music" },
+  { title: "Push styles", route: "screens/motion/push-styles", section: "motion", Icon: Navigation, keywords: "animation fade slide_from_bottom simple_push native stack" },
+  { title: "Transition lab", route: "screens/motion/lab/index", href: "/screens/motion/lab", section: "motion", Icon: Wand, keywords: "react-native-screen-transitions shared element bounds zoom presets sheet snap points card stack" },
+
   // Demo apps: built only from kit components, one idiom across all of them.
-  { title: "Today", route: "screens/fitness/today", section: "fitness", Icon: Activity, keywords: "home week goal" },
-  { title: "Workouts", route: "screens/fitness/workouts", section: "fitness", Icon: Dumbbell, keywords: "library grid chips" },
-  { title: "Workout", route: "screens/fitness/workout/[id]", href: "/screens/fitness/workout/lower-power", section: "fitness", Icon: Dumbbell, keywords: "detail exercises" },
-  { title: "Live workout", route: "screens/fitness/session", section: "fitness", Icon: Timer, keywords: "session sets stepper rest" },
-  { title: "Progress", route: "screens/fitness/history", section: "fitness", Icon: Trophy, keywords: "history chart personal best" },
+  { title: "Today", route: "screens/fitness/today", section: "fitness", Icon: Activity, keywords: "home week goal", states: ["Workout day", "Rest day", "New"] },
+  { title: "Workouts", route: "screens/fitness/workouts", section: "fitness", Icon: Dumbbell, keywords: "library grid chips", states: ["Loaded", "Loading", "No results"] },
+  { title: "Workout", route: "screens/fitness/workout/[id]", href: "/screens/fitness/workout/lower-power", section: "fitness", Icon: Dumbbell, keywords: "detail exercises", states: ["Not started", "In your plan", "Done today"] },
+  { title: "Live workout", route: "screens/fitness/session", section: "fitness", Icon: Timer, keywords: "session sets stepper rest", states: ["Lifting", "Resting", "Finished"] },
+  { title: "Progress", route: "screens/fitness/history", section: "fitness", Icon: Trophy, keywords: "history chart personal best", states: ["Loaded", "Loading", "Empty"] },
   { title: "New workout", route: "screens/fitness/new-workout", section: "fitness", Icon: Plus, keywords: "create modal" },
-  { title: "Shop", route: "screens/shop/home", section: "shop", Icon: Store, keywords: "ecommerce home grid" },
-  { title: "Product", route: "screens/shop/product/[id]", href: "/screens/shop/product/pace", section: "shop", Icon: Tag, keywords: "sizes carousel" },
-  { title: "Bag", route: "screens/shop/basket", section: "shop", Icon: ShoppingCart, keywords: "basket cart quantity" },
-  { title: "Checkout", route: "screens/shop/checkout", section: "shop", Icon: CreditCard, keywords: "delivery payment promo" },
-  { title: "Order", route: "screens/shop/order/[id]", href: "/screens/shop/order/4821", section: "shop", Icon: Package, keywords: "tracking status" },
-  { title: "Orders", route: "screens/shop/orders", section: "shop", Icon: Receipt, keywords: "history" },
-  { title: "Schedule", route: "screens/bookings/schedule", section: "bookings", Icon: CalendarDays, keywords: "day appointments salon" },
-  { title: "Booking", route: "screens/bookings/booking/[id]", href: "/screens/bookings/booking/b2", section: "bookings", Icon: Clock, keywords: "appointment detail check in" },
+  { title: "Shop", route: "screens/shop/home", section: "shop", Icon: Store, keywords: "ecommerce home grid", states: ["Loaded", "Loading", "Offline"] },
+  { title: "Product", route: "screens/shop/product/[id]", href: "/screens/shop/product/pace", section: "shop", Icon: Tag, keywords: "sizes carousel", states: ["In stock", "Sold out"] },
+  { title: "Bag and checkout", route: "screens/shop/basket", section: "shop", Icon: ShoppingCart, keywords: "basket cart checkout VOID BasketFooter" },
+  { title: "Order", route: "screens/shop/order/[id]", href: "/screens/shop/order/4821", section: "shop", Icon: Package, keywords: "tracking status", states: ["Processing", "On the way", "Delivered"] },
+  { title: "Orders", route: "screens/shop/orders", section: "shop", Icon: Receipt, keywords: "history", states: ["Loaded", "Loading", "Empty"] },
+  { title: "Schedule", route: "screens/bookings/schedule", section: "bookings", Icon: CalendarDays, keywords: "day appointments salon", states: ["Busy", "Loading", "Day off"] },
+  { title: "Booking", route: "screens/bookings/booking/[id]", href: "/screens/bookings/booking/b2", section: "bookings", Icon: Clock, keywords: "appointment detail check in", states: ["Confirmed", "Checked in", "Cancelled"] },
   { title: "New booking", route: "screens/bookings/new-booking", section: "bookings", Icon: CalendarPlus, keywords: "create slots modal" },
-  { title: "Clients", route: "screens/bookings/clients", section: "bookings", Icon: Users, keywords: "customers search" },
+  { title: "Clients", route: "screens/bookings/clients", section: "bookings", Icon: Users, keywords: "customers search", states: ["Loaded", "Loading", "Empty"] },
   { title: "Opening hours", route: "screens/bookings/hours", section: "bookings", Icon: Clock, keywords: "availability rules" },
-  { title: "Account", route: "screens/profile/account", section: "profile", Icon: User, keywords: "profile settings sign out" },
+  { title: "Account", route: "screens/profile/account", section: "profile", Icon: User, keywords: "profile settings sign out", states: ["Signed in", "Email not verified"] },
   { title: "Edit details", route: "screens/profile/edit-profile", section: "profile", Icon: UserPen, keywords: "profile form" },
-  { title: "Notifications", route: "screens/profile/notifications", section: "profile", Icon: Bell, keywords: "push email quiet hours" },
-  { title: "Privacy and data", route: "screens/profile/privacy", section: "profile", Icon: ShieldCheck, keywords: "gdpr export delete account" },
+  { title: "Notifications", route: "screens/profile/notifications", section: "profile", Icon: Bell, keywords: "push email quiet hours", states: ["Allowed", "Off in Settings"] },
+  { title: "Privacy and data", route: "screens/profile/privacy", section: "profile", Icon: ShieldCheck, keywords: "gdpr export delete account", states: ["Default", "Preparing export", "Export ready"] },
 
   // Screens
   { title: "Welcome", route: "screens/sign-in/welcome", section: "sign-in", Icon: Sparkles, keywords: "VOID auth" },
@@ -268,11 +279,29 @@ export const ENTRIES: Entry[] = [
   { title: "Earnings", route: "screens/delivering/earnings", section: "delivering", Icon: Wallet, keywords: "RIDERS" },
   { title: "Active delivery", route: "screens/delivering/delivery/[id]", href: "/screens/delivering/delivery/demo", section: "delivering", Icon: Bike, keywords: "RIDERS" },
   { title: "Store settings", route: "screens/patterns/store-settings", section: "patterns", Icon: Settings2, keywords: "native controls" },
-  { title: "List", route: "screens/patterns/list", section: "patterns", Icon: List },
+  { title: "List", route: "screens/patterns/list", section: "patterns", Icon: List, states: ["Loaded", "Loading", "Empty"] },
   { title: "Detail with sticky footer", route: "screens/patterns/detail", section: "patterns", Icon: Type },
   { title: "Edit", route: "screens/patterns/edit", section: "patterns", Icon: TextCursorInput },
   { title: "Create (modal)", route: "screens/patterns/create", section: "patterns", Icon: PanelBottom },
 ];
+
+// Routes that are reached from other pages, not listed in a compartment: the
+// push styles' destination, and the transition lab's own stack (a nested
+// Blank Stack, so the root stack registers only "screens/motion/lab").
+export const UNLISTED_ROUTES = [
+  { route: "screens/motion/push-target" },
+  { route: "screens/motion/playlist/[id]" },
+  { route: "screens/motion/lab/photo/[id]" },
+  { route: "screens/motion/lab/playlist/[id]" },
+  { route: "screens/motion/lab/sheet" },
+  { route: "screens/motion/lab/stack" },
+  { route: "screens/motion/lab/preset-slide-top" },
+  { route: "screens/motion/lab/preset-zoom-in" },
+  { route: "screens/motion/lab/preset-slide-bottom" },
+  { route: "screens/motion/lab/preset-draggable" },
+  { route: "screens/motion/lab/preset-elastic" },
+];
+export const NESTED_STACKS = ["screens/motion/lab"];
 
 // The screens the Page types page opens, one per expo-router presentation.
 // Not compartment rows: the root layout declares each on the Stack with its
@@ -291,7 +320,10 @@ export const PAGE_TYPES = {
 
 export type PageType = keyof typeof PAGE_TYPES;
 
-export const hrefOf = (e: Entry) => e.href ?? `/${e.route}`;
+export const hrefOf = (e: Entry, state?: string) => {
+  const base = e.href ?? `/${e.route}`;
+  return state ? `${base}${base.includes("?") ? "&" : "?"}state=${encodeURIComponent(state)}` : base;
+};
 export const sectionHref = (sec: Section) => `/${sec.route.replace(/\/index$/, "")}`;
 export const entriesIn = (id: string) => ENTRIES.filter((e) => e.section === id);
 export const sectionById = (id: string) => SECTIONS.find((sec) => sec.id === id)!;

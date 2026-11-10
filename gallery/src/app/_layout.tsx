@@ -1,7 +1,8 @@
 import "../globals.css";
 import { Toaster } from "@/components/Toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ENTRIES, PAGE_TYPES, SECTIONS } from "@/gallery/catalog";
+import { ENTRIES, NESTED_STACKS, PAGE_TYPES, SECTIONS } from "@/gallery/catalog";
+import { isAnim } from "@/gallery/motion/native";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import type { NativeStackNavigationOptions } from "expo-router";
 import { useFonts } from "expo-font";
@@ -99,9 +100,22 @@ export default function RootLayout() {
             {SECTIONS.map((sec) => (
               <Stack.Screen key={sec.route} name={sec.route} options={{ title: sec.title }} />
             ))}
-            {ENTRIES.map((e) => (
+            {ENTRIES.filter((e) => !NESTED_STACKS.some((n) => e.route.startsWith(`${n}/`))).map((e) => (
               <Stack.Screen key={e.route} name={e.route} options={{ title: e.title, ...SCREEN_OPTIONS[e.route] }} />
             ))}
+            {NESTED_STACKS.map((n) => (
+              // The lab pops its own pages; a native edge swipe would pop the
+              // whole lab instead, so it is off here.
+              <Stack.Screen key={n} name={n} options={{ headerShown: false, gestureEnabled: false }} />
+            ))}
+            <Stack.Screen name="screens/motion/playlist/[id]" options={{ ...minimal, title: "" }} />
+            <Stack.Screen
+              name="screens/motion/push-target"
+              options={({ route }) => {
+                const anim = (route.params as { anim?: string } | undefined)?.anim;
+                return { ...minimal, title: "", animation: isAnim(anim) ? anim : "default", animationDuration: anim === "fade" ? 200 : undefined };
+              }}
+            />
             <Stack.Screen name={PAGE_TYPES.card.route} options={{ title: PAGE_TYPES.card.title, presentation: "card" }} />
             <Stack.Screen name={PAGE_TYPES.modal.route} options={{ title: PAGE_TYPES.modal.title, presentation: "modal" }} />
             <Stack.Screen name={PAGE_TYPES.formSheet.route} options={{ ...SHEET_SEE_THROUGH, title: PAGE_TYPES.formSheet.title, presentation: "formSheet", sheetGrabberVisible: true, sheetAllowedDetents: [0.3, 0.5, 1], sheetInitialDetentIndex: 0 }} />

@@ -18,7 +18,7 @@ const THEMES = ["System", "Light", "Dark"].map((t) => ({ label: t, value: t }));
 // Account home for any of the demo apps: who you are, then your stuff, then
 // settings, then help. Sign out is in the header menu, never a lone row.
 export default function Account() {
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [theme, setTheme] = useState("System");
   const [signingOut, setSigningOut] = useState(false);
 
@@ -28,7 +28,7 @@ export default function Account() {
         accessibilityLabel="Account actions"
         actions={[{ label: "Sign out", systemImage: "rectangle.portrait.and.arrow.right", destructive: true, onPress: () => setSigningOut(true) }]}
       />
-      <DemoScreen bar={bar}>
+      <DemoScreen>
         <SettingsIdentity
           leading={<Avatar name="Aoife Byrne" size={60} />}
           title="Aoife Byrne"

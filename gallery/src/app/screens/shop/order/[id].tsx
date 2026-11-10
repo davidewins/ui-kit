@@ -1,5 +1,5 @@
-import { Card, Text, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
+import { Card, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { ProgressBar } from "@/components/ui/feedback/ProgressBar";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
@@ -27,7 +27,7 @@ const STEPS = [
 export default function Order() {
   const colors = useThemeColors();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [cancelling, setCancelling] = useState(false);
   const reached = state === "Processing" ? 1 : state === "On the way" ? 3 : 4;
   const subtotal = BASKET.reduce((n, l) => n + productById(l.product).price * l.qty, 0);
@@ -45,7 +45,7 @@ export default function Order() {
         ]}
       />
       <DemoScreen
-        bar={bar}
+       
         secondary={state === "Delivered"}
         footer={
           state === "On the way" ? (

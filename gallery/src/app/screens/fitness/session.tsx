@@ -1,6 +1,7 @@
-import { Card, Text, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
+import { Card, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
+import { Gauge } from "@/components/ui/feedback/Gauge";
 import { ProgressBar } from "@/components/ui/feedback/ProgressBar";
 import { StepperRow } from "@/components/ui/inputs/StepperRow";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
@@ -35,7 +36,7 @@ function useTicker(from: number, dir: 1 | -1) {
 // countdown. Finished: the summary and Save. End workout is in the header menu.
 export default function Session() {
   const colors = useThemeColors();
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [weight, setWeight] = useState(80);
   const [reps, setReps] = useState(6);
   const [ending, setEnding] = useState(false);
@@ -63,7 +64,7 @@ export default function Session() {
           actions={[{ label: "End workout", systemImage: "xmark.circle", destructive: true, onPress: () => setEnding(true) }]}
         />
       ) : null}
-      <DemoScreen bar={bar} footer={footer} secondary={state !== "Finished"}>
+      <DemoScreen footer={footer} secondary={state !== "Finished"}>
         {state === "Finished" ? (
           <>
             <TitleBlock title="Workout done" subtitle={`${W.name}, today at 07:10`} />
@@ -95,6 +96,16 @@ export default function Session() {
                 </Text>
                 <ProgressBar value={state === "Resting" ? rest / 90 : 2 / 18} accessibilityLabel={state === "Resting" ? "Rest left" : "Workout progress"} />
               </Card>
+            </View>
+
+            <View style={{ flexDirection: "row", justifyContent: "space-around", marginHorizontal: 16, marginBottom: 20 }}>
+              {state === "Resting" ? (
+                <Gauge label="Rest" value={rest} max={90} valueLabel={clock(rest)} tone={rest <= 10 ? "warning" : "default"} />
+              ) : (
+                <Gauge label="Sets" value={2} max={18} valueLabel="2/18" />
+              )}
+              <Gauge label="Volume" value={960} max={6240} valueLabel="960" />
+              <Gauge label="Time" value={elapsed} max={45 * 60} valueLabel={`${Math.floor(elapsed / 60)}m`} />
             </View>
 
             {state === "Lifting" ? (

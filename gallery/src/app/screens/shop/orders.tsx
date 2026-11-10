@@ -1,19 +1,20 @@
-import { Badge, EmptyState, SkeletonList } from "@/components/ui";
+import { Badge, EmptyState } from "@/components/ui";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { ART, SHOP_ORDERS, STATUS_BADGE, euro, productById } from "@/gallery/demo/data";
 import { DemoScreen, MEDIA_INSET, MediaRow, useStates } from "@/gallery/demo/parts";
 import { router } from "expo-router";
+import { SkeletonTitle, SkeletonMediaRows } from "@/gallery/demo/skeletons";
 
 const STATES = ["Loaded", "Loading", "Empty"] as const;
 
 // Order history: one photo row per order, status as a badge, newest first.
 export default function Orders() {
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
 
   if (state === "Empty") {
     return (
-      <DemoScreen scroll={false} bar={bar}>
+      <DemoScreen scroll={false}>
         <EmptyState art={{ image: ART.box }} title="No orders yet" body="Your orders and their tracking show up here" action={{ label: "Start shopping", onPress: () => router.push("/screens/shop/home") }} />
       </DemoScreen>
     );
@@ -34,9 +35,14 @@ export default function Orders() {
     ));
 
   return (
-    <DemoScreen bar={bar}>
+    <DemoScreen>
       {state === "Loading" ? (
-        <SkeletonList count={4} />
+        <>
+          <SkeletonTitle />
+          <SkeletonMediaRows count={2} trailing="badge" />
+          <SkeletonTitle />
+          <SkeletonMediaRows count={2} trailing="badge" />
+        </>
       ) : (
         <>
           <SectionTitle>In progress</SectionTitle>

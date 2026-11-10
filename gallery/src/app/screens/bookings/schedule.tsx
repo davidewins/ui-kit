@@ -1,4 +1,4 @@
-import { Badge, EmptyState, SkeletonList } from "@/components/ui";
+import { Badge, EmptyState } from "@/components/ui";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { Chip } from "@/components/ui/inputs/Chip";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
@@ -8,13 +8,14 @@ import { ChipRow, DemoScreen, MEDIA_INSET, MediaRow, StatTiles, TimeColumn, useS
 import { Stack, router } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";
+import { SkeletonTiles, SkeletonTitle, SkeletonMediaRows } from "@/gallery/demo/skeletons";
 
 const STATES = ["Busy", "Loading", "Day off"] as const;
 
 // A salon's day: pick the day, three numbers, then morning and afternoon.
 // New booking is the header Plus (a modal).
 export default function Schedule() {
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [day, setDay] = useState(2);
   const live = BOOKINGS.filter((b) => b.status !== "Cancelled");
   const revenue = live.reduce((n, b) => n + serviceById(b.service).price, 0);
@@ -46,14 +47,20 @@ export default function Schedule() {
           ),
         }}
       />
-      <DemoScreen bar={bar}>
+      <DemoScreen>
         <ChipRow>
           {DAYS.map((d, i) => (
             <Chip key={d} label={i === 2 ? `Today, ${d}` : d} selected={day === i} onPress={() => setDay(i)} />
           ))}
         </ChipRow>
         {state === "Loading" ? (
-          <SkeletonList count={6} />
+          <>
+            <SkeletonTiles />
+            <SkeletonTitle />
+            <SkeletonMediaRows count={3} lead="time" />
+            <SkeletonTitle />
+            <SkeletonMediaRows count={3} lead="time" />
+          </>
         ) : state === "Day off" ? (
           <EmptyState
             layout="inline"

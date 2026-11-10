@@ -1,5 +1,5 @@
-import { Badge, Text, View } from "@/components/ui";
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
+import { Badge, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
@@ -25,7 +25,7 @@ export default function BookingDetail() {
   const b = bookingById(id);
   const c = clientById(b.client);
   const s = serviceById(b.service);
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [cancelling, setCancelling] = useState(false);
 
   const footer =
@@ -50,7 +50,7 @@ export default function BookingDetail() {
           ...(state === "Confirmed" ? [{ label: "Cancel booking", systemImage: "xmark.circle", destructive: true, onPress: () => setCancelling(true) }] : []),
         ]}
       />
-      <DemoScreen bar={bar} footer={footer} secondary={state === "Confirmed"}>
+      <DemoScreen footer={footer} secondary={state === "Confirmed"}>
         <SettingsIdentity
             leading={<Avatar name={c.name} size={60} />}
             title={c.name}

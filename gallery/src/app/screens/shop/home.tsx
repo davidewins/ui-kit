@@ -1,4 +1,4 @@
-import { SkeletonList, Text, View } from "@/components/ui";
+import { Text, View } from "@/components/ui";
 import { LoadErrorState } from "@/components/LoadErrorState";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { Chip } from "@/components/ui/inputs/Chip";
@@ -6,12 +6,14 @@ import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { BASKET, PRODUCTS } from "@/gallery/demo/data";
 import { priceLine, stockBadge } from "@/gallery/demo/shop";
 import { ChipRow, DemoScreen, GUTTER, PhotoGrid, PhotoTile, RADIUS, useStates } from "@/gallery/demo/parts";
+import { Skeleton } from "@/components/ui/feedback/Skeleton";
 import { Toast } from "@/lib/toast";
 import { Image } from "expo-image";
 import { Stack, router } from "expo-router";
 import { Search, ShoppingBag } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable } from "react-native";
+import { SkeletonTitle, SkeletonPhotoGrid } from "@/gallery/demo/skeletons";
 
 const CATEGORIES = ["All", "Running", "Lifestyle", "Audio", "Accessories"] as const;
 const STATES = ["Loaded", "Loading", "Offline"] as const;
@@ -20,7 +22,7 @@ const FEATURED = PRODUCTS.find((p) => p.id === "aero")!;
 // Shop home: Search and Bag in the header, category chips, one featured
 // product, then everything in a two-up grid.
 export default function ShopHome() {
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [cat, setCat] = useState<(typeof CATEGORIES)[number]>("All");
   const shown = PRODUCTS.filter((p) => cat === "All" || p.category === cat);
   const inBag = BASKET.reduce((n, l) => n + l.qty, 0);
@@ -37,7 +39,7 @@ export default function ShopHome() {
           ),
         }}
       />
-      <DemoScreen bar={bar} scroll={state !== "Offline"}>
+      <DemoScreen scroll={state !== "Offline"}>
         {state === "Offline" ? (
           <LoadErrorState title="You're offline" message="We couldn't load the shop. Check your connection and try again." onRetry={() => Toast.info("Retrying")} />
         ) : (
@@ -48,7 +50,11 @@ export default function ShopHome() {
               ))}
             </ChipRow>
             {state === "Loading" ? (
-              <SkeletonList count={4} />
+              <>
+                {cat === "All" ? <Skeleton height={220} radius={RADIUS} style={{ marginHorizontal: GUTTER, marginBottom: 18 }} /> : null}
+                <SkeletonTitle />
+                <SkeletonPhotoGrid count={4} />
+              </>
             ) : (
               <>
                 {cat === "All" ? <Featured /> : null}

@@ -14,9 +14,13 @@ export function CompartmentIndex({ id }: { id: string }) {
       contentContainerStyle={{ paddingTop: 8, paddingBottom: insets.bottom + 32 }}
     >
       <SettingsGroup>
-        {entriesIn(id).map((e) => (
-          <SettingsRow key={e.route} label={e.title} Icon={e.Icon} href={hrefOf(e) as Href} navigates />
-        ))}
+        {entriesIn(id).flatMap((e) =>
+          e.states
+            ? e.states.map((st) => (
+                <SettingsRow key={`${e.route}-${st}`} label={e.title} trailing={st} Icon={e.Icon} href={hrefOf(e, st) as Href} navigates />
+              ))
+            : [<SettingsRow key={e.route} label={e.title} Icon={e.Icon} href={hrefOf(e) as Href} navigates />],
+        )}
       </SettingsGroup>
     </ScrollView>
   );

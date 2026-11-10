@@ -1,4 +1,4 @@
-import { EmptyState, SkeletonList } from "@/components/ui";
+import { EmptyState } from "@/components/ui";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { Chip } from "@/components/ui/inputs/Chip";
 import { ART, WORKOUTS, type WorkoutKind } from "@/gallery/demo/data";
@@ -6,13 +6,14 @@ import { ChipRow, DemoScreen, PhotoGrid, PhotoTile, useStates } from "@/gallery/
 import { Stack, router } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";
+import { SkeletonPhotoGrid } from "@/gallery/demo/skeletons";
 
 const KINDS = ["All", "Strength", "HIIT", "Yoga", "Core"] as const;
 const STATES = ["Loaded", "Loading", "No results"] as const;
 
 // Workout library: filter chips, a two-up photo grid, New in the header.
 export default function Workouts() {
-  const { state, bar } = useStates(STATES);
+  const { state } = useStates(STATES);
   const [kind, setKind] = useState<(typeof KINDS)[number]>("All");
   const shown = state === "No results" ? [] : WORKOUTS.filter((w) => kind === "All" || w.kind === (kind as WorkoutKind));
 
@@ -25,14 +26,14 @@ export default function Workouts() {
           ),
         }}
       />
-      <DemoScreen bar={bar}>
+      <DemoScreen>
         <ChipRow>
           {KINDS.map((k) => (
             <Chip key={k} label={k} selected={kind === k} onPress={() => setKind(k)} />
           ))}
         </ChipRow>
         {state === "Loading" ? (
-          <SkeletonList count={4} />
+          <SkeletonPhotoGrid count={4} ratio={0.8} />
         ) : shown.length === 0 ? (
           <EmptyState
             layout="inline"
