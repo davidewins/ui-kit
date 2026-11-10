@@ -1,13 +1,17 @@
 // One stylist's day in a salon (modelled on Fresha's and Booksy's day
 // calendar, and iOS Calendar's day view with its week strip): the week to
-// pick from, the day in one line and one bar, then the day against the clock
-// with the overlap, the free gap and the cancellation where they fall.
+// pick from, the day's three figures and one bar on a panel, then the day
+// against the clock with the overlap, the free gap and the cancellation where
+// they fall. Tap a booking for the glass peek; long press the peek for the
+// rest (reschedule, message, cancel).
 import { EmptyState, Text, View } from "@/components/ui";
 import { DayTimeline } from "@/components/ui/calendar/DayTimeline";
 import { type CalendarEvent, dayKey } from "@/components/ui/calendar/timeline";
 import { WeekStrip } from "@/components/ui/calendar/WeekStrip";
 import { SegmentBar } from "@/components/ui/data/SegmentBar";
+import { Popover } from "@/components/ui/overlays/Popover";
 import { TABULAR, TYPE } from "@/components/ui/primitives/type";
+import { Panel } from "@/components/ui/surfaces/Panel";
 import { ART, euro } from "@/gallery/demo/data";
 import { DemoScreen } from "@/gallery/demo/parts";
 import { useHues } from "@/hooks/useHues";
@@ -16,7 +20,7 @@ import { Toast } from "@/lib/toast";
 import { differenceInMinutes, format, isSameDay } from "date-fns";
 import { useMemo, useState } from "react";
 import { BOOKINGS, type Booking, NOW, SERVICES, STYLISTS, type ServiceKind, TODAY, bookingStatus, bookingsOn, duration } from "./data";
-import { CalendarHeader, EventPeek, useKindHue } from "./parts";
+import { CalendarHeader, EventPeek, SALON_ACTIONS, useBookingActions, useKindHue } from "./parts";
 
 const ME = STYLISTS[0];
 const KINDS: ServiceKind[] = ["Cut", "Colour", "Styling", "Barber"];
@@ -41,6 +45,7 @@ export default function CalendarDay() {
   const kindHue = useKindHue();
   const [day, setDay] = useState(TODAY);
   const [pickedId, setPickedId] = useState<string | null>(null);
+  const { actionsFor, dialog } = useBookingActions();
 
   const bookings = useMemo(() => bookingsOn(day, ME.id), [day]);
   const live = bookings.filter((b) => !b.cancelled);
@@ -59,17 +64,19 @@ export default function CalendarDay() {
   const revenue = live.reduce((n, b) => n + SERVICES[b.service].price, 0);
   const picked = bookings.find((b) => b.id === pickedId);
   const fact = (value: string, label: string) => (
-    <Text weight="medium" style={[TYPE.body, { color: colors.muted }]}>
-      <Text weight="semibold" style={TABULAR}>
+    <View style={{ flex: 1 }}>
+      <Text weight="semibold" style={[TYPE.title, TABULAR]}>
         {value}
       </Text>
-      {` ${label}`}
-    </Text>
+      <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>
+        {label}
+      </Text>
+    </View>
   );
 
   return (
     <>
-      <CalendarHeader view="day" addLabel="New booking" onAdd={() => Toast.info(`New booking, ${format(day, "EEE d MMM")}`)} onToday={() => setDay(TODAY)} />
+      <CalendarHeader view="day" addLabel="New booking" onAdd={() => Toast.info(`New booking, ${format(day, "EEE d MMM")}`)} onToday={() => setDay(TODAY)} actions={SALON_ACTIONS} />
       <DemoScreen
         footer={
           picked ? (
@@ -87,6 +94,7 @@ export default function CalendarDay() {
                 `${format(picked.start, "HH:mm")} to ${format(picked.end, "HH:mm")} · ${bookingStatus(picked)} · ${picked.visit === 1 ? "first visit" : `visit ${picked.visit}`}`,
               ]}
               action={{ label: NEXT_STEP[bookingStatus(picked)], onPress: () => Toast.info(`${NEXT_STEP[bookingStatus(picked)]}: ${picked.client}`) }}
+              menu={actionsFor(picked)}
             />
           ) : undefined
         }
@@ -101,20 +109,18 @@ export default function CalendarDay() {
               setPickedId(null);
             }}
           />
-          <View style={{ marginTop: 14, marginBottom: 18, rowGap: 10 }}>
-            <View style={{ rowGap: 2 }}>
-              <Text weight="semibold" style={TYPE.headline}>
-                {`${isSameDay(day, TODAY) ? "Today, " : ""}${format(day, "EEEE d MMMM")}`}
-              </Text>
-              {live.length ? (
-                <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 12 }}>
-                  {fact(String(live.length), "bookings")}
-                  {fact(duration(minutes), `of ${ME.to - ME.from} h booked`)}
-                  {fact(euro(revenue), "expected")}
-                </View>
-              ) : null}
-            </View>
-            {live.length ? (
+        </View>
+        <Panel style={{ marginTop: 14, marginBottom: 18, rowGap: 14 }}>
+          <Text weight="semibold" style={TYPE.headline}>
+            {`${isSameDay(day, TODAY) ? "Today, " : ""}${format(day, "EEEE d MMMM")}`}
+          </Text>
+          {live.length ? (
+            <>
+              <View style={{ flexDirection: "row", columnGap: 12 }}>
+                {fact(String(live.length), live.length === 1 ? "booking" : "bookings")}
+                {fact(duration(minutes), `of ${ME.to - ME.from} h booked`)}
+                {fact(euro(revenue), "expected")}
+              </View>
               <SegmentBar
                 height={8}
                 segments={KINDS.map((k) => {
@@ -122,9 +128,21 @@ export default function CalendarDay() {
                   return { label: k, value: m, color: kindHue[k], display: duration(m) };
                 }).filter((s) => s.value > 0)}
               />
-            ) : null}
-          </View>
-        </View>
+              <View style={{ flexDirection: "row" }}>
+                <Popover label="How the day is counted" systemImage="info.circle">
+                  <View style={{ width: 280, padding: 16, rowGap: 8 }}>
+                    <Text weight="medium" style={TYPE.body}>
+                      Cancelled bookings are left out of the hours and the money.
+                    </Text>
+                    <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>
+                      {`Booked time is each service's length against ${ME.name}'s ${ME.to - ME.from} hour shift. A gap of an hour or more shows on the clock as a free slot.`}
+                    </Text>
+                  </View>
+                </Popover>
+              </View>
+            </>
+          ) : null}
+        </Panel>
         {bookings.length ? (
           <View style={{ marginHorizontal: 16 }}>
             <DayTimeline
@@ -141,9 +159,12 @@ export default function CalendarDay() {
             />
           </View>
         ) : (
-          <EmptyState layout="inline" art={{ image: ART.calendar }} title="Closed on Sundays" body={`${ME.name} has no bookings on this day. Open it up from your hours to take some.`} action={{ label: "Opening hours", onPress: () => Toast.info("Opening hours") }} />
+          <Panel flush>
+            <EmptyState layout="inline" art={{ image: ART.calendar }} title="Closed on Sundays" body={`${ME.name} has no bookings on this day. Open it up from your hours to take some.`} action={{ label: "Opening hours", onPress: () => Toast.info("Opening hours") }} />
+          </Panel>
         )}
       </DemoScreen>
+      {dialog}
     </>
   );
 }

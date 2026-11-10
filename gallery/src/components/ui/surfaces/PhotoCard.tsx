@@ -58,7 +58,7 @@ export function PhotoCard({
       <View style={{ position: "absolute", left: inset, right: inset, bottom: inset }}>
         <GlassSurface
           fill
-          fillOpacity={0.55}
+          fillOpacity={0.25}
           style={{ borderRadius: radius - inset, borderCurve: "continuous", overflow: "hidden", paddingHorizontal: compact ? 10 : 14, paddingVertical: compact ? 8 : 12 }}
         >
           {compact ? (
@@ -74,7 +74,7 @@ export function PhotoCard({
                 <Text weight="semibold" numberOfLines={1} style={TYPE.headline}>{title}</Text>
                 {subtitle ? <Text weight="medium" numberOfLines={1} style={[TYPE.sub, { color: colors.muted }]}>{subtitle}</Text> : null}
               </View>
-              {figure ? <Text weight="semibold" style={[TYPE.title, TABULAR]}>{figure}</Text> : null}
+              {figure ? <Text weight="semibold" style={[TYPE.headline, TABULAR]}>{figure}</Text> : null}
             </View>
           )}
         </GlassSurface>

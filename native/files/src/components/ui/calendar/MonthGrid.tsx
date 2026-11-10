@@ -47,7 +47,7 @@ export function MonthGrid({ month, onMonthChange, selected, onSelect, marks = {}
 
   return (
     <View>
-      <PeriodBar title={format(month, "MMMM")} detail={format(month, "yyyy")} unit="month" onPrevious={() => onMonthChange(addMonths(month, -1))} onNext={() => onMonthChange(addMonths(month, 1))} />
+      <PeriodBar title={format(month, "MMMM yyyy")} unit="month" onPrevious={() => onMonthChange(addMonths(month, -1))} onNext={() => onMonthChange(addMonths(month, 1))} />
       <View style={{ flexDirection: "row", marginTop: 12, marginBottom: 4 }}>
         {WEEKDAYS.map((d, i) => (
           <Text key={d} weight="medium" style={[TYPE.caption, { flex: 1, textAlign: "center", color: i > 4 ? colors.muted : colors.text, opacity: i > 4 ? 0.7 : 0.6 }]}>

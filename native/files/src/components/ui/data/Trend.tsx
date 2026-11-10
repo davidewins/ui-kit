@@ -1,5 +1,5 @@
-// A change since last time, beside the figure it belongs to: an arrow and
-// the change in the status colour, then what it is compared with in grey.
+// A change since last time, on its own line under the figure it belongs to:
+// an arrow, the change and what it is compared with, all in the status colour.
 // Green means better, which is not always up (resting heart rate, refunds):
 // say so with `good`.
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -26,14 +26,10 @@ export function Trend({ value, direction, good, note }: TrendProps) {
   return (
     <View style={{ flexDirection: "row", alignItems: "center", columnGap: 3 }} accessibilityLabel={`${direction} ${value}${note ? ` ${note}` : ""}`}>
       <Arrow size={15} color={color} strokeWidth={2.6} />
-      <Text weight="semibold" style={[TYPE.sub, TABULAR, { color }]}>
-        {value}
+      <Text weight="semibold" numberOfLines={1} style={[TYPE.sub, TABULAR, { color, flexShrink: 1 }]}>
+        {note ? `${value} ${note}` : value}
       </Text>
-      {note ? (
-        <Text weight="medium" style={[TYPE.sub, { color: colors.muted, marginLeft: 3 }]}>
-          {note}
-        </Text>
-      ) : null}
+
     </View>
   );
 }

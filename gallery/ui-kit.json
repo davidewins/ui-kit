@@ -121,7 +121,9 @@
     "src/components/ui/primitives/type.ts",
     "src/components/ui/surfaces/PhotoCard.tsx",
     "src/components/ui/surfaces/TicketCard.tsx",
-    "src/hooks/useHues.ts"
+    "src/hooks/useHues.ts",
+    "src/components/ui/surfaces/Panel.tsx",
+    "src/components/ui/actions/RoundButton.tsx"
   ],
   "seeds": [
     "src/hooks/useFontFamily.ts"

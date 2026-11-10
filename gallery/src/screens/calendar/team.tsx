@@ -1,13 +1,16 @@
 // The resource view (modelled on Fresha's team calendar and Google Calendar's
 // people-side-by-side day): three stylists as three columns on one clock, how
 // full each one is in the column header, and how many chairs are busy each
-// hour in the bars above.
+// hour in the bars on the panel above. Tap a booking for the glass peek; long
+// press the peek for the rest (reschedule, message, cancel).
 import { EmptyState, Text, View } from "@/components/ui";
 import { DayTimeline, type TimelineColumn } from "@/components/ui/calendar/DayTimeline";
 import { PeriodBar } from "@/components/ui/calendar/PeriodBar";
 import type { CalendarEvent } from "@/components/ui/calendar/timeline";
 import { BarChart } from "@/components/ui/data/BarChart";
+import { Popover } from "@/components/ui/overlays/Popover";
 import { TABULAR, TYPE } from "@/components/ui/primitives/type";
+import { Panel } from "@/components/ui/surfaces/Panel";
 import { ART } from "@/gallery/demo/data";
 import { DemoScreen } from "@/gallery/demo/parts";
 import { useHues } from "@/hooks/useHues";
@@ -16,7 +19,7 @@ import { Toast } from "@/lib/toast";
 import { addDays, format, isSameDay } from "date-fns";
 import { useMemo, useState } from "react";
 import { NOW, SERVICES, STYLISTS, type ServiceKind, TODAY, bookingStatus, bookingsOn, duration } from "./data";
-import { CalendarHeader, EventPeek, useKindHue } from "./parts";
+import { CalendarHeader, EventPeek, SALON_ACTIONS, useBookingActions, useKindHue } from "./parts";
 
 const OPEN = Math.min(...STYLISTS.map((s) => s.from));
 const CLOSE = Math.max(...STYLISTS.map((s) => s.to));
@@ -31,6 +34,7 @@ export default function CalendarTeam() {
   const [day, setDay] = useState(TODAY);
   const [pickedId, setPickedId] = useState<string | null>(null);
   const isToday = isSameDay(day, TODAY);
+  const { actionsFor, dialog } = useBookingActions();
 
   const bookings = useMemo(() => bookingsOn(day), [day]);
   const live = bookings.filter((b) => !b.cancelled);
@@ -76,6 +80,7 @@ export default function CalendarTeam() {
           setDay(TODAY);
           setPickedId(null);
         }}
+        actions={[{ label: "Add a shift", systemImage: "person.badge.plus", onPress: () => Toast.info("Add a shift") }, ...SALON_ACTIONS]}
       />
       <DemoScreen
         footer={
@@ -88,15 +93,18 @@ export default function CalendarTeam() {
                 `${format(picked.start, "HH:mm")} to ${format(picked.end, "HH:mm")} · ${bookingStatus(picked)}`,
               ]}
               action={{ label: NEXT_STEP[bookingStatus(picked)], onPress: () => Toast.info(`${NEXT_STEP[bookingStatus(picked)]}: ${picked.client}`) }}
+              menu={actionsFor(picked)}
             />
           ) : undefined
         }
       >
         <View style={{ marginHorizontal: 16 }}>
-          <PeriodBar title={format(day, "EEE d MMM")} detail={isToday ? "Today" : undefined} unit="day" onPrevious={() => move(-1)} onNext={() => move(1)} />
-          {bookings.length ? (
-            <>
-              <View style={{ flexDirection: "row", alignItems: "flex-end", columnGap: 16, marginTop: 10 }}>
+          <PeriodBar title={`${isToday ? "Today, " : ""}${format(day, "EEE d MMM")}`} unit="day" onPrevious={() => move(-1)} onNext={() => move(1)} />
+        </View>
+        {bookings.length ? (
+          <>
+            <Panel style={{ marginTop: 10, marginBottom: 18 }}>
+              <View style={{ flexDirection: "row", alignItems: "flex-end", columnGap: 16 }}>
                 <View>
                   <Text weight="semibold" style={[TYPE.display, TABULAR]}>
                     {`${Math.round((booked / shift) * 100)}%`}
@@ -121,7 +129,21 @@ export default function CalendarTeam() {
               <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted, marginTop: 10 }]}>
                 {`Chairs busy by hour. Fullest at ${peak.hour}:00, ${quiet.chairs < 0.5 ? "nobody" : `only ${quiet.chairs.toFixed(1)}`} at ${quiet.hour}:00.`}
               </Text>
-              <View style={{ flexDirection: "row", columnGap: 14, marginTop: 12, marginBottom: 18 }}>
+              <View style={{ flexDirection: "row", marginTop: 12 }}>
+                <Popover label="How busy is worked out" systemImage="info.circle">
+                  <View style={{ width: 280, padding: 16, rowGap: 8 }}>
+                    <Text weight="medium" style={TYPE.body}>
+                      Each bar is the minutes booked across the team in that hour, divided by 60.
+                    </Text>
+                    <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>
+                      {`A stylist with two clients at once, while a colour takes, still fills one chair. The percentage is booked time against the ${shift / 60} hours on the rota, and cancelled bookings are left out.`}
+                    </Text>
+                  </View>
+                </Popover>
+              </View>
+            </Panel>
+            <View style={{ marginHorizontal: 16 }}>
+              <View style={{ flexDirection: "row", columnGap: 14, marginBottom: 14 }}>
                 {KINDS.map((k) => (
                   <View key={k} style={{ flexDirection: "row", alignItems: "center", columnGap: 6 }}>
                     <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: kindHue[k] }} />
@@ -132,13 +154,15 @@ export default function CalendarTeam() {
                 ))}
               </View>
               <DayTimeline day={day} events={events} columns={columns} startHour={OPEN} endHour={CLOSE} hourHeight={64} now={NOW} onPressEvent={(e) => setPickedId(e.id)} />
-            </>
-          ) : null}
-        </View>
-        {bookings.length ? null : (
-          <EmptyState layout="inline" art={{ image: ART.calendar }} title="Closed on Sundays" body="Nobody is on the rota. Add a shift to open the day for bookings." action={{ label: "Add a shift", plus: true, onPress: () => Toast.info("Add a shift") }} />
+            </View>
+          </>
+        ) : (
+          <Panel flush style={{ marginTop: 10 }}>
+            <EmptyState layout="inline" art={{ image: ART.calendar }} title="Closed on Sundays" body="Nobody is on the rota. Add a shift to open the day for bookings." action={{ label: "Add a shift", plus: true, onPress: () => Toast.info("Add a shift") }} />
+          </Panel>
         )}
       </DemoScreen>
+      {dialog}
     </>
   );
 }

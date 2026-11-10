@@ -3,6 +3,7 @@
 // something, the selected day filled. For choosing the day a timeline or list
 // below it shows. Swipe sideways or use the arrows to change week. For a whole
 // month use MonthGrid.
+import { RoundButton } from "../actions/RoundButton";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { addDays, format, isSameDay, startOfWeek } from "date-fns";
 import * as Haptics from "expo-haptics";
@@ -49,15 +50,11 @@ export function WeekStrip({ selected, onSelect, dots = {}, today = new Date(), a
   ).current;
 
   const arrow = (label: string, Icon: typeof ChevronLeft, weeks: number) => (
-    <Pressable
-      onPress={() => shift(weeks)}
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      hitSlop={6}
-      style={({ pressed }) => ({ width: 28, height: 28, borderRadius: 14, marginTop: 20, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? colors.border : colors.surface })}
-    >
-      <Icon size={16} color={colors.text} strokeWidth={2.2} />
-    </Pressable>
+    <View style={{ marginTop: 18 }}>
+      <RoundButton size={30} accessibilityLabel={label} onPress={() => shift(weeks)}>
+        <Icon size={16} color={colors.text} strokeWidth={2.2} />
+      </RoundButton>
+    </View>
   );
 
   return (

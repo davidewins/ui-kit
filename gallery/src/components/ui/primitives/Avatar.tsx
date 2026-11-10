@@ -122,7 +122,8 @@ export function AvatarStack({ people, size = 28, max = 3, total }: AvatarStackPr
       ))}
       {rest > 0 ? (
         <View
-          style={{ position: "absolute", left: shown.length * step, width: cell, height: cell, borderRadius: cell / 2, borderWidth: edge, borderColor: colors.background, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center" }}
+          // Above the last face, so the "+" is never covered.
+          style={{ position: "absolute", left: shown.length * step, zIndex: count + 1, width: cell, height: cell, borderRadius: cell / 2, borderWidth: edge, borderColor: colors.background, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center" }}
         >
           <Text weight="semibold" numberOfLines={1} style={[size >= 36 ? TYPE.sub : TYPE.caption, TABULAR]}>
             {`+${rest > 99 ? "99" : rest}`}

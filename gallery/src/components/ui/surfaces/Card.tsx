@@ -1,28 +1,31 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/ui/surfaces/Card.tsx. Edit it there and sync; local edits fail ui-kit:check.
 import { useThemeColors } from "@/hooks/useThemeColors";
 import React from "react";
-import { StyleSheet, type ViewStyle } from "react-native";
+import type { ViewStyle } from "react-native";
+import { useUniwind } from "uniwind";
 import { View } from "../primitives/View";
 
 /**
- * A raised card: card fill (white / #1c1c1e), hairline border and a soft drop
- * shadow, for cards that must stand out on a flat page (analytics, David
- * 3 Nov). Dark mode has no visible shadow on black, so the border carries
- * the edge. No overflow hidden: it would clip the shadow on iOS.
+ * A raised card: card fill, a real edge and a layered shadow, for blocks
+ * that must lift off a flat page (David, 3 Nov, then 10 Nov: "no proper
+ * shadows or borders"). Light: a tight contact shadow plus a wide soft one.
+ * Dark: a shadow cannot show on black, so the lighter fill, a lit top edge
+ * and a 1pt rim carry the lift. No overflow hidden: it would clip the shadow.
  */
 export function useRaisedCardStyle(radius = 24): ViewStyle {
   const colors = useThemeColors();
+  const { theme } = useUniwind();
+  const dark = theme === "dark";
   return {
     backgroundColor: colors.card,
     borderRadius: radius,
     borderCurve: "continuous",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 14,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: dark ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.07)",
+    boxShadow: dark
+      ? "inset 0 1px 0 rgba(255,255,255,0.10), 0 18px 40px rgba(0,0,0,0.6)"
+      : "0 1px 2px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.12)",
+    elevation: 4,
   };
 }
 

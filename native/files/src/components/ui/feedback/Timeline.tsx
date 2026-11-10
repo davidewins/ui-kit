@@ -73,7 +73,7 @@ export function Timeline({
                   {e.title}
                 </Text>
                 {e.time ? (
-                  <Text weight="medium" style={[TYPE.sub, TABULAR, { color: e.state === "current" ? colors.text : colors.muted }]}>
+                  <Text weight="medium" style={[TYPE.body, TABULAR, { color: e.state === "upcoming" ? colors.muted : colors.text }]}>
                     {e.time}
                   </Text>
                 ) : null}

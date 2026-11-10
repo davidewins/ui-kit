@@ -13,7 +13,7 @@ export interface BarListItem {
   value: number;
   /** The figure as written ("€1,240", "12 sets"). Defaults to the value. */
   display?: string;
-  /** A second, muted fact after the label ("38 sold"). */
+  /** A second, muted fact on its own line under the label ("38 sold"). */
   detail?: string;
   color?: string;
   /** A thumbnail, avatar or mark before the label. */
@@ -30,20 +30,18 @@ export function BarList({ items, max, color }: { items: BarListItem[]; max?: num
           {item.leading}
           <View style={{ flex: 1, rowGap: 6 }}>
             <View style={{ flexDirection: "row", alignItems: "baseline", columnGap: 8 }}>
-              <Text weight="medium" numberOfLines={1} style={[TYPE.body, { flexShrink: 1 }]}>
+              <Text weight="medium" numberOfLines={1} style={[TYPE.body, { flex: 1 }]}>
                 {item.label}
               </Text>
-              {item.detail ? (
-                <Text weight="medium" numberOfLines={1} style={[TYPE.sub, TABULAR, { color: colors.muted, flex: 1 }]}>
-                  {item.detail}
-                </Text>
-              ) : (
-                <View style={{ flex: 1 }} />
-              )}
               <Text weight="semibold" style={[TYPE.body, TABULAR]}>
                 {item.display ?? item.value}
               </Text>
             </View>
+            {item.detail ? (
+              <Text weight="medium" numberOfLines={1} style={[TYPE.sub, TABULAR, { color: colors.muted, marginTop: -4 }]}>
+                {item.detail}
+              </Text>
+            ) : null}
             <View style={{ height: 6, borderRadius: 3, backgroundColor: colors.border }}>
               <View style={{ width: `${Math.max(2, Math.min(100, (item.value / top) * 100))}%`, height: 6, borderRadius: 3, backgroundColor: item.color ?? color ?? colors.text }} />
             </View>

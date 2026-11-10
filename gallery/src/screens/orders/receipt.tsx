@@ -1,7 +1,9 @@
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
 import { Badge, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
+import { ContextMenu } from "@/components/ui/actions/ContextMenu";
 import { CopyButton } from "@/components/ui/actions/CopyButton";
+import { Popover } from "@/components/ui/overlays/Popover";
 import { BrandMark } from "@/components/ui/primitives/BrandMark";
 import { TABULAR, TYPE } from "@/components/ui/primitives/type";
 import { TicketCard } from "@/components/ui/surfaces/TicketCard";
@@ -17,7 +19,9 @@ const BASKET_HREF = "/screens/orders/product-gallery";
 
 // A delivered order as the receipt itself, the way Stripe and Apple send
 // one: who took the money, how much, then every line to the cent. The stub
-// under the tear carries the number you quote when something is wrong.
+// under the tear carries the number you quote when something is wrong. Long
+// press a line to buy it again or send it back; the VAT button splits the
+// total into net and tax.
 export default function Receipt() {
   const colors = useThemeColors();
   const order = DELIVERED;
@@ -25,7 +29,7 @@ export default function Receipt() {
   const hairline = <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: 14 }} />;
   const line = (label: string, value: string, strong = false) => (
     <View key={label} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" }}>
-      <Text weight={strong ? "semibold" : "medium"} style={[strong ? TYPE.headline : TYPE.body, strong ? null : { color: colors.muted }]}>{label}</Text>
+      <Text weight={strong ? "semibold" : "medium"} style={strong ? TYPE.headline : TYPE.body}>{label}</Text>
       <Text weight={strong ? "semibold" : "medium"} style={[strong ? TYPE.headline : TYPE.body, TABULAR]}>{value}</Text>
     </View>
   );
@@ -77,16 +81,25 @@ export default function Receipt() {
               {order.lines.map((l) => {
                 const item = ITEMS[l.item];
                 return (
-                  <View key={l.item} style={{ flexDirection: "row", columnGap: 10 }}>
-                    <Text weight="medium" style={[TYPE.body, TABULAR, { width: 26, color: colors.muted }]}>{`${l.qty} ×`}</Text>
-                    <View style={{ flex: 1, rowGap: 1 }}>
-                      <Text weight="medium" numberOfLines={1} style={TYPE.body}>{item.name}</Text>
-                      <Text weight="medium" numberOfLines={1} style={[TYPE.sub, TABULAR, { color: colors.muted }]}>
-                        {[lineDetail(l), l.qty > 1 ? `${eur2(item.price)} each` : null].filter(Boolean).join(", ")}
-                      </Text>
+                  <ContextMenu
+                    key={l.item}
+                    actions={[
+                      { label: "Buy again", systemImage: "bag.badge.plus", onPress: () => Toast.success(`${item.name} added to your bag`) },
+                      { label: "Return this item", systemImage: "arrow.uturn.backward", onPress: () => Toast.info("Returns are open until 21 Nov") },
+                      { label: "Report a problem", systemImage: "exclamationmark.bubble", onPress: () => Toast.info("Chat with Runlab") },
+                    ]}
+                  >
+                    <View style={{ flexDirection: "row", columnGap: 10 }}>
+                      <Text weight="medium" style={[TYPE.body, TABULAR, { width: 26 }]}>{`${l.qty} ×`}</Text>
+                      <View style={{ flex: 1, rowGap: 1 }}>
+                        <Text weight="medium" numberOfLines={1} style={TYPE.body}>{item.name}</Text>
+                        <Text weight="medium" numberOfLines={1} style={[TYPE.sub, TABULAR, { color: colors.muted }]}>
+                          {[lineDetail(l), l.qty > 1 ? `${eur2(item.price)} each` : null].filter(Boolean).join(", ")}
+                        </Text>
+                      </View>
+                      <Text weight="medium" style={[TYPE.body, TABULAR]}>{eur2(item.price * l.qty)}</Text>
                     </View>
-                    <Text weight="medium" style={[TYPE.body, TABULAR]}>{eur2(item.price * l.qty)}</Text>
-                  </View>
+                  </ContextMenu>
                 );
               })}
             </View>
@@ -98,13 +111,26 @@ export default function Receipt() {
               <View style={{ height: 2 }} />
               {line("Total", eur2(sum), true)}
               <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>{`Includes ${eur2(vatIn(sum))} VAT at 23%. VAT no. ${SHOP.vatNo}`}</Text>
+              <View style={{ flexDirection: "row", marginTop: 6 }}>
+                <Popover label="VAT breakdown" systemImage="info.circle">
+                  <View style={{ width: 280, padding: 16, rowGap: 6 }}>
+                    {line("Net of VAT", eur2(sum - vatIn(sum)))}
+                    {line("VAT at 23%", eur2(vatIn(sum)))}
+                    <View style={{ height: 2 }} />
+                    {line("Total", eur2(sum), true)}
+                    <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>{`Charged by ${SHOP.name}, VAT no. ${SHOP.vatNo}. Delivery carries VAT at the same rate.`}</Text>
+                  </View>
+                </Popover>
+              </View>
             </View>
 
             {hairline}
             <View style={{ flexDirection: "row", alignItems: "center", columnGap: 12 }}>
               <BrandMark brand={order.paidWith.brand} size={24} />
-              <Text weight="medium" style={[TYPE.body, TABULAR, { flex: 1 }]}>{order.paidWith.label}</Text>
-              <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>Auth 038214</Text>
+              <View style={{ flex: 1, rowGap: 1 }}>
+                <Text weight="medium" style={[TYPE.body, TABULAR]}>{order.paidWith.label}</Text>
+                <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>Auth 038214</Text>
+              </View>
             </View>
           </TicketCard>
         </View>

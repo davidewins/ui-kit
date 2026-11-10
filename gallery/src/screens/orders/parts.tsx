@@ -1,18 +1,55 @@
 // Small arrangements the order screens share, so a row means the same thing
 // on every one of them: a 44pt leading slot (photo, brand mark or icon), two
-// lines of text starting at x = 72, and one thing at the end.
+// lines of text starting at x = 72, and one thing at the end. Rows sit
+// together on a RowPanel; a line of text is one size and one colour.
 import { Text, View } from "@/components/ui";
+import type { TimelineEvent } from "@/components/ui/feedback/Timeline";
+import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { TABULAR, TYPE } from "@/components/ui/primitives/type";
+import { Panel } from "@/components/ui/surfaces/Panel";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { Toast } from "@/lib/toast";
 import * as Haptics from "expo-haptics";
 import { Image, type ImageProps } from "expo-image";
 import { type ReactNode, useState } from "react";
-import { Pressable } from "react-native";
+import { Pressable, Share, type StyleProp, type ViewStyle } from "react-native";
 
 export const GUTTER = 16;
 export const LEAD = 44;
-/** Where a row's text starts: pass to SettingsGroup's separatorInset. */
+/** Where a row's text starts, from the edge of its panel: where hairlines begin. */
 export const TEXT_INSET = GUTTER + LEAD + 12;
+
+/** The inner clip of a RowPanel: a pressed row's fill stops at the panel's
+ *  corners, and the panel itself stays unclipped so its shadow shows. */
+const CLIP = { marginBottom: 0, borderRadius: 23, borderCurve: "continuous", overflow: "hidden" } as const;
+
+/** A raised panel of rows, with a hairline between them starting at the text. */
+export function RowPanel({ children, inset = TEXT_INSET, style }: { children: ReactNode; inset?: number; style?: StyleProp<ViewStyle> }) {
+  return (
+    <Panel flush style={style}>
+      <SettingsGroup separatorInset={inset} style={CLIP}>
+        {children}
+      </SettingsGroup>
+    </Panel>
+  );
+}
+
+/** Kit Timeline sets an event's time smaller on its title's line. These
+ *  screens keep one text style per line, so the time leads the line below. */
+export const timeFirst = (events: readonly TimelineEvent[]): TimelineEvent[] =>
+  events.map(({ time, detail, ...e }) => ({ ...e, detail: [time, detail].filter(Boolean).join(" · ") }));
+
+/** Copy from a long-press menu, the way the kit's CopyButton does it: the
+ *  share sheet stands in on a build made before expo-clipboard was added. */
+export async function copyText(value: string, done = "Copied") {
+  try {
+    const Clipboard = require("expo-clipboard") as typeof import("expo-clipboard");
+    await Clipboard.setStringAsync(value);
+    Toast.success(done);
+  } catch {
+    Share.share({ message: value }).catch(() => {});
+  }
+}
 
 export function Thumb({ source, size = LEAD }: { source: ImageProps["source"]; size?: number }) {
   return <Image source={source} style={{ width: size, height: size, borderRadius: size * 0.26 }} contentFit="cover" />;
@@ -84,7 +121,8 @@ export interface MoneyLine {
   good?: boolean;
 }
 
-/** The sums: a few lines, the total in bold, and the tax inside it. */
+/** The sums: a few lines, the total in bold, and the tax inside it. A label
+ *  and its value are the same size and colour, at opposite ends of the row. */
 export function Money({
   lines,
   total,
@@ -105,7 +143,7 @@ export function Money({
     <View style={{ paddingHorizontal: inset, rowGap: 6 }}>
       {lines.map((l) => (
         <View key={l.label} style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text weight="medium" style={[TYPE.body, { color: colors.muted }]}>{l.label}</Text>
+          <Text weight="medium" style={TYPE.body}>{l.label}</Text>
           <Text weight="medium" style={[TYPE.body, TABULAR, l.good ? { color: colors.success } : null]}>{l.value}</Text>
         </View>
       ))}

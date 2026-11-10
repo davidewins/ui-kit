@@ -1,10 +1,13 @@
-// Gallery-only: the two pieces every social screen shares. The network marks
-// in their own colours, and the hrefs between the screens (the lead rewires
-// these when the routes are final).
+// Gallery-only: the pieces every social screen shares. The network marks in
+// their own colours, the hrefs between the screens (the lead rewires these
+// when the routes are final), the clip for rows inside a flush Panel, and
+// copy to the clipboard for the long-press menus.
 import { SocialMark } from "@/apps/tkvr/components/SocialMark";
 import { useHues } from "@/hooks/useHues";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { View } from "react-native";
+import { Toast } from "@/lib/toast";
+import type { ReactNode } from "react";
+import { Share, View } from "react-native";
 import type { Network } from "./data";
 
 export const HREF = {
@@ -28,8 +31,9 @@ export function useNetworkColor() {
 }
 
 /** The network's mark in a filled circle. `ring` carves it out of whatever it
- *  overlaps (an avatar's corner). */
-export function NetworkBadge({ network, size = 22, ring = false }: { network: Network; size?: number; ring?: boolean }) {
+ *  overlaps (an avatar's corner); `on` is the colour behind it when that is
+ *  a Panel and not the page. */
+export function NetworkBadge({ network, size = 22, ring = false, on }: { network: Network; size?: number; ring?: boolean; on?: string }) {
   const colors = useThemeColors();
   const fill = BRAND[network] ?? colors.text;
   const ink = BRAND[network] ? "#fff" : colors.background;
@@ -41,7 +45,7 @@ export function NetworkBadge({ network, size = 22, ring = false }: { network: Ne
         height: size + edge * 2,
         borderRadius: size / 2 + edge,
         borderWidth: edge,
-        borderColor: colors.background,
+        borderColor: on ?? colors.background,
         backgroundColor: fill,
         alignItems: "center",
         justifyContent: "center",
@@ -50,4 +54,22 @@ export function NetworkBadge({ network, size = 22, ring = false }: { network: Ne
       <SocialMark network={network} size={Math.round(size * 0.56)} color={ink} />
     </View>
   );
+}
+
+/** Rows inside `<Panel flush>`: clips their pressed fill to the panel's
+ *  corners. The Panel cannot clip itself, it would cut off its own shadow. */
+export function PanelRows({ children }: { children: ReactNode }) {
+  return <View style={{ borderRadius: 23, borderCurve: "continuous", overflow: "hidden" }}>{children}</View>;
+}
+
+/** Copy from a long-press menu, the way the kit's CopyButton does it: the
+ *  share sheet stands in on a build made before expo-clipboard was added. */
+export async function copyText(value: string, done = "Copied") {
+  try {
+    const Clipboard = require("expo-clipboard") as typeof import("expo-clipboard");
+    await Clipboard.setStringAsync(value);
+    Toast.success(done);
+  } catch {
+    Share.share({ message: value }).catch(() => {});
+  }
 }

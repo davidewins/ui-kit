@@ -1,23 +1,27 @@
 // The list view of the content calendar (modelled on Fantastical's list and
 // Google Calendar's Schedule): two weeks, day by day, with the quiet days
 // folded to a line so the gaps in the plan are as visible as the posts. The
-// bars at the top are the same fourteen days as a count.
+// panel at the top counts the same fourteen days as bars and filters the list
+// to one status; each week is its own panel.
 import { Text, View } from "@/components/ui";
+import { Menu } from "@/components/ui/actions/Menu";
 import { AgendaList, type AgendaEvent } from "@/components/ui/calendar/AgendaList";
 import { PeriodBar } from "@/components/ui/calendar/PeriodBar";
 import { BarChart } from "@/components/ui/data/BarChart";
 import { SectionHeader } from "@/components/ui/lists/SectionHeader";
 import { TABULAR, TYPE } from "@/components/ui/primitives/type";
+import { Panel } from "@/components/ui/surfaces/Panel";
 import { DemoScreen } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { addDays, format, getISOWeek, isSameDay, isSameMonth, startOfWeek } from "date-fns";
 import { useMemo, useState } from "react";
-import { POSTS, type Post, TODAY, compact, fromNow } from "./data";
-import { CalendarHeader, NetworkMarks, useStatusColor } from "./parts";
+import { POSTS, type Post, type PostStatus, STATUS_LABEL, TODAY, compact, fromNow } from "./data";
+import { CONTENT_ACTIONS, CalendarHeader, NetworkMarks, useStatusColor } from "./parts";
 
 const THIS_WEEK = startOfWeek(TODAY, { weekStartsOn: 1 });
 const DAYS = 14;
+const STATUSES: PostStatus[] = ["scheduled", "draft", "failed", "published"];
 
 const fact = (p: Post) =>
   p.status === "published" && p.results ? `${compact(p.results.views)} views` : p.status === "scheduled" ? fromNow(p.at) : p.status === "failed" ? "failed to post" : "draft";
@@ -26,9 +30,10 @@ export default function CalendarAgenda() {
   const colors = useThemeColors();
   const statusColor = useStatusColor();
   const [from, setFrom] = useState(THIS_WEEK);
+  const [status, setStatus] = useState<PostStatus | null>(null);
   const to = addDays(from, DAYS - 1);
 
-  const posts = useMemo(() => POSTS.filter((p) => p.at >= from && p.at < addDays(from, DAYS)), [from]);
+  const posts = useMemo(() => POSTS.filter((p) => p.at >= from && p.at < addDays(from, DAYS) && (!status || p.status === status)), [from, status]);
   const events: AgendaEvent[] = useMemo(
     () =>
       posts.map((p) => ({
@@ -53,25 +58,32 @@ export default function CalendarAgenda() {
 
   return (
     <>
-      <CalendarHeader view="agenda" addLabel="New post" onAdd={() => Toast.info("New post")} onToday={() => setFrom(THIS_WEEK)} />
+      <CalendarHeader view="agenda" addLabel="New post" onAdd={() => Toast.info("New post")} onToday={() => setFrom(THIS_WEEK)} actions={CONTENT_ACTIONS} />
       <DemoScreen>
         <View style={{ marginHorizontal: 16 }}>
           <PeriodBar
             title={`${format(from, isSameMonth(from, to) ? "d" : "d MMM")} to ${format(to, "d MMM")}`}
-            detail="2 weeks"
             unit="two weeks"
             onPrevious={() => setFrom(addDays(from, -DAYS))}
             onNext={() => setFrom(addDays(from, DAYS))}
           />
-          <Text weight="medium" style={[TYPE.body, TABULAR, { color: colors.muted, marginTop: 6, marginBottom: 14 }]}>
-            <Text weight="semibold" style={TABULAR}>
-              {posts.length}
+        </View>
+        <Panel style={{ marginTop: 10 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", columnGap: 12 }}>
+            <Text weight="semibold" numberOfLines={1} style={[TYPE.headline, TABULAR, { flex: 1 }]}>
+              {`${posts.length} ${posts.length === 1 ? "post" : "posts"} in 2 weeks`}
             </Text>
-            {" posts, "}
-            <Text weight="semibold" style={TABULAR}>
-              {empty}
-            </Text>
-            {` ${empty === 1 ? "day" : "days"} still with nothing`}
+            <Menu
+              label={status ? STATUS_LABEL[status] : "All posts"}
+              systemImage="line.3.horizontal.decrease"
+              items={[
+                { label: "All posts", selected: !status, onPress: () => setStatus(null) },
+                ...STATUSES.map((s) => ({ label: STATUS_LABEL[s], selected: s === status, onPress: () => setStatus(s) })),
+              ]}
+            />
+          </View>
+          <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted, marginTop: 2, marginBottom: 14 }]}>
+            {`${empty} ${empty === 1 ? "day" : "days"} still with nothing`}
           </Text>
           <BarChart
             height={72}
@@ -83,12 +95,14 @@ export default function CalendarAgenda() {
             }))}
             accessibilityLabel="Posts per day over these two weeks"
           />
-        </View>
+        </Panel>
 
         {[from, addDays(from, 7)].map((start) => (
           <View key={+start}>
-            <SectionHeader title={weekTitle(start)} count={inWeek(start)} />
-            <AgendaList from={start} days={7} events={events} today={TODAY} emptyLabel="Nothing planned" />
+            <SectionHeader title={`${weekTitle(start)}, ${inWeek(start)} ${inWeek(start) === 1 ? "post" : "posts"}`} />
+            <Panel flush style={{ paddingVertical: 4 }}>
+              <AgendaList from={start} days={7} events={events} today={TODAY} emptyLabel="Nothing planned" />
+            </Panel>
           </View>
         ))}
       </DemoScreen>

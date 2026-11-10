@@ -70,23 +70,25 @@ export function ConversationRow({ name, source, preview, lines = 1, time, unread
     >
       <Avatar name={name} source={source} size={AVATAR} status={status} badge={mark} />
       <View style={{ flex: 1, rowGap: 2 }}>
-        <View style={{ flexDirection: "row", alignItems: "baseline", columnGap: 8 }}>
+        {/* One text style per line: the name with the unread mark at its end,
+            then the preview and the time in the same size and colour. */}
+        <View style={{ flexDirection: "row", alignItems: "center", columnGap: 8 }}>
           <Text weight="semibold" numberOfLines={1} style={[TYPE.body, { flex: 1 }]}>
             {name}
           </Text>
-          <Text weight={isUnread ? "semibold" : "medium"} style={[TYPE.sub, TABULAR, { color: isUnread ? colors.text : colors.muted }]}>
-            {time}
-          </Text>
+          {typeof unread === "number" ? (
+            <CountBadge count={unread} />
+          ) : unread ? (
+            <View accessibilityLabel="Unread" style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.error }} />
+          ) : null}
         </View>
         <View style={{ flexDirection: "row", alignItems: "flex-start", columnGap: 12 }}>
           <Text weight="medium" numberOfLines={lines} style={[TYPE.sub, { flex: 1, color: isUnread ? colors.text : colors.muted }]}>
             {preview}
           </Text>
-          {typeof unread === "number" ? (
-            <CountBadge count={unread} />
-          ) : unread ? (
-            <View accessibilityLabel="Unread" style={{ width: 10, height: 10, borderRadius: 5, marginTop: 4, backgroundColor: colors.error }} />
-          ) : null}
+          <Text weight="medium" style={[TYPE.sub, TABULAR, { color: isUnread ? colors.text : colors.muted }]}>
+            {time}
+          </Text>
         </View>
       </View>
     </Pressable>

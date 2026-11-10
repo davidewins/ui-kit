@@ -1,14 +1,17 @@
-// Where a month's money went, the Monzo / Copilot way: what came in against
-// what went out as a ring you can pick slices of from the list beside it,
-// this month's takings racing last month's, and when the shop is busy.
+// Where a month's money went, the Monzo / Copilot way: what went out as a
+// ring you can pick slices of from the list beside it, this month's takings
+// racing last month's, and when the shop is busy.
 import { Text, View } from "@/components/ui";
+import { Menu } from "@/components/ui/actions/Menu";
 import { DonutChart } from "@/components/ui/data/DonutChart";
 import { Heatmap } from "@/components/ui/data/Heatmap";
 import { LineChart } from "@/components/ui/data/LineChart";
 import { Trend } from "@/components/ui/data/Trend";
 import { SectionHeader } from "@/components/ui/lists/SectionHeader";
+import { Popover } from "@/components/ui/overlays/Popover";
 import { TABULAR, TYPE } from "@/components/ui/primitives/type";
-import { DemoScreen, GUTTER } from "@/gallery/demo/parts";
+import { Panel } from "@/components/ui/surfaces/Panel";
+import { DemoScreen } from "@/gallery/demo/parts";
 import { useHues } from "@/hooks/useHues";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
@@ -20,6 +23,7 @@ export default function MoneySpending() {
   const colors = useThemeColors();
   const hues = useHues();
   const [picked, setPicked] = useState<number | undefined>(undefined);
+  const [month, setMonth] = useState("October 2026");
   const out = SPEND.reduce((n, s) => n + s.value, 0);
   const kept = INCOME - out;
   const day = CUMULATIVE.now.length;
@@ -27,52 +31,57 @@ export default function MoneySpending() {
 
   return (
     <DemoScreen>
-      <View style={{ flexDirection: "row", alignItems: "center", columnGap: 20, paddingHorizontal: GUTTER, paddingTop: 8 }}>
-        <DonutChart
-          size={164}
-          thickness={20}
-          segments={SPEND.map((s, i) => ({ value: s.value, label: s.label, color: picked === undefined || picked === i ? hues[s.hue] : colors.border }))}
-        >
-          <Text weight="semibold" style={[TYPE.title, TABULAR]}>{euro0(picked === undefined ? out : SPEND[picked].value)}</Text>
-          <Text weight="medium" style={[TYPE.caption, TABULAR, { color: colors.muted, textAlign: "center" }]}>
-            {picked === undefined ? `spent of ${euro0(INCOME)}\ntaken in October` : `${SPEND[picked].label.toLowerCase()}, ${Math.round((SPEND[picked].value / out) * 100)}%\nof spending`}
-          </Text>
-        </DonutChart>
-        <View style={{ flex: 1 }}>
-          {SPEND.map((s, i) => (
-            <Pressable
-              key={s.label}
-              onPress={() => {
-                Haptics.selectionAsync().catch(() => {});
-                setPicked(picked === i ? undefined : i);
-              }}
-              accessibilityRole="button"
-              accessibilityState={{ selected: picked === i }}
-              accessibilityLabel={`${s.label}, ${euro0(s.value)}`}
-              hitSlop={{ top: 2, bottom: 2 }}
-              style={{ flexDirection: "row", alignItems: "center", columnGap: 8, height: 32, opacity: picked === undefined || picked === i ? 1 : 0.4 }}
-            >
-              <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: hues[s.hue] }} />
-              <Text weight="medium" numberOfLines={1} style={[TYPE.sub, { flex: 1 }]}>{s.label}</Text>
-              <Text weight="semibold" style={[TYPE.sub, TABULAR]}>{euro0(s.value)}</Text>
-            </Pressable>
-          ))}
+      <Panel glass>
+        <View style={{ flexDirection: "row", alignItems: "center", columnGap: 18 }}>
+          <DonutChart
+            size={156}
+            thickness={19}
+            segments={SPEND.map((s, i) => ({ value: s.value, label: s.label, color: picked === undefined || picked === i ? hues[s.hue] : colors.border }))}
+          >
+            <Text weight="semibold" style={[TYPE.title, TABULAR]}>{euro0(picked === undefined ? out : SPEND[picked].value)}</Text>
+            <Text weight="medium" style={[TYPE.caption, TABULAR, { color: colors.muted, textAlign: "center" }]}>
+              {picked === undefined ? "spent in October" : `${Math.round((SPEND[picked].value / out) * 100)}% of spending`}
+            </Text>
+          </DonutChart>
+          <View style={{ flex: 1 }}>
+            {SPEND.map((s, i) => (
+              <Pressable
+                key={s.label}
+                onPress={() => {
+                  Haptics.selectionAsync().catch(() => {});
+                  setPicked(picked === i ? undefined : i);
+                }}
+                accessibilityRole="button"
+                accessibilityState={{ selected: picked === i }}
+                accessibilityLabel={`${s.label}, ${euro0(s.value)}`}
+                style={{ flexDirection: "row", alignItems: "center", columnGap: 8, height: 32, opacity: picked === undefined || picked === i ? 1 : 0.4 }}
+              >
+                <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: hues[s.hue] }} />
+                <Text weight="medium" numberOfLines={1} style={[TYPE.sub, { flex: 1 }]}>{s.label}</Text>
+                <Text weight="medium" style={[TYPE.sub, TABULAR]}>{euro0(s.value)}</Text>
+              </Pressable>
+            ))}
+          </View>
         </View>
-      </View>
-      <View style={{ paddingHorizontal: GUTTER, marginTop: 14 }}>
-        <Text weight="medium" style={[TYPE.body, TABULAR]}>
-          {`You kept ${euro0(kept)}, ${Math.round((kept / INCOME) * 100)}% of what came in. Stock was two thirds of everything spent.`}
+        <Text weight="medium" style={[TYPE.body, TABULAR, { marginTop: 14 }]}>
+          {`${euro0(INCOME)} came in and you kept ${euro0(kept)}, ${Math.round((kept / INCOME) * 100)}% of it. Stock was two thirds of everything spent.`}
         </Text>
-      </View>
+        <View style={{ flexDirection: "row", columnGap: 8, marginTop: 14 }}>
+          <Menu label={month} systemImage="calendar" items={["October 2026", "September 2026", "August 2026", "July 2026"].map((m) => ({ label: m, selected: m === month, onPress: () => setMonth(m) }))} />
+          <Popover label="What counts" systemImage="info.circle">
+            <View style={{ width: 280, padding: 16, rowGap: 8 }}>
+              <Text weight="medium" style={TYPE.body}>Spending is everything that left the account in the month, VAT included.</Text>
+              <Text weight="medium" style={[TYPE.sub, { color: colors.muted }]}>Refunds to customers are taken off what came in, not counted as spending. Transfers to your own savings are left out.</Text>
+            </View>
+          </Popover>
+        </View>
+      </Panel>
 
       <SectionHeader title="November against October" />
-      <View style={{ paddingHorizontal: GUTTER }}>
-        <View style={{ flexDirection: "row", alignItems: "baseline", columnGap: 10, marginBottom: 8 }}>
-          <Text style={TABULAR}>
-            <Text weight="semibold" style={[TYPE.title, { color: hues.green }]}>{`€${CUMULATIVE.now[day - 1].toFixed(1)}k`}</Text>
-            <Text weight="medium" style={[TYPE.sub, { color: colors.muted }]}>{` taken by the ${day}th`}</Text>
-          </Text>
-          <Trend value={euro0(ahead)} direction="up" note="ahead" />
+      <Panel>
+        <Text weight="semibold" style={[TYPE.title, TABULAR, { color: hues.green }]}>{`€${CUMULATIVE.now[day - 1].toFixed(1)}k taken by the ${day}th`}</Text>
+        <View style={{ marginTop: 2, marginBottom: 10 }}>
+          <Trend value={euro0(ahead)} direction="up" note="ahead of October on the same day" />
         </View>
         <LineChart
           height={140}
@@ -88,10 +97,10 @@ export default function MoneySpending() {
           <Legend color={hues.green} label="November" />
           <Legend color={colors.muted} label="October, same days" dashed />
         </View>
-      </View>
+      </Panel>
 
       <SectionHeader title="When you are busy" />
-      <View style={{ paddingHorizontal: GUTTER }}>
+      <Panel>
         <Text weight="medium" style={[TYPE.body, { marginBottom: 12 }]}>Saturday at 13:00 is your peak. Sunday after 18:00 takes almost nothing.</Text>
         <View style={{ flexDirection: "row", marginLeft: 18, marginBottom: 6 }}>
           {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
@@ -99,7 +108,7 @@ export default function MoneySpending() {
           ))}
         </View>
         <Heatmap columns={BUSY} color={hues.orange} gap={4} cellHeight={20} rowLabels={["10", "", "12", "", "14", "", "16", "", "18", "", "20"]} accessibilityLabel="Busy hours by weekday" />
-      </View>
+      </Panel>
     </DemoScreen>
   );
 }
