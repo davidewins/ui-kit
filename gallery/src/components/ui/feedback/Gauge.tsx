@@ -15,7 +15,7 @@ import {
 } from "@expo/ui/jetpack-compose";
 import { fillMaxWidth, size } from "@expo/ui/jetpack-compose/modifiers";
 import { Gauge as SwiftGauge, Text } from "@expo/ui/swift-ui";
-import { font, foregroundStyle, gaugeStyle, tint } from "@expo/ui/swift-ui/modifiers";
+import { Animation, animation, contentTransition, font, foregroundStyle, gaugeStyle, tint } from "@expo/ui/swift-ui/modifiers";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Platform } from "react-native";
 import { ComposeHost, SwiftHost } from "../native/NativeHost";
@@ -45,8 +45,16 @@ export function Gauge({ value, min = 0, max = 1, label, valueLabel, variant = "r
           value={value}
           min={min}
           max={max}
-          currentValueLabel={valueLabel ? <Text modifiers={[font({ family: "Geist-SemiBold" })]}>{valueLabel}</Text> : undefined}
-          modifiers={[gaugeStyle(variant === "ring" ? "circularCapacity" : "linearCapacity"), tint(color)]}
+          currentValueLabel={
+            valueLabel ? (
+              // The number rolls to its new value (SwiftUI numeric text).
+              <Text modifiers={[font({ family: "Geist-SemiBold" }), contentTransition("numericText"), animation(Animation.spring({ duration: 0.6 }), value)]}>
+                {valueLabel}
+              </Text>
+            ) : undefined
+          }
+          // The fill springs to a new reading instead of jumping.
+          modifiers={[gaugeStyle(variant === "ring" ? "circularCapacity" : "linearCapacity"), tint(color), animation(Animation.spring({ duration: 0.6 }), value)]}
         >
           <Text modifiers={[font({ family: "Geist-Medium", size: 13 }), foregroundStyle(colors.muted)]}>{label}</Text>
         </SwiftGauge>

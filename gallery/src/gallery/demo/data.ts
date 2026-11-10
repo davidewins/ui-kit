@@ -42,6 +42,11 @@ export interface Exercise {
   sets: number;
   reps: string;
   weight?: number;
+  /** What you did last time: "80 × 6". */
+  last?: string;
+  /** Best ever set. */
+  best?: string;
+  rest?: number;
 }
 
 export interface Workout {
@@ -65,11 +70,11 @@ export const WORKOUTS: Workout[] = [
     photo: PHOTO.barbell,
     coach: "Ciara Walsh",
     exercises: [
-      { name: "Back squat", sets: 4, reps: "6", weight: 80 },
-      { name: "Romanian deadlift", sets: 3, reps: "8", weight: 70 },
-      { name: "Walking lunge", sets: 3, reps: "10 each", weight: 16 },
-      { name: "Hip thrust", sets: 3, reps: "10", weight: 90 },
-      { name: "Calf raise", sets: 3, reps: "15", weight: 40 },
+      { name: "Back squat", sets: 4, reps: "6", weight: 80, last: "77.5 × 6", best: "100 × 3", rest: 150 },
+      { name: "Romanian deadlift", sets: 3, reps: "8", weight: 70, last: "70 × 8", best: "90 × 5", rest: 120 },
+      { name: "Walking lunge", sets: 3, reps: "10", weight: 16, last: "14 × 10", best: "20 × 10", rest: 90 },
+      { name: "Hip thrust", sets: 3, reps: "10", weight: 90, last: "85 × 10", best: "110 × 8", rest: 90 },
+      { name: "Calf raise", sets: 3, reps: "15", weight: 40, last: "40 × 15", best: "50 × 12", rest: 60 },
     ],
   },
   {
@@ -81,10 +86,10 @@ export const WORKOUTS: Workout[] = [
     photo: PHOTO.gym,
     coach: "Ciara Walsh",
     exercises: [
-      { name: "Bench press", sets: 4, reps: "6", weight: 60 },
-      { name: "Overhead press", sets: 3, reps: "8", weight: 35 },
-      { name: "Incline dumbbell press", sets: 3, reps: "10", weight: 22 },
-      { name: "Dips", sets: 3, reps: "12" },
+      { name: "Bench press", sets: 4, reps: "6", weight: 60, last: "60 × 6", best: "72.5 × 3", rest: 150 },
+      { name: "Overhead press", sets: 3, reps: "8", weight: 35, last: "32.5 × 8", best: "45 × 4", rest: 120 },
+      { name: "Incline dumbbell press", sets: 3, reps: "10", weight: 22, last: "20 × 10", best: "26 × 8", rest: 90 },
+      { name: "Dips", sets: 3, reps: "12", last: "BW × 11", best: "BW × 15", rest: 90 },
     ],
   },
   {
@@ -144,11 +149,34 @@ export const FOCUS: Record<WorkoutKind, { area: string; load: number }[]> = {
 export const workoutById = (id?: string) => WORKOUTS.find((w) => w.id === id) ?? WORKOUTS[0];
 
 export const SESSIONS = [
-  { id: "s5", workout: "lower-power", day: "Today", time: "07:10", minutes: 47, volume: "6,240 kg", prs: 1 },
-  { id: "s4", workout: "hiit-20", day: "Sunday", time: "10:02", minutes: 21, volume: "312 kcal", prs: 0 },
-  { id: "s3", workout: "upper-push", day: "Friday", time: "18:30", minutes: 42, volume: "4,880 kg", prs: 2 },
-  { id: "s2", workout: "sunset-flow", day: "Thursday", time: "20:15", minutes: 30, volume: "30 min", prs: 0 },
-  { id: "s1", workout: "core-15", day: "Tuesday", time: "07:00", minutes: 16, volume: "16 min", prs: 0 },
+  { id: "s5", workout: "lower-power", day: "Today", time: "07:10", minutes: 47, volume: "6,240 kg", prs: 1, sets: 16, kcal: 412, avgHr: 128 },
+  { id: "s4", workout: "hiit-20", day: "Sun", time: "10:02", minutes: 21, volume: "312 kcal", prs: 0, sets: 16, kcal: 312, avgHr: 156 },
+  { id: "s3", workout: "upper-push", day: "Fri", time: "18:30", minutes: 42, volume: "4,880 kg", prs: 2, sets: 13, kcal: 341, avgHr: 121 },
+  { id: "s2", workout: "sunset-flow", day: "Thu", time: "20:15", minutes: 30, volume: "30 min", prs: 0, sets: 9, kcal: 118, avgHr: 92 },
+  { id: "s1", workout: "core-15", day: "Tue", time: "07:00", minutes: 16, volume: "16 min", prs: 0, sets: 9, kcal: 96, avgHr: 110 },
+] as const;
+
+/** Minutes trained each day this week, Monday first (null = rest). */
+export const WEEK_MINUTES = [47, 16, null, 30, 42, null, 21] as const;
+
+/** Body and recovery, today vs a week ago. */
+export const BODY = [
+  { label: "Weight", value: "78.4", unit: "kg", delta: "-0.6", good: true },
+  { label: "Resting HR", value: "54", unit: "bpm", delta: "-2", good: true },
+  { label: "Sleep", value: "7:12", unit: "h", delta: "+0:20", good: true },
+  { label: "HRV", value: "61", unit: "ms", delta: "-4", good: false },
+  { label: "Steps", value: "8,412", unit: "", delta: "+1,204", good: true },
+  { label: "Water", value: "1.6", unit: "L", delta: "-0.4", good: false },
+] as const;
+
+/** The last six weeks, newest first. */
+export const WEEKS = [
+  { week: "This week", sessions: 5, minutes: 156, volume: "15.4 t", prs: 3 },
+  { week: "3 Nov", sessions: 4, minutes: 170, volume: "14.1 t", prs: 1 },
+  { week: "27 Oct", sessions: 4, minutes: 130, volume: "12.9 t", prs: 0 },
+  { week: "20 Oct", sessions: 5, minutes: 155, volume: "13.8 t", prs: 2 },
+  { week: "13 Oct", sessions: 3, minutes: 140, volume: "11.2 t", prs: 0 },
+  { week: "6 Oct", sessions: 2, minutes: 80, volume: "6.4 t", prs: 1 },
 ] as const;
 
 /** Minutes trained per week, oldest first. */
@@ -158,9 +186,11 @@ export const WEEK_DAYS = ["M", "T", "W", "T", "F", "S", "S"] as const;
 export const WEEK_PLAN = ["done", "done", "rest", "done", "planned", "planned", "rest"] as const;
 
 export const PERSONAL_BESTS = [
-  { lift: "Back squat", value: "100 kg", when: "Today" },
-  { lift: "Bench press", value: "72.5 kg", when: "Friday" },
-  { lift: "Deadlift", value: "130 kg", when: "12 Oct" },
+  { lift: "Back squat", value: "100 × 3", e1rm: "106 kg", when: "Today" },
+  { lift: "Bench press", value: "72.5 × 3", e1rm: "77 kg", when: "Fri" },
+  { lift: "Deadlift", value: "130 × 2", e1rm: "134 kg", when: "12 Oct" },
+  { lift: "Overhead press", value: "45 × 4", e1rm: "49 kg", when: "6 Oct" },
+  { lift: "Hip thrust", value: "110 × 8", e1rm: "139 kg", when: "27 Oct" },
 ] as const;
 
 // Shop

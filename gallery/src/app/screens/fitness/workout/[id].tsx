@@ -6,19 +6,31 @@ import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { FOCUS, workoutById } from "@/gallery/demo/data";
-import { DemoScreen, Hero, StatTiles, TitleBlock, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, Hero, MetricGrid, TitleBlock, useStates } from "@/gallery/demo/parts";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
-import { Dumbbell, User } from "lucide-react-native";
+import { User } from "lucide-react-native";
 
 const STATES = ["Not started", "In your plan", "Done today"] as const;
 
-// Workout detail: photo, title, three stat tiles, the exercise list, and the
-// one main action (Start) in the sticky footer. More in the header menu.
+/** The last times you did this workout, newest first. */
+const HISTORY = [
+  { date: "Today", time: "47:12", volume: "6,240", top: "100 × 3" },
+  { date: "3 Nov", time: "45:03", volume: "5,980", top: "95 × 3" },
+  { date: "27 Oct", time: "48:40", volume: "5,710", top: "92.5 × 4" },
+  { date: "20 Oct", time: "44:55", volume: "5,450", top: "90 × 5" },
+];
+
+// Workout detail, dense like a strength logger's routine page: photo, title,
+// badges, six numbers, every exercise with plan, load, last time and best,
+// focus by area, your history with this workout, then the coach. Start is
+// the one main action, in the sticky footer; more in the header menu.
 export default function WorkoutDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const w = workoutById(id);
   const { state } = useStates(STATES);
+  const sets = w.exercises.reduce((n, e) => n + e.sets, 0);
+  const volume = w.exercises.reduce((n, e) => n + e.sets * (parseInt(e.reps, 10) || 0) * (e.weight ?? 0), 0);
 
   return (
     <>
@@ -41,29 +53,71 @@ export default function WorkoutDetail() {
           />
         }
       >
-        <Hero source={w.photo} />
-        <TitleBlock title={w.name} subtitle={`${w.kind} with ${w.coach}`} />
-        {state !== "Not started" ? (
-          <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
+        <Hero source={w.photo} height={180} />
+        <TitleBlock title={w.name} subtitle={`${w.kind}, ${w.level}, with ${w.coach}`} />
+        <View style={{ flexDirection: "row", gap: 6, marginHorizontal: 16, marginBottom: 12 }}>
+          {state !== "Not started" ? (
             <Badge variant={state === "Done today" ? "success" : "default"}>{state === "Done today" ? "Done today, 47 min" : "Thursday, 07:00"}</Badge>
-          </View>
-        ) : null}
-        <StatTiles items={[{ value: `${w.minutes} min`, label: "Length" }, { value: String(w.exercises.length), label: "Exercises" }, { value: w.level, label: "Level" }]} />
+          ) : null}
+          <Badge>{`Done ${HISTORY.length} times`}</Badge>
+          <Badge variant="warning">1 PR in reach</Badge>
+        </View>
+        <MetricGrid
+          items={[
+            { label: "Length", value: String(w.minutes), unit: "min" },
+            { label: "Moves", value: String(w.exercises.length) },
+            { label: "Sets", value: String(sets) },
+            { label: "Target volume", value: (volume / 1000).toFixed(1), unit: "t" },
+            { label: "Energy", value: "~420", unit: "kcal" },
+            { label: "Last time", value: "47", unit: "min", delta: "+2 min", good: false },
+          ]}
+        />
+
+        <SectionTitle>Exercises</SectionTitle>
+        <DataTable
+          dense
+          columns={[
+            { key: "n", label: "#", width: 16, align: "left" },
+            { key: "name", label: "Exercise" },
+            { key: "plan", label: "Sets", width: 40 },
+            { key: "kg", label: "Load", width: 48 },
+            { key: "last", label: "Last", width: 60 },
+            { key: "best", label: "Best", width: 58 },
+          ]}
+          rows={w.exercises.map((e, i) => ({
+            n: String(i + 1),
+            name: e.name,
+            plan: `${e.sets}×${e.reps}`,
+            kg: e.weight ? `${e.weight}` : "BW",
+            last: e.last ?? "",
+            best: e.best ?? "",
+          }))}
+        />
+
         <SectionTitle>Focus</SectionTitle>
-        <View style={{ marginHorizontal: 16, marginBottom: 18, gap: 12 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 16, rowGap: 10, marginHorizontal: 16, marginBottom: 18 }}>
           {FOCUS[w.kind].map((f) => (
-            <Gauge key={f.area} variant="bar" label={f.area} value={f.load} valueLabel={f.load >= 0.8 ? "High" : f.load >= 0.5 ? "Medium" : "Light"} />
+            <View key={f.area} style={{ width: "47%" }}>
+              <Gauge variant="bar" label={f.area} value={f.load} valueLabel={`${Math.round(f.load * 100)}%`} />
+            </View>
           ))}
         </View>
-        <SectionTitle>Exercises</SectionTitle>
+
+        <SectionTitle>Your history</SectionTitle>
+        <DataTable
+          dense
+          columns={[
+            { key: "date", label: "Date" },
+            { key: "time", label: "Time", width: 52 },
+            { key: "volume", label: "Volume", width: 64 },
+            { key: "top", label: "Top set", width: 72 },
+          ]}
+          rows={HISTORY}
+          highlight={0}
+        />
+
         <SettingsGroup>
-          {w.exercises.map((e) => (
-            <SettingsRow key={e.name} label={e.name} Icon={Dumbbell} trailing={`${e.sets} × ${e.reps}${e.weight ? `, ${e.weight} kg` : ""}`} />
-          ))}
-        </SettingsGroup>
-        <SectionTitle>Coach</SectionTitle>
-        <SettingsGroup>
-          <SettingsRow label={w.coach} Icon={User} trailing="12 workouts" navigates onPress={() => Toast.info(`${w.coach}'s profile`)} />
+          <SettingsRow label={w.coach} Icon={User} trailing="Coach, 12 workouts" navigates onPress={() => Toast.info(`${w.coach}'s profile`)} />
         </SettingsGroup>
       </DemoScreen>
     </>

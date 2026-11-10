@@ -8,12 +8,13 @@ import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { workoutById } from "@/gallery/demo/data";
-import { DemoScreen, MEDIA_INSET, MediaRow, StatTiles, TitleBlock, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, MetricGrid, TitleBlock, useStates } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { router } from "expo-router";
 import { Check, Circle, Hash, Trophy, Weight } from "lucide-react-native";
 import { useEffect, useState } from "react";
+import Animated, { ZoomIn } from "react-native-reanimated";
 
 const STATES = ["Lifting", "Resting", "Finished"] as const;
 const W = workoutById("lower-power");
@@ -38,6 +39,16 @@ export default function Session() {
   const [weight, setWeight] = useState(80);
   const [reps, setReps] = useState(6);
   const [ending, setEnding] = useState(false);
+  // Sets of the first exercise logged so far; Log set really logs.
+  const [done, setDone] = useState(2);
+  const [justLogged, setJustLogged] = useState(-1);
+  const exSets = W.exercises[0].sets;
+  const totalSets = W.exercises.reduce((n, e) => n + e.sets, 0);
+  const logSet = () => {
+    if (done >= exSets) return;
+    setJustLogged(done);
+    setDone(done + 1);
+  };
   const elapsed = useTicker(18 * 60 + 42, 1);
   const rest = useTicker(90, -1);
   const ex = W.exercises[0];
@@ -45,7 +56,15 @@ export default function Session() {
   const footer =
     state === "Lifting" ? (
       <InsetFooter
-        primaryCta={{ label: "Log set 3", onPress: () => Toast.success(`Set 3 logged, ${weight} kg × ${reps}`) }}
+        primaryCta={{
+          label: done < exSets ? `Log set ${done + 1}` : "Next exercise",
+          onPress: () => {
+            if (done < exSets) {
+              logSet();
+              Toast.success(`Set ${done + 1} logged, ${weight} kg × ${reps}`);
+            } else Toast.info("Up next: Romanian deadlift");
+          },
+        }}
         secondaryCta={{ label: "Skip exercise", onPress: () => Toast.info("Up next: Romanian deadlift") }}
       />
     ) : state === "Resting" ? (
@@ -65,38 +84,94 @@ export default function Session() {
       <DemoScreen footer={footer} secondary={state !== "Finished"}>
         {state === "Finished" ? (
           <>
-            <TitleBlock title="Workout done" subtitle={`${W.name}, today at 07:10`} />
-            <StatTiles items={[{ value: "47 min", label: "Time" }, { value: "6,240 kg", label: "Volume" }, { value: "18", label: "Sets" }]} />
-            <SectionTitle>New best</SectionTitle>
+            <TitleBlock title="Workout done" subtitle={`${W.name}, today 07:10 to 07:57`} />
+            <MetricGrid
+              items={[
+                { label: "Time", value: "47:12", delta: "+2:09 vs last", good: false },
+                { label: "Volume", value: "6,240", unit: "kg", delta: "+260 kg", good: true },
+                { label: "Sets", value: "16", delta: "Same as last" , good: true },
+                { label: "Avg heart rate", value: "128", unit: "bpm" },
+                { label: "Max heart rate", value: "171", unit: "bpm" },
+                { label: "Energy", value: "412", unit: "kcal" },
+              ]}
+            />
             <SettingsGroup>
-              <SettingsRow label="Back squat" Icon={Trophy} trailing="100 kg × 3" />
+              <SettingsRow label="New best: back squat" Icon={Trophy} trailing="100 kg × 3" />
             </SettingsGroup>
             <SectionTitle>Exercises</SectionTitle>
-            <SettingsGroup>
-              {W.exercises.map((e) => (
-                <SettingsRow key={e.name} label={e.name} Icon={Check} trailing={`${e.sets} sets`} />
-              ))}
-            </SettingsGroup>
+            <DataTable
+              dense
+              columns={[
+                { key: "name", label: "Exercise" },
+                { key: "sets", label: "Sets", width: 36 },
+                { key: "top", label: "Top set", width: 64 },
+                { key: "vol", label: "Volume", width: 56 },
+                { key: "diff", label: "vs last", width: 52 },
+              ]}
+              rows={W.exercises.map((e, i) => ({
+                name: e.name,
+                sets: String(e.sets),
+                top: i === 0 ? "100 × 3" : `${e.weight} × ${e.reps}`,
+                vol: `${Math.round((e.sets * (parseInt(e.reps, 10) || 0) * (e.weight ?? 0)) / 10) * 10}`,
+                diff: i === 2 ? "-40" : `+${(i + 1) * 30}`,
+              }))}
+            />
           </>
         ) : (
           <>
-            <View style={{ marginHorizontal: 16, marginBottom: 18 }}>
+            <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
               <Card raised>
-                <Text weight="medium" style={{ fontSize: 15, color: colors.muted }}>{state === "Resting" ? "Rest" : ex.name}</Text>
-                <Text weight="semibold" style={{ fontSize: 44, lineHeight: 50, letterSpacing: -1, marginTop: 2, fontVariant: ["tabular-nums"] }}>
-                  {state === "Resting" ? clock(rest) : "Set 3 of 4"}
-                </Text>
-                <Text weight="medium" style={{ fontSize: 15, color: colors.muted, marginTop: 2 }}>
-                  {state === "Resting" ? `Next: ${ex.name}, set 3 of 4` : `Last time ${ex.weight} kg × ${ex.reps}`}
-                </Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View style={{ flex: 1, gap: 2 }}>
+                    <Text weight="semibold" numberOfLines={1} style={{ fontSize: 17, letterSpacing: -0.3 }}>{ex.name}</Text>
+                    <Text weight="medium" style={{ fontSize: 13, color: colors.muted }}>
+                      {state === "Resting" ? `Rest, then set ${Math.min(done + 1, ex.sets)} of ${ex.sets}` : `Set ${Math.min(done + 1, ex.sets)} of ${ex.sets}, rest ${clock(ex.rest ?? 90)} after`}
+                    </Text>
+                    <Text weight="medium" style={{ fontSize: 13, color: colors.muted }}>{`Exercise 1 of ${W.exercises.length}, best ${ex.best}`}</Text>
+                  </View>
+                  <Text weight="semibold" style={{ fontSize: 34, letterSpacing: -0.8, fontVariant: ["tabular-nums"] }}>
+                    {state === "Resting" ? clock(rest) : `${weight}`}
+                  </Text>
+                  {state === "Resting" ? null : <Text weight="medium" style={{ fontSize: 13, color: colors.muted, marginLeft: 4, marginTop: 10 }}>{`kg × ${reps}`}</Text>}
+                </View>
               </Card>
             </View>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-around", marginHorizontal: 16, marginBottom: 20 }}>
-              <Gauge label="Sets" value={2} max={18} valueLabel="2/18" />
-              <Gauge label="Volume" value={960} max={6240} valueLabel="960" />
+            <View style={{ flexDirection: "row", justifyContent: "space-around", marginHorizontal: 16, marginBottom: 8 }}>
+              <Gauge label="Sets" value={done} max={totalSets} valueLabel={`${done}/${totalSets}`} />
+              <Gauge label="Volume" value={done * weight * reps} max={6240} valueLabel={(done * weight * reps).toLocaleString("en-IE")} />
               <Gauge label="Time" value={elapsed} max={45 * 60} valueLabel={`${Math.floor(elapsed / 60)}m`} />
             </View>
+
+            <SectionTitle>{ex.name}</SectionTitle>
+            <DataTable
+              columns={[
+                { key: "set", label: "Set", width: 32, align: "left" },
+                { key: "prev", label: "Previous" },
+                { key: "kg", label: "kg", width: 48 },
+                { key: "reps", label: "Reps", width: 44 },
+                { key: "done", label: "", width: 24, align: "center" },
+              ]}
+              rows={Array.from({ length: ex.sets }, (_, i) => ({
+                set: String(i + 1),
+                prev: ex.last ?? "",
+                kg: i < done || i === done ? String(i < 2 ? ex.weight : weight) : "",
+                reps: i < done || i === done ? (i < 2 ? ex.reps : String(reps)) : "",
+                done:
+                  i < done ? (
+                    // The set just logged ticks in with a spring; earlier ones sit still.
+                    <Animated.View key={`check-${i}-${i === justLogged}`} entering={i === justLogged ? ZoomIn.springify().damping(12) : undefined}>
+                      <Check size={16} color={colors.success} strokeWidth={2.5} />
+                    </Animated.View>
+                  ) : i === done ? (
+                    <Circle size={14} color={colors.text} strokeWidth={2.5} />
+                  ) : (
+                    ""
+                  ),
+              }))}
+              highlight={done < ex.sets ? done : undefined}
+              muted={Array.from({ length: done }, (_, i) => i)}
+            />
 
             {state === "Lifting" ? (
               <SettingsGroup>
@@ -105,24 +180,24 @@ export default function Session() {
               </SettingsGroup>
             ) : null}
 
-            <SectionTitle>{ex.name}</SectionTitle>
-            <SettingsGroup>
-              {Array.from({ length: ex.sets }, (_, i) => (
-                <SettingsRow
-                  key={i}
-                  label={`Set ${i + 1}`}
-                  Icon={i < 2 ? Check : Circle}
-                  trailing={i < 2 ? `${ex.weight} kg × ${ex.reps}` : i === 2 ? "Now" : "To do"}
-                />
-              ))}
-            </SettingsGroup>
-
-            <SectionTitle>Up next</SectionTitle>
-            <SettingsGroup separatorInset={MEDIA_INSET}>
-              {W.exercises.slice(1, 3).map((e) => (
-                <MediaRow key={e.name} image={W.photo} title={e.name} subtitle={`${e.sets} × ${e.reps}${e.weight ? `, ${e.weight} kg` : ""}`} />
-              ))}
-            </SettingsGroup>
+            <SectionTitle>Still to do</SectionTitle>
+            <DataTable
+              dense
+              columns={[
+                { key: "name", label: "Exercise" },
+                { key: "plan", label: "Sets", width: 40 },
+                { key: "kg", label: "Load", width: 44 },
+                { key: "last", label: "Last", width: 60 },
+                { key: "rest", label: "Rest", width: 40 },
+              ]}
+              rows={W.exercises.slice(1).map((e) => ({
+                name: e.name,
+                plan: `${e.sets}×${e.reps}`,
+                kg: e.weight ? String(e.weight) : "BW",
+                last: e.last ?? "",
+                rest: clock(e.rest ?? 90),
+              }))}
+            />
           </>
         )}
       </DemoScreen>

@@ -14,11 +14,11 @@ type ImageSource = ImageProps["source"];
 import { type Href, Link, useLocalSearchParams } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
 import { type ReactNode, useState } from "react";
-import { Pressable, ScrollView, useWindowDimensions } from "react-native";
+import { Pressable, ScrollView, StyleSheet, useWindowDimensions } from "react-native";
 
 export const GUTTER = 16;
 export const RADIUS = 24;
-const THUMB = 52;
+const THUMB = 44;
 /** Pass to SettingsGroup when it holds MediaRows: hairlines start at the text. */
 export const MEDIA_INSET = SETTINGS_ROW.paddingHorizontal + THUMB + SETTINGS_ROW.gap;
 
@@ -48,7 +48,7 @@ export function TitleBlock({ title, subtitle, figure }: { title: string; subtitl
   );
 }
 
-/** A SettingsRow with a photo: same padding and pressed fill, 72pt tall.
+/** A SettingsRow with a photo: same padding and pressed fill, 60pt tall.
  *  With `href` it is a Link like SettingsRow's (asChild, Trigger, plain-object
  *  pressed style), its photo zooms into the page's Hero and press and hold
  *  peeks. With only `onPress` it is a plain row. */
@@ -76,7 +76,7 @@ export function MediaRow({
   const [pressed, setPressed] = useState(false);
   const tappable = !!(href || onPress);
   const thumb = image ? (
-    <Image source={image} style={{ width: THUMB, height: THUMB, borderRadius: 14, borderCurve: "continuous" }} contentFit="cover" />
+    <Image source={image} style={{ width: THUMB, height: THUMB, borderRadius: 10 }} contentFit="cover" />
   ) : (
     <View style={{ width: THUMB }}>{leading}</View>
   );
@@ -94,8 +94,8 @@ export function MediaRow({
       style={{
         flexDirection: "row",
         alignItems: "center",
-        minHeight: 72,
-        paddingVertical: 10,
+        minHeight: 60,
+        paddingVertical: 8,
         paddingHorizontal: SETTINGS_ROW.paddingHorizontal,
         columnGap: SETTINGS_ROW.gap,
         backgroundColor: pressed && tappable ? colors.border : "transparent",
@@ -308,6 +308,103 @@ export function TimeColumn({ start, end, struck = false }: { start: string; end:
     <View style={{ gap: 2 }}>
       <Text weight="semibold" style={{ fontSize: 15, fontVariant: ["tabular-nums"], textDecorationLine: line }}>{start}</Text>
       <Text weight="medium" style={{ fontSize: 13, color: colors.muted, fontVariant: ["tabular-nums"], textDecorationLine: line }}>{end}</Text>
+    </View>
+  );
+}
+
+/** Three-across metric cells: value with unit, label, and the change since
+ *  last week in status colour. Hairline grid, no fills: dense, not boxy. */
+export function MetricGrid({
+  items,
+}: {
+  items: readonly { label: string; value: string; unit?: string; delta?: string; good?: boolean }[];
+}) {
+  const colors = useThemeColors();
+  const rows: (typeof items)[number][][] = [];
+  for (let i = 0; i < items.length; i += 3) rows.push(items.slice(i, i + 3));
+  return (
+    <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
+      {rows.map((row, r) => (
+        <View key={r} style={{ flexDirection: "row", borderTopWidth: r ? StyleSheet.hairlineWidth : 0, borderColor: colors.border }}>
+          {row.map((m, c) => (
+            <View key={m.label} style={{ flex: 1, paddingVertical: 10, paddingLeft: c ? 12 : 0, borderLeftWidth: c ? StyleSheet.hairlineWidth : 0, borderColor: colors.border, gap: 1 }}>
+              <Text weight="medium" numberOfLines={1} style={{ fontSize: 12, color: colors.muted }}>{m.label}</Text>
+              <Text numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
+                <Text weight="semibold" style={{ fontSize: 17, letterSpacing: -0.3 }}>{m.value}</Text>
+                {m.unit ? <Text weight="medium" style={{ fontSize: 12, color: colors.muted }}>{` ${m.unit}`}</Text> : null}
+              </Text>
+              {m.delta ? (
+                <Text weight="medium" numberOfLines={1} style={{ fontSize: 12, color: m.good ? colors.success : colors.error, fontVariant: ["tabular-nums"] }}>{m.delta}</Text>
+              ) : null}
+            </View>
+          ))}
+          {Array.from({ length: 3 - row.length }, (_, i) => <View key={`pad-${i}`} style={{ flex: 1 }} />)}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+export interface Column {
+  key: string;
+  label: string;
+  /** Fixed width for number columns; omit for the one flexible column. */
+  width?: number;
+  align?: "left" | "right" | "center";
+}
+
+/** An aligned table: muted 12pt header, 40pt rows (32 dense), numbers in tabular
+ *  figures, hairlines between rows. For set logs, weekly totals and the like. */
+export function DataTable({
+  columns,
+  rows,
+  highlight,
+  muted,
+  dense = false,
+}: {
+  columns: readonly Column[];
+  rows: readonly Record<string, ReactNode>[];
+  /** Row index drawn bold (the current set). */
+  highlight?: number;
+  /** Row indexes drawn muted (done, or not yet). */
+  muted?: readonly number[];
+  /** 13pt text in 32pt rows, for tables with many columns. */
+  dense?: boolean;
+}) {
+  const colors = useThemeColors();
+  const size = dense ? 13 : 15;
+  const rowHeight = dense ? 32 : 40;
+  const cell = (c: Column) => ({
+    width: c.width,
+    flex: c.width ? undefined : 1,
+    textAlign: c.align ?? (c.width ? "right" : "left"),
+  });
+  return (
+    <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
+      <View style={{ flexDirection: "row", columnGap: 8, paddingBottom: 6, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: colors.border }}>
+        {columns.map((c) => (
+          <Text key={c.key} weight="medium" numberOfLines={1} style={[{ fontSize: 12, color: colors.muted }, cell(c) as object]}>{c.label}</Text>
+        ))}
+      </View>
+      {rows.map((r, i) => (
+        <View key={i} style={{ flexDirection: "row", alignItems: "center", columnGap: 8, height: rowHeight, borderBottomWidth: i < rows.length - 1 ? StyleSheet.hairlineWidth : 0, borderColor: colors.border }}>
+          {columns.map((c) => {
+            const v = r[c.key];
+            return typeof v === "string" || typeof v === "number" ? (
+              <Text
+                key={c.key}
+                weight={highlight === i ? "semibold" : "medium"}
+                numberOfLines={1}
+                style={[{ fontSize: size, fontVariant: ["tabular-nums"], color: muted?.includes(i) ? colors.muted : colors.text }, cell(c) as object]}
+              >
+                {v}
+              </Text>
+            ) : (
+              <View key={c.key} style={{ width: c.width, flex: c.width ? undefined : 1, alignItems: c.align === "left" ? "flex-start" : c.align === "center" ? "center" : "flex-end" }}>{v}</View>
+            );
+          })}
+        </View>
+      ))}
     </View>
   );
 }

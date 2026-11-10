@@ -8,7 +8,7 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { GUTTER, MEDIA_INSET } from "./parts";
 
-const THUMB = 52;
+const THUMB = 44;
 
 function Hairline({ inset }: { inset: number }) {
   const colors = useThemeColors();
@@ -42,7 +42,7 @@ function ChevronSlot() {
 
 type Lead = "photo" | "avatar" | "time";
 
-/** MediaRow-shaped rows: 72pt, photo / avatar / time column, two lines, an
+/** MediaRow-shaped rows: 60pt, photo / avatar / time column, two lines, an
  *  optional trailing figure or badge, hairlines from the text. */
 export function SkeletonMediaRows({
   count = 4,
@@ -60,9 +60,9 @@ export function SkeletonMediaRows({
       {Array.from({ length: count }, (_, i) => (
         <View key={i}>
           {i > 0 ? <Hairline inset={MEDIA_INSET} /> : null}
-          <View style={{ flexDirection: "row", alignItems: "center", minHeight: 72, paddingHorizontal: SETTINGS_ROW.paddingHorizontal, columnGap: SETTINGS_ROW.gap }}>
+          <View style={{ flexDirection: "row", alignItems: "center", minHeight: 60, paddingVertical: 8, paddingHorizontal: SETTINGS_ROW.paddingHorizontal, columnGap: SETTINGS_ROW.gap }}>
             {lead === "photo" ? (
-              <Skeleton width={THUMB} height={THUMB} radius={14} />
+              <Skeleton width={THUMB} height={THUMB} radius={10} />
             ) : lead === "avatar" ? (
               <Skeleton width={THUMB} height={THUMB} radius={THUMB / 2} />
             ) : (
@@ -162,13 +162,36 @@ export function SkeletonTitle() {
 }
 
 /** Bar gauges: a label line over a thin track, at the gauges' 12pt rhythm. */
-export function SkeletonBars({ count = 4 }: { count?: number }) {
+export function SkeletonBars({ count = 4, twoUp = false }: { count?: number; twoUp?: boolean }) {
   return (
-    <View style={{ marginHorizontal: GUTTER, marginBottom: 18, gap: 12 }}>
+    <View style={{ marginHorizontal: GUTTER, marginBottom: 18, flexDirection: twoUp ? "row" : "column", flexWrap: "wrap", columnGap: 16, rowGap: twoUp ? 10 : 12 }}>
       {Array.from({ length: count }, (_, i) => (
-        <View key={i} style={{ gap: 8 }}>
+        <View key={i} style={{ gap: 8, width: twoUp ? "47%" : "100%" }}>
           <Skeleton width={i % 2 ? "30%" : "22%"} height={11} radius={4} />
           <Skeleton width="100%" height={6} radius={3} />
+        </View>
+      ))}
+    </View>
+  );
+}
+
+/** DataTable's shape: a 12pt header line over hairline rows (32pt dense,
+ *  40pt normal), one flexible column and `numbers` right-aligned ones. */
+export function SkeletonTable({ rows = 5, numbers = 3, dense = true }: { rows?: number; numbers?: number; dense?: boolean }) {
+  const colors = useThemeColors();
+  const h = dense ? 32 : 40;
+  const cells = (bar: number) => (
+    <>
+      <View style={{ flex: 1 }}><Skeleton width="45%" height={bar} radius={4} /></View>
+      {Array.from({ length: numbers }, (_, i) => <Skeleton key={i} width={36} height={bar} radius={4} />)}
+    </>
+  );
+  return (
+    <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", columnGap: 8, height: 16, marginBottom: 6 }}>{cells(8)}</View>
+      {Array.from({ length: rows }, (_, i) => (
+        <View key={i} style={{ flexDirection: "row", alignItems: "center", columnGap: 8, height: h, borderTopWidth: StyleSheet.hairlineWidth, borderColor: colors.border }}>
+          {cells(dense ? 10 : 12)}
         </View>
       ))}
     </View>

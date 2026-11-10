@@ -1,21 +1,27 @@
-import { Card, EmptyState, Text, View } from "@/components/ui";
+import { Badge, Card, EmptyState, Text, View } from "@/components/ui";
 import { Sparkline } from "@/components/analytics/Sparkline";
 import { SegmentedControl } from "@/components/ui/inputs/SegmentedControl";
 import { Gauge } from "@/components/ui/feedback/Gauge";
 import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
-import { SettingsRow } from "@/components/ui/lists/SettingsRow";
-import { ART, PERSONAL_BESTS, SESSIONS, WEEKLY_MINUTES, workoutById } from "@/gallery/demo/data";
-import { DemoScreen, MEDIA_INSET, MediaRow, useStates } from "@/gallery/demo/parts";
+import { ART, PERSONAL_BESTS, SESSIONS, WEEKLY_MINUTES, WEEKS, workoutById } from "@/gallery/demo/data";
+import { DataTable, DemoScreen, MEDIA_INSET, MediaRow, useStates } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { router } from "expo-router";
-import { Trophy } from "lucide-react-native";
 import { useState } from "react";
 import { useWindowDimensions } from "react-native";
-import { SkeletonBars, SkeletonChartCard, SkeletonMediaRows, SkeletonSettingsRows, SkeletonTitle } from "@/gallery/demo/skeletons";
+import { SkeletonBars, SkeletonChartCard, SkeletonMediaRows, SkeletonTable, SkeletonTitle } from "@/gallery/demo/skeletons";
 
 const STATES = ["Loaded", "Loading", "Empty"] as const;
 const RANGES = ["Week", "Month", "Year"] as const;
+const AREAS = [
+  { area: "Legs", done: 3, goal: 3 },
+  { area: "Push", done: 1, goal: 2 },
+  { area: "Pull", done: 1, goal: 2 },
+  { area: "Core", done: 1, goal: 3 },
+  { area: "Mobility", done: 1, goal: 2 },
+  { area: "Cardio", done: 2, goal: 2 },
+];
 const TOTALS = ["156 min", "612 min", "6,980 min"];
 
 // Progress: the trend in one raised card, personal bests, then every session.
@@ -45,9 +51,11 @@ export default function History() {
         <>
           <SkeletonChartCard />
           <SkeletonTitle />
-          <SkeletonBars count={4} />
+          <SkeletonBars count={6} twoUp />
           <SkeletonTitle />
-          <SkeletonSettingsRows count={3} chevron={false} />
+          <SkeletonTable rows={6} numbers={4} />
+          <SkeletonTitle />
+          <SkeletonTable rows={5} numbers={3} />
           <SkeletonTitle />
           <SkeletonMediaRows count={5} trailing="figure" />
         </>
@@ -62,27 +70,55 @@ export default function History() {
             </Card>
           </View>
 
-          <SectionTitle>By area</SectionTitle>
-          <View style={{ marginHorizontal: 16, marginBottom: 18, gap: 12 }}>
-            <Gauge variant="bar" label="Legs" value={3} max={3} valueLabel="3 of 3" />
-            <Gauge variant="bar" label="Push" value={1} max={2} valueLabel="1 of 2" />
-            <Gauge variant="bar" label="Core" value={1} max={3} valueLabel="1 of 3" tone="warning" />
-            <Gauge variant="bar" label="Mobility" value={1} max={2} valueLabel="1 of 2" />
+          <SectionTitle>By area, this week</SectionTitle>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 16, rowGap: 10, marginHorizontal: 16, marginBottom: 18 }}>
+            {AREAS.map((a) => (
+              <View key={a.area} style={{ width: "47%" }}>
+                <Gauge variant="bar" label={a.area} value={a.done} max={a.goal} valueLabel={`${a.done} of ${a.goal}`} tone={a.done / a.goal < 0.5 ? "warning" : "default"} />
+              </View>
+            ))}
           </View>
 
-          <SectionTitle>Personal bests</SectionTitle>
-          <SettingsGroup>
-            {PERSONAL_BESTS.map((p) => (
-              <SettingsRow key={p.lift} label={p.lift} Icon={Trophy} trailing={`${p.value}, ${p.when}`} />
-            ))}
-          </SettingsGroup>
+          <SectionTitle>Weeks</SectionTitle>
+          <DataTable
+            dense
+            columns={[
+              { key: "week", label: "Week" },
+              { key: "sessions", label: "Sessions", width: 60 },
+              { key: "minutes", label: "Min", width: 40 },
+              { key: "volume", label: "Volume", width: 56 },
+              { key: "prs", label: "PRs", width: 32 },
+            ]}
+            rows={WEEKS.map((w) => ({ week: w.week, sessions: String(w.sessions), minutes: String(w.minutes), volume: w.volume, prs: w.prs ? String(w.prs) : "" }))}
+            highlight={0}
+          />
 
-          <SectionTitle>This week</SectionTitle>
+          <SectionTitle>Personal bests</SectionTitle>
+          <DataTable
+            dense
+            columns={[
+              { key: "lift", label: "Lift" },
+              { key: "best", label: "Best", width: 64 },
+              { key: "e1rm", label: "Est. 1RM", width: 64 },
+              { key: "when", label: "When", width: 52 },
+            ]}
+            rows={PERSONAL_BESTS.map((p) => ({ lift: p.lift, best: p.value, e1rm: p.e1rm, when: p.when }))}
+          />
+
+          <SectionTitle>Sessions</SectionTitle>
           <SettingsGroup separatorInset={MEDIA_INSET}>
             {SESSIONS.map((s) => {
               const w = workoutById(s.workout);
               return (
-                <MediaRow key={s.id} image={w.photo} title={w.name} subtitle={`${s.day} at ${s.time}, ${s.minutes} min`} trailing={s.volume} href={`/screens/fitness/workout/${w.id}`} />
+                <MediaRow
+                  key={s.id}
+                  image={w.photo}
+                  title={w.name}
+                  subtitle={`${s.day} ${s.time}, ${s.minutes} min, ${s.sets} sets, ${s.avgHr} bpm`}
+                  trailing={s.volume}
+                  accessory={s.prs ? <Badge variant="success">{`${s.prs} PR`}</Badge> : undefined}
+                  href={`/screens/fitness/workout/${w.id}`}
+                />
               );
             })}
           </SettingsGroup>
