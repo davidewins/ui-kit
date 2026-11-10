@@ -27,8 +27,8 @@ export default function NativeZoom() {
             </Link.Trigger>
             <Link.Preview />
             <Link.Menu>
-              <Link.MenuAction title="Play" icon="play.fill" onPress={() => Toast.success(`Playing ${p.title}`)} />
-              <Link.MenuAction title="Shuffle" icon="shuffle" onPress={() => Toast.success(`Shuffling ${p.title}`)} />
+              <Link.MenuAction title="Play" icon="play.fill" onPress={() => Toast.info(`Playing ${p.title}`)} />
+              <Link.MenuAction title="Shuffle" icon="shuffle" onPress={() => Toast.info(`Shuffling ${p.title}`)} />
               <Link.MenuAction title="Share" icon="square.and.arrow.up" onPress={() => Share.share({ message: `${p.title}: ${p.curator}` })} />
             </Link.Menu>
           </Link>

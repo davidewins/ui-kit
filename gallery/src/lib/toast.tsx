@@ -1,7 +1,9 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/lib/toast.tsx. Edit it there and sync; local edits fail ui-kit:check.
 // Toasts for every app: `Toast.success("Saved")`, same calls as the
 // toastify-react-native API it replaces. Each toast fires one haptic for its
-// kind and a short sound, then hands a ToastCard to sonner-native.
+// kind, then hands a ToastCard to sonner-native. Results (success, error,
+// warning) also play a short sound; info toasts are silent, so a tap that
+// only tells you something never makes a noise (David, 10 Nov).
 import { ToastCard, type ToastKind } from "@/components/ToastCard";
 import * as Haptics from "expo-haptics";
 import { toast } from "sonner-native";
@@ -13,11 +15,10 @@ const HAPTIC: Record<ToastKind, () => Promise<void>> = {
   info: () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light),
 };
 
-const SOUND: Record<ToastKind, number> = {
+const SOUND: Partial<Record<ToastKind, number>> = {
   success: require("@/assets/sounds/toast-success.wav"),
   error: require("@/assets/sounds/toast-error.wav"),
   warning: require("@/assets/sounds/toast-info.wav"),
-  info: require("@/assets/sounds/toast-info.wav"),
 };
 
 // expo-audio mixes with other audio and respects the mute switch by default.
@@ -25,6 +26,7 @@ const SOUND: Record<ToastKind, number> = {
 type Player = { volume: number; seekTo: (s: number) => unknown; play: () => void };
 const players: Partial<Record<ToastKind, Player | null>> = {};
 function playSound(kind: ToastKind) {
+  if (!SOUND[kind]) return;
   try {
     if (players[kind] === undefined) {
       const { createAudioPlayer } = require("expo-audio");

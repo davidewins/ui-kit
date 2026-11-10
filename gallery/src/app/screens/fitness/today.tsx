@@ -8,7 +8,6 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { haptic } from "@/lib/haptics";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
-import { Check } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
@@ -50,12 +49,12 @@ export default function Today() {
 
   return (
     <DemoScreen footer={rest ? undefined : <InsetFooter primaryCta={{ label: "Start workout", onPress: () => router.push("/screens/fitness/session") }} />}>
-        <View style={{ flexDirection: "row", justifyContent: "space-around", marginHorizontal: GUTTER, marginBottom: 16 }}>
-          <Gauge label="Workouts" value={ring(3)} max={5} valueLabel={`${ring(3)}/5`} />
-          <Gauge label="Minutes" value={ring(156)} max={200} valueLabel={String(ring(156))} />
-          <Gauge label="Active kcal" value={ring(rest ? 210 : 412)} max={600} valueLabel={String(ring(rest ? 210 : 412))} />
+        <Headline rest={rest} />
+        <WeekBars rest={rest} />
+        <View style={{ marginHorizontal: GUTTER, gap: 12, marginTop: 4 }}>
+          <Gauge variant="bar" label="Workouts this week" value={ring(3)} max={5} valueLabel={`${ring(3)} of 5`} />
+          <Gauge variant="bar" label="Active energy" value={ring(rest ? 1640 : 1840)} max={2500} valueLabel={`${ring(rest ? 1640 : 1840).toLocaleString("en-IE")} of 2,500 kcal`} />
         </View>
-        <WeekStrip rest={rest} />
         <Section title={rest ? "Tomorrow" : "Up next"} art="stopwatch" trailing="07:00" />
         <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
           <Link href={`/screens/fitness/workout/${next.id}`} asChild>
@@ -135,36 +134,63 @@ export default function Today() {
   );
 }
 
-/** Monday to Sunday: filled when trained, grey when planned, empty on rest
- *  days, today ringed, minutes trained under each. */
-function WeekStrip({ rest }: { rest: boolean }) {
+/** The page's one big number, like SELLERS Today's revenue: minutes trained
+ *  this week, with the change against last week in a status pill. */
+function Headline({ rest }: { rest: boolean }) {
   const colors = useThemeColors();
+  const up = !rest;
   return (
-    <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: GUTTER, marginBottom: 4 }}>
+    <View style={{ paddingHorizontal: GUTTER, marginTop: 4, marginBottom: 16 }}>
+      <Text weight="medium" style={{ fontSize: 15, lineHeight: 20, color: colors.muted }}>Trained this week</Text>
+      <View style={{ flexDirection: "row", alignItems: "flex-end", columnGap: 10, marginTop: 2 }}>
+        <Text weight="semibold" style={{ fontSize: 40, lineHeight: 44, letterSpacing: -1.2, fontVariant: ["tabular-nums"] }}>
+          {rest ? "135" : "156"}
+          <Text weight="medium" style={{ fontSize: 20, letterSpacing: -0.4, color: colors.muted }}> min</Text>
+        </Text>
+        <View style={{ marginBottom: 8, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 2, backgroundColor: up ? colors.successBg : colors.errorBg }}>
+          <Text weight="semibold" style={{ fontSize: 12, color: up ? colors.success : colors.error, fontVariant: ["tabular-nums"] }}>
+            {up ? "↑ 20% vs last week" : "↓ 4% vs last week"}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+/** Minutes per day as bars, Monday first. Trained days are filled, today is
+ *  outlined, planned days dashed, rest days empty; minutes under each. */
+function WeekBars({ rest }: { rest: boolean }) {
+  const colors = useThemeColors();
+  const H = 72;
+  const most = Math.max(...WEEK_MINUTES.map((m) => m ?? 0), 45);
+  return (
+    <View style={{ flexDirection: "row", columnGap: 8, marginHorizontal: GUTTER, marginBottom: 12 }}>
       {WEEK_DAYS.map((d, i) => {
-        // On a rest day today (Friday) is a rest day, not a planned session.
         const plan = rest && i === 4 ? "rest" : WEEK_PLAN[i];
         const today = i === 4;
-        const mins = plan === "done" ? WEEK_MINUTES[i] : null;
+        const mins = plan === "done" ? (WEEK_MINUTES[i] ?? 0) : plan === "planned" ? 45 : 0;
+        const h = mins ? Math.max(6, (mins / most) * H) : 0;
         return (
-          <View key={i} style={{ alignItems: "center", gap: 4, width: 36 }}>
-            <Text weight={today ? "semibold" : "medium"} style={{ fontSize: 12, color: today ? colors.text : colors.muted }}>{d}</Text>
-            <View
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 15,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: plan === "done" ? colors.tint : plan === "planned" ? colors.surface : "transparent",
-                borderWidth: today ? 2 : 0,
-                borderColor: colors.text,
-              }}
-            >
-              {plan === "done" ? <Check size={14} color={colors.onTint} strokeWidth={2.5} /> : null}
+          <View key={i} style={{ flex: 1, alignItems: "center" }}>
+            <View style={{ height: H, width: "100%", justifyContent: "flex-end" }}>
+              {h ? (
+                <View
+                  style={{
+                    height: h,
+                    borderRadius: 6,
+                    backgroundColor: plan === "done" ? colors.text : "transparent",
+                    borderWidth: plan === "done" ? 0 : 1.5,
+                    borderStyle: plan === "planned" ? "dashed" : "solid",
+                    borderColor: today ? colors.text : colors.muted,
+                  }}
+                />
+              ) : (
+                <View style={{ height: 2, borderRadius: 1, backgroundColor: colors.border }} />
+              )}
             </View>
-            <Text weight="medium" style={{ fontSize: 12, color: mins ? colors.text : colors.muted, fontVariant: ["tabular-nums"] }}>
-              {mins ? `${mins}m` : plan === "planned" ? "Plan" : "Rest"}
+            <Text weight={today ? "semibold" : "medium"} style={{ fontSize: 12, marginTop: 6, color: today ? colors.text : colors.muted }}>{d}</Text>
+            <Text weight="medium" style={{ fontSize: 11, color: plan === "done" ? colors.text : colors.muted, fontVariant: ["tabular-nums"] }}>
+              {plan === "done" ? `${WEEK_MINUTES[i]}m` : plan === "planned" ? "Plan" : "Rest"}
             </Text>
           </View>
         );

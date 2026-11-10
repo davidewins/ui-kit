@@ -33,7 +33,7 @@ export default function Lab() {
   const cover = Math.floor((width - EDGE * 2 - GAP * 2) / 2.5);
 
   return (
-    <LabPage title="Transition lab">
+    <LabPage title="Transition lab" back="Transitions">
       <SectionTitle>Zoom a photo</SectionTitle>
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", rowGap: PHOTO_GAP, marginHorizontal: EDGE, marginBottom: SETTINGS_GROUP.marginBottom }}>
         {LAB_PHOTOS.map((src, i) => (

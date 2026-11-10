@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "453b4a8",
+  "rev": "509c5d9",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -42,7 +42,7 @@
     "src/components/ui/feedback/EmptyState.tsx": "dcddd424c3b376127e90d670e6d77fcf20f0740a8e2d0cd025cd670da3ffe4cb",
     "src/components/ui/inputs/FilterChip.tsx": "31102d82993e8eaab95fe6ae638ea9cafe37130ef9927cf9812ff2d345b8a98d",
     "src/components/ui/primitives/FlatList.tsx": "a69b81ecf65d100e3c46f800ed7d19977eb7e63a664aee2a990cea1edbbf0e7a",
-    "src/components/ui/feedback/Gauge.tsx": "55f7dcf349e345e9dced816e772a2766c551e358de46370e64fb2eb1f77798f9",
+    "src/components/ui/feedback/Gauge.tsx": "589b9e3f20bde17241f6cd5f8383db8eea9e5e805c8b0269c90b9e76c2a3564a",
     "src/components/ui/actions/GlassButton.tsx": "651e87c28aeeb7820386f2a3452725608b039f359f3fe8587908cce0f2556369",
     "src/components/ui/surfaces/GlassGroup.tsx": "541b1b3f1b3a35299b71eeb0a247ab95f3bfa24cf2ce4f0792ebc7ef293a6b0e",
     "src/components/ui/actions/HeaderIconButton.tsx": "8ee7a450459caf9767873abd8e6952c80c490e63b5dbd91943c835dd5c6baf6f",
@@ -73,7 +73,7 @@
     "src/components/ui/feedback/Skeleton.tsx": "0e68c16f7462396e812a8c630c6f59880c890303421c521a76c03893e0ff4e6e",
     "src/components/ui/feedback/SkeletonBlock.tsx": "b5e8250cc08e880fbc7d01289e0dc3f67eb0a30dd883f91cc6a8acebda8d76b9",
     "src/components/ui/inputs/SliderRow.tsx": "09954c19ff57ef91a8a3244bcb7e13a68a80c61d0f44dec1d9e0f1d3fee871dc",
-    "src/components/ui/inputs/StepperRow.tsx": "102c769f56f620a5fa5a4df7b505845b77fd0914577b283be331dd906afb18c0",
+    "src/components/ui/inputs/StepperRow.tsx": "5e5ce0d388cbd2cd655ffd7bbdb57c3f5d498b63cb9091b070e54923de119641",
     "src/components/ui/inputs/Switch.tsx": "7420284bd40fc3904f8edf118cf02576c9936a0a41983d7925a976eb65ac5259",
     "src/components/ui/primitives/Text.tsx": "9cf5745c3b224dda788fbbfb4281899627f2a120ee02b3e1e3cdbdf4b2b6cb5c",
     "src/components/ui/primitives/TextInput.tsx": "1dea3d23c2692c3ea5fe628f972d332adb3bca9d0a7b00ea68d40252e2c71b29",
@@ -84,6 +84,6 @@
     "src/hooks/useTabPaneBottomInset.ts": "302667303ac9c11cc5d3c8b357fc03bda301626e951e9483b65bc28ac1adfcae",
     "src/hooks/useThemeColors.ts": "7707c881e9a62e75a6b3c3dc3d0859576f4cfc143b46921bdf4213c06bec7225",
     "src/lib/haptics.ts": "01cacef5dbcc55d0e6a59203b52bfe0cc87ee83802898880e76f618a5b82c028",
-    "src/lib/toast.tsx": "3b648defa9b4a317e5eebfff2e5ef041fabc363b075a0e74a943314dd7ee64e0"
+    "src/lib/toast.tsx": "0a6d5e348c36fee30306043e82c9ecb72944b3d15cbd7d6d97043153a77cf7ea"
   }
 }

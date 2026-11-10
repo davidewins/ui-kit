@@ -66,7 +66,7 @@ export function CoverCaption({ p }: { p: Playlist }) {
 export function PlaylistHeader({ p, art }: { p: Playlist; art: ReactNode }) {
   const colors = useThemeColors();
   // Button already fires its press haptic.
-  const play = (shuffle: boolean) => () => Toast.success(shuffle ? `Shuffling ${p.title}` : `Playing ${p.title}`);
+  const play = (shuffle: boolean) => () => Toast.info(shuffle ? `Shuffling ${p.title}` : `Playing ${p.title}`);
   return (
     <View style={{ alignItems: "center", paddingTop: 8 }}>
       {art}
@@ -94,10 +94,7 @@ export function TrackList({ tracks }: { tracks: readonly Track[] }) {
         <View key={`${i}-${t.title}`}>
           {i > 0 ? <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginLeft: EDGE + ROW.number + ROW.gap }} /> : null}
           <Pressable
-            onPress={() => {
-              haptic("selection");
-              Toast.success(`Playing ${t.title}`);
-            }}
+            onPress={() => haptic("selection")}
             accessibilityRole="button"
             accessibilityLabel={`${t.title} by ${t.artist}, ${t.time}`}
             style={({ pressed }) => ({
@@ -123,18 +120,21 @@ export function TrackList({ tracks }: { tracks: readonly Track[] }) {
 }
 
 /**
- * Header for pages in the transition lab, which has no native header: a 44pt
- * bar under the status bar with a glass button on the left and the title
- * centred on the bar. `close` draws an X (for cards that dismiss downward);
- * `onDark` draws white for pages on black.
+ * Header for pages in the transition lab, which has no native header. Drawn
+ * to iOS 26's own bar: 44pt under the status bar, a glass capsule back button
+ * carrying the previous page's name, the title 17pt semibold centred on the
+ * bar. `close` is an X for cards that drop down; `onDark` draws white.
  */
 export function LabHeader({
   title,
+  back = "Lab",
   close = false,
   onDark = false,
   inset = true,
 }: {
   title?: string;
+  /** The page you go back to, shown in the back capsule. */
+  back?: string;
   close?: boolean;
   onDark?: boolean;
   /** False when the page already sits below the status bar (a card). */
@@ -144,18 +144,24 @@ export function LabHeader({
   const colors = useThemeColors();
   const top = inset ? insets.top : 0;
   const ink = onDark ? "#fff" : colors.text;
-  const Icon = close ? X : ChevronLeft;
   return (
     <View style={{ height: top + BAR, paddingTop: top }}>
       {title ? (
-        <View style={{ position: "absolute", top, left: 72, right: 72, height: BAR, justifyContent: "center" }}>
+        <View style={{ position: "absolute", top, left: 120, right: 120, height: BAR, justifyContent: "center" }}>
           <Text weight="semibold" numberOfLines={1} style={[styles.headline, { textAlign: "center", color: ink }]}>{title}</Text>
         </View>
       ) : null}
       <View style={{ height: BAR, justifyContent: "center", paddingHorizontal: EDGE }}>
-        <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel={close ? "Close" : "Back"} hitSlop={8} style={{ alignSelf: "flex-start" }}>
-          <GlassSurface isInteractive style={styles.back}>
-            <Icon size={close ? 18 : 22} color={ink} strokeWidth={2} />
+        <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel={close ? "Close" : `Back to ${back}`} hitSlop={8} style={{ alignSelf: "flex-start" }}>
+          <GlassSurface isInteractive style={close ? styles.close : styles.backCapsule}>
+            {close ? (
+              <X size={18} color={ink} strokeWidth={2} />
+            ) : (
+              <>
+                <ChevronLeft size={22} color={ink} strokeWidth={2.2} />
+                <Text weight="regular" numberOfLines={1} style={{ fontSize: 17, color: ink, marginLeft: 2 }}>{back}</Text>
+              </>
+            )}
           </GlassSurface>
         </Pressable>
       </View>
@@ -164,12 +170,12 @@ export function LabHeader({
 }
 
 /** A page in the transition lab: page colour, LabHeader, scrolling body. */
-export function LabPage({ title, children }: { title?: string; children: ReactNode }) {
+export function LabPage({ title, back = "Lab", children }: { title?: string; back?: string; children: ReactNode }) {
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <LabHeader title={title} />
+      <LabHeader title={title} back={back} />
       <Transition.ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>{children}</Transition.ScrollView>
     </View>
   );
@@ -181,5 +187,6 @@ export const styles = StyleSheet.create({
   body: { fontSize: 15, lineHeight: 20, letterSpacing: -0.2 },
   secondary: { fontSize: 13, lineHeight: 17 },
   nums: { fontVariant: ["tabular-nums"] },
-  back: { width: 36, height: 36, borderRadius: 18, alignItems: "center", justifyContent: "center", overflow: "hidden" },
+  backCapsule: { height: 44, borderRadius: 22, paddingLeft: 10, paddingRight: 16, flexDirection: "row", alignItems: "center", overflow: "hidden" },
+  close: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", overflow: "hidden" },
 });

@@ -153,7 +153,7 @@ export default function Product() {
           <View style={{ flex: 1, gap: 3 }}>
             {RATING.split.map((r) => (
               <View key={r.stars} style={{ flexDirection: "row", alignItems: "center", columnGap: 6 }}>
-                <Text weight="medium" style={{ fontSize: 11, color: colors.muted, width: 40, textAlign: "right", letterSpacing: 1 }}>{"★".repeat(r.stars)}</Text>
+                <Text weight="medium" numberOfLines={1} style={{ fontSize: 10, color: colors.muted, width: 52, textAlign: "right" }}>{"★".repeat(r.stars)}</Text>
                 <View style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: colors.border, overflow: "hidden" }}>
                   <View style={{ width: `${r.share * 100}%`, height: 4, backgroundColor: colors.text }} />
                 </View>

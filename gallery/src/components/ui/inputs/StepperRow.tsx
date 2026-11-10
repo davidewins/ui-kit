@@ -51,13 +51,16 @@ export function StepperRow({
       accessory={
         Platform.OS === "ios" ? (
           <Host matchContents>
+            {/* Counted in whole steps (25 = 62.5 kg at a 2.5 step): with a
+                fractional step SwiftUI's Stepper ignored labelsHidden and drew
+                the label beside the buttons a second time. */}
             <Stepper
               label={label}
-              value={value}
-              min={min}
-              max={max}
-              step={step}
-              onValueChange={set}
+              value={Math.round(value / step)}
+              min={Math.ceil(min / step)}
+              max={Math.floor(max / step)}
+              step={1}
+              onValueChange={(n) => set(Math.round(n * step * 1000) / 1000)}
               modifiers={[labelsHidden(), disabledModifier(disabled)]}
             />
           </Host>

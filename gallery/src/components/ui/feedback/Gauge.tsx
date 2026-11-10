@@ -15,7 +15,9 @@ import {
 } from "@expo/ui/jetpack-compose";
 import { fillMaxWidth, size } from "@expo/ui/jetpack-compose/modifiers";
 import { Gauge as SwiftGauge, Text } from "@expo/ui/swift-ui";
-import { Animation, animation, contentTransition, font, foregroundStyle, gaugeStyle, tint } from "@expo/ui/swift-ui/modifiers";
+import { Animation, animation, contentTransition, font, gaugeStyle, labelsHidden, tint } from "@expo/ui/swift-ui/modifiers";
+import { Text as KitText } from "../primitives/Text";
+import { View } from "../primitives/View";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Platform } from "react-native";
 import { ComposeHost, SwiftHost } from "../native/NativeHost";
@@ -30,35 +32,57 @@ export interface GaugeProps {
   valueLabel?: string;
   variant?: "ring" | "bar";
   /** Status colour only when the reading needs attention. */
-  tone?: "default" | "warning" | "error";
+  tone?: "default" | "success" | "warning" | "error";
 }
 
 export function Gauge({ value, min = 0, max = 1, label, valueLabel, variant = "ring", tone = "default" }: GaugeProps) {
   const colors = useThemeColors();
-  const color = tone === "error" ? colors.error : tone === "warning" ? colors.warning : colors.text;
+  const color = tone === "error" ? colors.error : tone === "warning" ? colors.warning : tone === "success" ? colors.success : colors.text;
   const fraction = Math.min(1, Math.max(0, (value - min) / (max - min || 1)));
 
   if (Platform.OS === "ios") {
+    const gauge = (
+      <SwiftGauge
+        value={value}
+        min={min}
+        max={max}
+        currentValueLabel={
+          variant === "ring" && valueLabel ? (
+            // The number rolls to its new value (SwiftUI numeric text).
+            <Text modifiers={[font({ family: "Geist-SemiBold" }), contentTransition("numericText"), animation(Animation.spring({ duration: 0.6 }), value)]}>
+              {valueLabel}
+            </Text>
+          ) : undefined
+        }
+        // The fill springs to a new reading instead of jumping. SwiftUI's own
+        // labels are hidden: the ring style drops the label and the bar style
+        // prints the value large under the bar, so both are drawn below in RN.
+        modifiers={[
+          gaugeStyle(variant === "ring" ? "circularCapacity" : "linearCapacity"),
+          tint(color),
+          animation(Animation.spring({ duration: 0.6 }), value),
+          ...(variant === "bar" ? [labelsHidden()] : []),
+        ]}
+      >
+        <Text>{label}</Text>
+      </SwiftGauge>
+    );
+    if (variant === "ring") {
+      return (
+        <View style={{ alignItems: "center", gap: 6 }}>
+          <SwiftHost matchContents>{gauge}</SwiftHost>
+          <KitText weight="medium" numberOfLines={1} style={{ fontSize: 12, color: colors.muted }}>{label}</KitText>
+        </View>
+      );
+    }
     return (
-      <SwiftHost matchContents={variant === "ring" ? true : { vertical: true }}>
-        <SwiftGauge
-          value={value}
-          min={min}
-          max={max}
-          currentValueLabel={
-            valueLabel ? (
-              // The number rolls to its new value (SwiftUI numeric text).
-              <Text modifiers={[font({ family: "Geist-SemiBold" }), contentTransition("numericText"), animation(Animation.spring({ duration: 0.6 }), value)]}>
-                {valueLabel}
-              </Text>
-            ) : undefined
-          }
-          // The fill springs to a new reading instead of jumping.
-          modifiers={[gaugeStyle(variant === "ring" ? "circularCapacity" : "linearCapacity"), tint(color), animation(Animation.spring({ duration: 0.6 }), value)]}
-        >
-          <Text modifiers={[font({ family: "Geist-Medium", size: 13 }), foregroundStyle(colors.muted)]}>{label}</Text>
-        </SwiftGauge>
-      </SwiftHost>
+      <View style={{ gap: 6 }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", columnGap: 8 }}>
+          <KitText weight="medium" numberOfLines={1} style={{ flex: 1, fontSize: 13, color: colors.muted }}>{label}</KitText>
+          {valueLabel ? <KitText weight="semibold" style={{ fontSize: 13, color: tone === "default" ? colors.text : color, fontVariant: ["tabular-nums"] }}>{valueLabel}</KitText> : null}
+        </View>
+        <SwiftHost matchContents={{ vertical: true }}>{gauge}</SwiftHost>
+      </View>
     );
   }
 

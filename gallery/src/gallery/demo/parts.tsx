@@ -109,8 +109,18 @@ export function MediaRow({
         </Text>
         {subtitle ? <Text weight="medium" numberOfLines={1} style={{ fontSize: 13, color: colors.muted }}>{subtitle}</Text> : null}
       </View>
-      {trailing ? <Text weight="medium" style={{ fontSize: 15, fontVariant: ["tabular-nums"] }}>{trailing}</Text> : null}
-      {accessory}
+      {trailing && accessory ? (
+        // Figure over badge, so the title keeps the row's width.
+        <View style={{ alignItems: "flex-end", gap: 4 }}>
+          <Text weight="semibold" style={{ fontSize: 15, fontVariant: ["tabular-nums"] }}>{trailing}</Text>
+          {accessory}
+        </View>
+      ) : (
+        <>
+          {trailing ? <Text weight="medium" style={{ fontSize: 15, fontVariant: ["tabular-nums"] }}>{trailing}</Text> : null}
+          {accessory}
+        </>
+      )}
       {href ? <ChevronRight size={SETTINGS_ROW.chevronSize} color={colors.muted} strokeWidth={SETTINGS_ROW.chevronStrokeWidth} /> : null}
     </Pressable>
   );
