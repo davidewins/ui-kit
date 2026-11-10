@@ -1,10 +1,9 @@
 import { Badge, EmptyState } from "@/components/ui";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { ART, SHOP_ORDERS, STATUS_BADGE, euro, productById } from "@/gallery/demo/data";
-import { DemoScreen, MEDIA_INSET, MediaRow, MetricGrid, useStates } from "@/gallery/demo/parts";
+import { DemoScreen, MEDIA_INSET, MediaRow, FactList, useStates, Section } from "@/gallery/demo/parts";
 import { router } from "expo-router";
-import { SkeletonMediaRows, SkeletonMetricGrid, SkeletonTitle } from "@/gallery/demo/skeletons";
+import { SkeletonMediaRows, SkeletonFacts, SkeletonSection } from "@/gallery/demo/skeletons";
 
 const STATES = ["Loaded", "Loading", "Empty"] as const;
 
@@ -39,15 +38,15 @@ export default function Orders() {
     <DemoScreen>
       {state === "Loading" ? (
         <>
-          <SkeletonMetricGrid rows={2} />
-          <SkeletonTitle />
+          <SkeletonFacts rows={6} />
+          <SkeletonSection />
           <SkeletonMediaRows count={2} trailing="badge" />
-          <SkeletonTitle />
+          <SkeletonSection />
           <SkeletonMediaRows count={2} trailing="badge" />
         </>
       ) : (
         <>
-          <MetricGrid
+          <FactList
             items={[
               { label: "Orders this year", value: "14" },
               { label: "Spent", value: "€1,486", delta: "+€466 this month", good: true },
@@ -57,9 +56,9 @@ export default function Orders() {
               { label: "Points", value: "1,240", delta: "€12 off next order", good: true },
             ]}
           />
-          <SectionTitle>In progress</SectionTitle>
+          <Section title="On the way" art="truck" />
           <SettingsGroup separatorInset={MEDIA_INSET}>{rows(active)}</SettingsGroup>
-          <SectionTitle>Past orders</SectionTitle>
+          <Section title="Past orders" art="receipt" />
           <SettingsGroup separatorInset={MEDIA_INSET}>{rows(past)}</SettingsGroup>
         </>
       )}

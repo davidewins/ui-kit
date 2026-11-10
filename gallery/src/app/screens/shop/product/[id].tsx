@@ -1,19 +1,18 @@
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
 import { Badge, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
-import { Gauge } from "@/components/ui/feedback/Gauge";
 import { Carousel } from "@/components/ui/lists/Carousel";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { PRODUCTS, productById, euro } from "@/gallery/demo/data";
-import { Avatar, DataTable, DemoScreen, GUTTER, MEDIA_INSET, MediaRow, MetricGrid, PhotoGrid, PhotoTile, RADIUS, TitleBlock, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, GUTTER, FactList, PhotoGrid, PhotoTile, RADIUS, TitleBlock, useStates, Section } from "@/gallery/demo/parts";
 import { priceLine } from "@/gallery/demo/shop";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
+import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Pressable, useWindowDimensions } from "react-native";
+import { Pressable, StyleSheet, useWindowDimensions } from "react-native";
 
 const STATES = ["In stock", "Sold out"] as const;
 
@@ -31,9 +30,9 @@ const RATING = {
   ],
 };
 const REVIEWS = [
-  { name: "Ciara Walsh", title: "Light and fast, fits true", size: "39", fit: "true to size", stars: 5 },
-  { name: "Liam Kearney", title: "Great on tempo days", size: "44", fit: "slightly narrow", stars: 4 },
-  { name: "Orla Dunne", title: "Comfy all day at work", size: "38", fit: "true to size", stars: 5 },
+  { name: "Ciara W.", date: "2 Nov", title: "Light and fast, fits true", size: "39", fit: "true to size", stars: 5, body: "Ran a 10k PB in these the first week. The foam is soft without being mushy and the knit doesn't rub at the heel. Went my normal size." },
+  { name: "Liam K.", date: "28 Oct", title: "Great on tempo days, a bit narrow", size: "44", fit: "runs narrow", stars: 4, body: "Snappy on faster runs and grippy on wet paths. Toe box is narrow, so if you have wide feet go half a size up or try them in store first." },
+  { name: "Orla D.", date: "19 Oct", title: "Comfy for a twelve hour shift", size: "38", fit: "true to size", stars: 5, body: "Bought them for running, wear them at work. No sore feet after long shifts on a hard floor. Second pair already." },
 ];
 
 function specsFor(p: { category: string; colour: string }): [string, string][] {
@@ -103,7 +102,7 @@ export default function Product() {
 
         {p.sizes ? (
           <>
-            <SectionTitle>{size ? `Size ${size} (EU)` : "Size (EU)"}</SectionTitle>
+            <Section title={size ? `Size ${size}` : "Size"} art="bag" trailing="EU" />
             <View style={{ marginHorizontal: GUTTER, marginBottom: 18, flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
               {p.sizes.map((sz, i) => {
                 const left = soldOut ? 0 : SIZE_STOCK[i % SIZE_STOCK.length];
@@ -112,7 +111,10 @@ export default function Product() {
                   <Pressable
                     key={sz}
                     disabled={left === 0}
-                    onPress={() => setSize(sz)}
+                    onPress={() => {
+                      Haptics.selectionAsync().catch(() => {});
+                      setSize(sz);
+                    }}
                     accessibilityRole="button"
                     accessibilityLabel={`Size ${sz}, ${left ? `${left} left` : "sold out"}`}
                     accessibilityState={{ selected: on, disabled: left === 0 }}
@@ -129,7 +131,7 @@ export default function Product() {
           </>
         ) : null}
 
-        <MetricGrid
+        <FactList
           items={[
             { label: "Delivery", value: "Free", delta: "Tomorrow by 13:00", good: true },
             { label: "Collect", value: "2 h", delta: "Grafton Street", good: true },
@@ -139,22 +141,44 @@ export default function Product() {
 
         <Text weight="medium" style={{ fontSize: 15, lineHeight: 21, color: colors.muted, marginHorizontal: GUTTER, marginBottom: 6 }}>{p.description}</Text>
 
-        <SectionTitle>Details</SectionTitle>
+        <Section title="Details" art="document" />
         <DataTable dense columns={[{ key: "k", label: "Spec" }, { key: "v", label: "", width: 170 }]} rows={specsFor(p).map(([k, v]) => ({ k, v }))} />
 
-        <SectionTitle>{`Reviews, ${RATING.avg} average`}</SectionTitle>
-        <View style={{ marginHorizontal: GUTTER, marginBottom: 12, gap: 6 }}>
-          {RATING.split.map((r) => (
-            <Gauge key={r.stars} variant="bar" label={`${r.stars} stars`} value={r.share} valueLabel={`${Math.round(r.share * RATING.count)}`} />
+        <Section title="Ratings and reviews" art="megaphone" trailing={`${RATING.count}`} />
+        <View style={{ flexDirection: "row", alignItems: "center", columnGap: 16, marginHorizontal: GUTTER, marginBottom: 12 }}>
+          <View style={{ alignItems: "center", width: 88 }}>
+            <Text weight="bold" style={{ fontSize: 44, lineHeight: 48, letterSpacing: -1.5, fontVariant: ["tabular-nums"] }}>{RATING.avg}</Text>
+            <Text weight="medium" style={{ fontSize: 12, color: colors.muted }}>out of 5</Text>
+          </View>
+          <View style={{ flex: 1, gap: 3 }}>
+            {RATING.split.map((r) => (
+              <View key={r.stars} style={{ flexDirection: "row", alignItems: "center", columnGap: 6 }}>
+                <Text weight="medium" style={{ fontSize: 11, color: colors.muted, width: 40, textAlign: "right", letterSpacing: 1 }}>{"★".repeat(r.stars)}</Text>
+                <View style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: colors.border, overflow: "hidden" }}>
+                  <View style={{ width: `${r.share * 100}%`, height: 4, backgroundColor: colors.text }} />
+                </View>
+              </View>
+            ))}
+            <Text weight="medium" style={{ fontSize: 12, color: colors.muted, textAlign: "right", marginTop: 2 }}>{`${RATING.count} ratings`}</Text>
+          </View>
+        </View>
+        <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
+          {REVIEWS.map((r, i) => (
+            <View key={r.name} style={{ paddingVertical: 12, gap: 4, borderTopWidth: StyleSheet.hairlineWidth, borderColor: colors.border }}>
+              <View style={{ flexDirection: "row", alignItems: "baseline", columnGap: 8 }}>
+                <Text weight="semibold" numberOfLines={1} style={{ flex: 1, fontSize: 15 }}>{r.title}</Text>
+                <Text weight="medium" style={{ fontSize: 12, color: colors.muted }}>{r.date}</Text>
+              </View>
+              <Text weight="medium" style={{ fontSize: 12, color: colors.muted }}>
+                <Text style={{ color: colors.text, letterSpacing: 1 }}>{"★".repeat(r.stars) + "☆".repeat(5 - r.stars)}</Text>
+                {`  ${r.name}, EU ${r.size}, ${r.fit}`}
+              </Text>
+              <Text weight="regular" numberOfLines={i === 0 ? undefined : 3} style={{ fontSize: 15, lineHeight: 20 }}>{r.body}</Text>
+            </View>
           ))}
         </View>
-        <SettingsGroup separatorInset={MEDIA_INSET}>
-          {REVIEWS.map((r) => (
-            <MediaRow key={r.name} leading={<Avatar name={r.name} />} title={r.title} subtitle={`${r.name}, size ${r.size}, ${r.fit}`} trailing={`${r.stars}/5`} />
-          ))}
-        </SettingsGroup>
 
-        <SectionTitle>You might like</SectionTitle>
+        <Section title="You might like" art="shop" />
         <PhotoGrid
           data={PRODUCTS.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 2)}
           keyOf={(x) => x.id}

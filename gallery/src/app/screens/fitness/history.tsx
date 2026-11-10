@@ -2,15 +2,14 @@ import { Badge, Card, EmptyState, Text, View } from "@/components/ui";
 import { Sparkline } from "@/components/analytics/Sparkline";
 import { SegmentedControl } from "@/components/ui/inputs/SegmentedControl";
 import { Gauge } from "@/components/ui/feedback/Gauge";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { ART, PERSONAL_BESTS, SESSIONS, WEEKLY_MINUTES, WEEKS, workoutById } from "@/gallery/demo/data";
-import { DataTable, DemoScreen, MEDIA_INSET, MediaRow, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, MEDIA_INSET, MediaRow, useStates, Section } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { router } from "expo-router";
 import { useState } from "react";
 import { useWindowDimensions } from "react-native";
-import { SkeletonBars, SkeletonChartCard, SkeletonMediaRows, SkeletonTable, SkeletonTitle } from "@/gallery/demo/skeletons";
+import { SkeletonBars, SkeletonChartCard, SkeletonMediaRows, SkeletonTable, SkeletonSection } from "@/gallery/demo/skeletons";
 
 const STATES = ["Loaded", "Loading", "Empty"] as const;
 const RANGES = ["Week", "Month", "Year"] as const;
@@ -50,13 +49,13 @@ export default function History() {
       {state === "Loading" ? (
         <>
           <SkeletonChartCard />
-          <SkeletonTitle />
+          <SkeletonSection />
           <SkeletonBars count={6} twoUp />
-          <SkeletonTitle />
+          <SkeletonSection />
           <SkeletonTable rows={6} numbers={4} />
-          <SkeletonTitle />
+          <SkeletonSection />
           <SkeletonTable rows={5} numbers={3} />
-          <SkeletonTitle />
+          <SkeletonSection />
           <SkeletonMediaRows count={5} trailing="figure" />
         </>
       ) : (
@@ -70,7 +69,7 @@ export default function History() {
             </Card>
           </View>
 
-          <SectionTitle>By area, this week</SectionTitle>
+          <Section title="By area" art="target" trailing="This week" />
           <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 16, rowGap: 10, marginHorizontal: 16, marginBottom: 18 }}>
             {AREAS.map((a) => (
               <View key={a.area} style={{ width: "47%" }}>
@@ -79,7 +78,7 @@ export default function History() {
             ))}
           </View>
 
-          <SectionTitle>Weeks</SectionTitle>
+          <Section title="Weeks" art="calendar" trailing="Last 6" />
           <DataTable
             dense
             columns={[
@@ -93,7 +92,7 @@ export default function History() {
             highlight={0}
           />
 
-          <SectionTitle>Personal bests</SectionTitle>
+          <Section title="Personal bests" art="gift" />
           <DataTable
             dense
             columns={[
@@ -105,7 +104,7 @@ export default function History() {
             rows={PERSONAL_BESTS.map((p) => ({ lift: p.lift, best: p.value, e1rm: p.e1rm, when: p.when }))}
           />
 
-          <SectionTitle>Sessions</SectionTitle>
+          <Section title="Sessions" art="clipboard" trailing="This week" />
           <SettingsGroup separatorInset={MEDIA_INSET}>
             {SESSIONS.map((s) => {
               const w = workoutById(s.workout);

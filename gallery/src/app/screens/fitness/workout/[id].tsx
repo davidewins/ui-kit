@@ -2,11 +2,10 @@ import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
 import { Badge, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { Gauge } from "@/components/ui/feedback/Gauge";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { FOCUS, workoutById } from "@/gallery/demo/data";
-import { DataTable, DemoScreen, Hero, MetricGrid, TitleBlock, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, Hero, FactList, TitleBlock, useStates, Section } from "@/gallery/demo/parts";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
 import { User } from "lucide-react-native";
@@ -62,7 +61,7 @@ export default function WorkoutDetail() {
           <Badge>{`Done ${HISTORY.length} times`}</Badge>
           <Badge variant="warning">1 PR in reach</Badge>
         </View>
-        <MetricGrid
+        <FactList
           items={[
             { label: "Length", value: String(w.minutes), unit: "min" },
             { label: "Moves", value: String(w.exercises.length) },
@@ -73,7 +72,7 @@ export default function WorkoutDetail() {
           ]}
         />
 
-        <SectionTitle>Exercises</SectionTitle>
+        <Section title="Exercises" art="checklist" trailing={`${sets} sets`} />
         <DataTable
           dense
           columns={[
@@ -94,7 +93,7 @@ export default function WorkoutDetail() {
           }))}
         />
 
-        <SectionTitle>Focus</SectionTitle>
+        <Section title="Focus" art="target" />
         <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 16, rowGap: 10, marginHorizontal: 16, marginBottom: 18 }}>
           {FOCUS[w.kind].map((f) => (
             <View key={f.area} style={{ width: "47%" }}>
@@ -103,7 +102,7 @@ export default function WorkoutDetail() {
           ))}
         </View>
 
-        <SectionTitle>Your history</SectionTitle>
+        <Section title="Your history" art="risingChart" trailing={`${HISTORY.length} times`} />
         <DataTable
           dense
           columns={[

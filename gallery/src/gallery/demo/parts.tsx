@@ -4,8 +4,9 @@
 // padding, SettingsGroup hairlines, Tile, Card raised, 24pt radius).
 import { Text, View } from "@/components/ui";
 import { SETTINGS_ROW } from "@/components/ui/lists/SettingsRow";
-import { Tile } from "@/components/ui/surfaces/Tile";
+import { ArtSectionHeader } from "@/apps/sellers/components/ArtSectionHeader";
 import { useInsetFooterSpace } from "@/components/onboarding/shells/InsetShell";
+import { ART } from "@/gallery/demo/data";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { Image, type ImageProps } from "expo-image";
@@ -119,21 +120,6 @@ export function MediaRow({
       <Link.Trigger>{row}</Link.Trigger>
       {image ? <Link.Preview /> : null}
     </Link>
-  );
-}
-
-/** A row of small grey Tiles: a figure over a muted label. */
-export function StatTiles({ items }: { items: readonly { label: string; value: string }[] }) {
-  const colors = useThemeColors();
-  return (
-    <View style={{ flexDirection: "row", gap: 10, marginHorizontal: GUTTER, marginBottom: 18 }}>
-      {items.map((s) => (
-        <Tile key={s.label} style={{ flex: 1, gap: 2 }}>
-          <Text weight="semibold" numberOfLines={1} style={{ fontSize: 19, letterSpacing: -0.4, fontVariant: ["tabular-nums"] }}>{s.value}</Text>
-          <Text weight="medium" numberOfLines={1} style={{ fontSize: 13, color: colors.muted }}>{s.label}</Text>
-        </Tile>
-      ))}
-    </View>
   );
 }
 
@@ -312,33 +298,30 @@ export function TimeColumn({ start, end, struck = false }: { start: string; end:
   );
 }
 
-/** Three-across metric cells: value with unit, label, and the change since
- *  last week in status colour. Hairline grid, no fills: dense, not boxy. */
-export function MetricGrid({
+/** Facts as label / value rows, the way Health and Settings list them:
+ *  label left, the change since last time beside the value, value right in
+ *  tabular figures, 36pt rows on hairlines. One column, every row readable. */
+export function FactList({
   items,
 }: {
   items: readonly { label: string; value: string; unit?: string; delta?: string; good?: boolean }[];
 }) {
   const colors = useThemeColors();
-  const rows: (typeof items)[number][][] = [];
-  for (let i = 0; i < items.length; i += 3) rows.push(items.slice(i, i + 3));
   return (
     <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
-      {rows.map((row, r) => (
-        <View key={r} style={{ flexDirection: "row", borderTopWidth: r ? StyleSheet.hairlineWidth : 0, borderColor: colors.border }}>
-          {row.map((m, c) => (
-            <View key={m.label} style={{ flex: 1, paddingVertical: 10, paddingLeft: c ? 12 : 0, borderLeftWidth: c ? StyleSheet.hairlineWidth : 0, borderColor: colors.border, gap: 1 }}>
-              <Text weight="medium" numberOfLines={1} style={{ fontSize: 12, color: colors.muted }}>{m.label}</Text>
-              <Text numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
-                <Text weight="semibold" style={{ fontSize: 17, letterSpacing: -0.3 }}>{m.value}</Text>
-                {m.unit ? <Text weight="medium" style={{ fontSize: 12, color: colors.muted }}>{` ${m.unit}`}</Text> : null}
-              </Text>
-              {m.delta ? (
-                <Text weight="medium" numberOfLines={1} style={{ fontSize: 12, color: m.good ? colors.success : colors.error, fontVariant: ["tabular-nums"] }}>{m.delta}</Text>
-              ) : null}
-            </View>
-          ))}
-          {Array.from({ length: 3 - row.length }, (_, i) => <View key={`pad-${i}`} style={{ flex: 1 }} />)}
+      {items.map((m, i) => (
+        <View
+          key={m.label}
+          style={{ flexDirection: "row", alignItems: "center", height: 36, columnGap: 8, borderTopWidth: i ? StyleSheet.hairlineWidth : 0, borderColor: colors.border }}
+        >
+          <Text weight="medium" numberOfLines={1} style={{ flex: 1, fontSize: 15, color: colors.muted }}>{m.label}</Text>
+          {m.delta ? (
+            <Text weight="medium" numberOfLines={1} style={{ fontSize: 13, color: m.good ? colors.success : colors.error, fontVariant: ["tabular-nums"] }}>{m.delta}</Text>
+          ) : null}
+          <Text numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
+            <Text weight="semibold" style={{ fontSize: 15 }}>{m.value}</Text>
+            {m.unit ? <Text weight="medium" style={{ fontSize: 13, color: colors.muted }}>{` ${m.unit}`}</Text> : null}
+          </Text>
         </View>
       ))}
     </View>
@@ -407,4 +390,10 @@ export function DataTable({
       ))}
     </View>
   );
+}
+
+/** A display page's section header: SELLERS Today's ArtSectionHeader (Thiings
+ *  icon, 17pt title, optional muted note on the right). */
+export function Section({ title, art, trailing }: { title: string; art: keyof typeof ART; trailing?: string }) {
+  return <ArtSectionHeader title={title} art={ART[art]} trailing={trailing} />;
 }

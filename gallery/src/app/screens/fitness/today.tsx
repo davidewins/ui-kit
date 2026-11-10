@@ -1,10 +1,9 @@
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
 import { Badge, Card, EmptyState, Text, View } from "@/components/ui";
 import { Gauge } from "@/components/ui/feedback/Gauge";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { ART, BODY, SESSIONS, WEEK_DAYS, WEEK_MINUTES, WEEK_PLAN, workoutById } from "@/gallery/demo/data";
-import { DemoScreen, GUTTER, MEDIA_INSET, MediaRow, MetricGrid, useStates } from "@/gallery/demo/parts";
+import { DemoScreen, GUTTER, MEDIA_INSET, MediaRow, FactList, useStates, Section } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { haptic } from "@/lib/haptics";
 import { Image } from "expo-image";
@@ -57,7 +56,7 @@ export default function Today() {
           <Gauge label="Active kcal" value={ring(rest ? 210 : 412)} max={600} valueLabel={String(ring(rest ? 210 : 412))} />
         </View>
         <WeekStrip rest={rest} />
-        <SectionTitle>{rest ? "Tomorrow, 07:00" : "Up next, 07:00"}</SectionTitle>
+        <Section title={rest ? "Tomorrow" : "Up next"} art="stopwatch" trailing="07:00" />
         <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
           <Link href={`/screens/fitness/workout/${next.id}`} asChild>
             <Link.Trigger>
@@ -113,9 +112,9 @@ export default function Today() {
             <Link.Preview />
           </Link>
         </View>
-        <SectionTitle>Body and recovery</SectionTitle>
-        <MetricGrid items={BODY} />
-        <SectionTitle>Recent</SectionTitle>
+        <Section title="Body and recovery" art="risingChart" trailing="vs last week" />
+        <FactList items={BODY} />
+        <Section title="Recent" art="calendar" />
         <SettingsGroup separatorInset={MEDIA_INSET}>
           {SESSIONS.slice(0, 4).map((s) => {
             const w = workoutById(s.workout);

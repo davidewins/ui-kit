@@ -3,12 +3,11 @@ import { Card, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { Gauge } from "@/components/ui/feedback/Gauge";
 import { StepperRow } from "@/components/ui/inputs/StepperRow";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { workoutById } from "@/gallery/demo/data";
-import { DataTable, DemoScreen, MetricGrid, TitleBlock, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, FactList, TitleBlock, useStates, Section } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { router } from "expo-router";
@@ -85,7 +84,7 @@ export default function Session() {
         {state === "Finished" ? (
           <>
             <TitleBlock title="Workout done" subtitle={`${W.name}, today 07:10 to 07:57`} />
-            <MetricGrid
+            <FactList
               items={[
                 { label: "Time", value: "47:12", delta: "+2:09 vs last", good: false },
                 { label: "Volume", value: "6,240", unit: "kg", delta: "+260 kg", good: true },
@@ -98,7 +97,7 @@ export default function Session() {
             <SettingsGroup>
               <SettingsRow label="New best: back squat" Icon={Trophy} trailing="100 kg × 3" />
             </SettingsGroup>
-            <SectionTitle>Exercises</SectionTitle>
+            <Section title="Exercises" art="checkMark" />
             <DataTable
               dense
               columns={[
@@ -143,7 +142,7 @@ export default function Session() {
               <Gauge label="Time" value={elapsed} max={45 * 60} valueLabel={`${Math.floor(elapsed / 60)}m`} />
             </View>
 
-            <SectionTitle>{ex.name}</SectionTitle>
+            <Section title={ex.name} art="stopwatch" trailing={`${done} of ${ex.sets} sets`} />
             <DataTable
               columns={[
                 { key: "set", label: "Set", width: 32, align: "left" },
@@ -180,7 +179,7 @@ export default function Session() {
               </SettingsGroup>
             ) : null}
 
-            <SectionTitle>Still to do</SectionTitle>
+            <Section title="Still to do" art="checklist" trailing={`${W.exercises.length - 1} exercises`} />
             <DataTable
               dense
               columns={[

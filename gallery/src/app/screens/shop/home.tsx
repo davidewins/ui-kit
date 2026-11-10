@@ -2,10 +2,9 @@ import { EmptyState, Text, View } from "@/components/ui";
 import { LoadErrorState } from "@/components/LoadErrorState";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { Chip } from "@/components/ui/inputs/Chip";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { ART, BASKET, PRODUCTS } from "@/gallery/demo/data";
 import { priceLine, stockBadge } from "@/gallery/demo/shop";
-import { ChipRow, DemoScreen, GUTTER, PhotoGrid, PhotoTile, RADIUS, useStates } from "@/gallery/demo/parts";
+import { ChipRow, DemoScreen, GUTTER, PhotoGrid, PhotoTile, RADIUS, useStates, Section } from "@/gallery/demo/parts";
 import { Skeleton } from "@/components/ui/feedback/Skeleton";
 import { Toast } from "@/lib/toast";
 import { Image } from "expo-image";
@@ -14,7 +13,7 @@ import { Link, Stack, router } from "expo-router";
 import { ShoppingBag } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable } from "react-native";
-import { SkeletonTitle, SkeletonPhotoGrid } from "@/gallery/demo/skeletons";
+import { SkeletonSection, SkeletonPhotoGrid } from "@/gallery/demo/skeletons";
 
 const CATEGORIES = ["All", "Running", "Lifestyle", "Audio", "Accessories"] as const;
 const STATES = ["Loaded", "Loading", "Couldn't load"] as const;
@@ -53,13 +52,13 @@ export default function ShopHome() {
             {state === "Loading" ? (
               <>
                 {cat === "All" ? <SkeletonFeatured /> : null}
-                <SkeletonTitle />
+                <SkeletonSection />
                 <SkeletonPhotoGrid count={4} />
               </>
             ) : (
               <>
                 {cat === "All" && !query ? <Featured /> : null}
-                <SectionTitle>{query ? "Results" : cat === "All" ? "New in" : cat}</SectionTitle>
+                <Section title={query ? "Results" : cat === "All" ? "New in" : cat} art="shop" trailing={`${shown.length} items`} />
                 {shown.length === 0 ? (
                   <EmptyState layout="inline" art={{ image: ART.magnifier }} title={`Nothing for "${q.trim()}"`} body="Check the spelling, or try another category" />
                 ) : null}

@@ -1,15 +1,14 @@
 import { Badge, EmptyState, View } from "@/components/ui";
 import { HeaderIconButton } from "@/components/ui/actions/HeaderIconButton";
 import { Chip } from "@/components/ui/inputs/Chip";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { ART, BOOKINGS, type Booking, DAYS, STAFF_LOAD, STATUS_BADGE, clientById, euro, serviceById } from "@/gallery/demo/data";
-import { ChipRow, DemoScreen, MEDIA_INSET, MediaRow, MetricGrid, TimeColumn, useStates } from "@/gallery/demo/parts";
+import { ChipRow, DemoScreen, MEDIA_INSET, MediaRow, FactList, TimeColumn, useStates, Section } from "@/gallery/demo/parts";
 import { Gauge } from "@/components/ui/feedback/Gauge";
 import { Stack, router } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";
-import { SkeletonBars, SkeletonMediaRows, SkeletonMetricGrid, SkeletonTitle } from "@/gallery/demo/skeletons";
+import { SkeletonBars, SkeletonMediaRows, SkeletonFacts, SkeletonSection } from "@/gallery/demo/skeletons";
 
 const STATES = ["Busy", "Loading", "Day off"] as const;
 
@@ -56,11 +55,11 @@ export default function Schedule() {
         </ChipRow>
         {state === "Loading" ? (
           <>
-            <SkeletonMetricGrid rows={2} />
-            <SkeletonBars count={3} twoUp />
-            <SkeletonTitle />
+            <SkeletonFacts rows={6} />
+            <SkeletonBars count={3} />
+            <SkeletonSection />
             <SkeletonMediaRows count={3} lead="time" />
-            <SkeletonTitle />
+            <SkeletonSection />
             <SkeletonMediaRows count={4} lead="time" />
           </>
         ) : state === "Day off" ? (
@@ -73,7 +72,7 @@ export default function Schedule() {
           />
         ) : (
           <>
-            <MetricGrid
+            <FactList
               items={[
                 { label: "Bookings", value: String(live.length), delta: "+2 on last Wed", good: true },
                 { label: "Booked", value: "5.4", unit: "h of 22", delta: "25% full", good: false },
@@ -83,16 +82,14 @@ export default function Schedule() {
                 { label: "No-shows", value: "0", unit: "this week" },
               ]}
             />
-            <View style={{ flexDirection: "row", columnGap: 12, marginHorizontal: 16, marginBottom: 6 }}>
+            <View style={{ gap: 10, marginHorizontal: 16, marginBottom: 6 }}>
               {STAFF_LOAD.map((st) => (
-                <View key={st.name} style={{ flex: 1 }}>
-                  <Gauge variant="bar" label={st.name} value={st.booked} max={st.shift} valueLabel={`${Math.round((st.booked / st.shift) * 100)}%`} />
-                </View>
+                <Gauge key={st.name} variant="bar" label={st.name} value={st.booked} max={st.shift} valueLabel={`${st.booked} of ${st.shift} h`} />
               ))}
             </View>
-            <SectionTitle>Morning</SectionTitle>
+            <Section title="Morning" art="calendar" trailing={`${morning.length} bookings`} />
             <SettingsGroup separatorInset={MEDIA_INSET}>{rows(morning)}</SettingsGroup>
-            <SectionTitle>Afternoon</SectionTitle>
+            <Section title="Afternoon" art="stopwatch" trailing={`${afternoon.length} bookings`} />
             <SettingsGroup separatorInset={MEDIA_INSET}>{rows(afternoon)}</SettingsGroup>
           </>
         )}

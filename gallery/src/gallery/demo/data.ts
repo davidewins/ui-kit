@@ -31,6 +31,19 @@ export const ART = {
   magnifier: require("@/assets/images/empty/magnifying-glass.png"),
   envelope: require("@/assets/images/empty/envelope.png"),
   padlock: require("@/assets/images/empty/padlock.png"),
+  barChart: require("@/assets/images/empty/bar-chart.png"),
+  risingChart: require("@/assets/images/empty/rising-chart.png"),
+  checklist: require("@/assets/images/empty/checklist.png"),
+  checkMark: require("@/assets/images/empty/check-mark.png"),
+  clipboard: require("@/assets/images/empty/clipboard.png"),
+  truck: require("@/assets/images/empty/delivery-truck.png"),
+  receipt: require("@/assets/images/empty/receipt.png"),
+  euro: require("@/assets/images/empty/euro-note.png"),
+  gift: require("@/assets/images/empty/gift-box.png"),
+  pin: require("@/assets/images/empty/map-pin.png"),
+  shop: require("@/assets/images/empty/shop.png"),
+  document: require("@/assets/images/empty/document.png"),
+  megaphone: require("@/assets/images/empty/megaphone.png"),
 };
 
 // Fitness

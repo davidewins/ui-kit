@@ -2,12 +2,11 @@ import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
 import { Card, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
 import { ProgressBar } from "@/components/ui/feedback/ProgressBar";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { BASKET, SHOP_ORDERS, euro, productById } from "@/gallery/demo/data";
-import { DataTable, DemoScreen, MEDIA_INSET, MediaRow, MetricGrid, Summary, useStates } from "@/gallery/demo/parts";
+import { DataTable, DemoScreen, MEDIA_INSET, MediaRow, FactList, Summary, useStates, Section } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
@@ -83,7 +82,7 @@ export default function Order() {
           highlight={reached - 1}
         />
 
-        <MetricGrid
+        <FactList
           items={[
             { label: "Courier", value: "DPD" },
             { label: "Tracking", value: "15502 8841" },
@@ -94,7 +93,7 @@ export default function Order() {
           ]}
         />
 
-        <SectionTitle>{`${lines.reduce((n, l) => n + l.qty, 0)} items`}</SectionTitle>
+        <Section title="Items" art="receipt" trailing={`${lines.reduce((n, l) => n + l.qty, 0)}`} />
         <SettingsGroup separatorInset={MEDIA_INSET}>
           {lines.map((l) => {
             const p = productById(l.product);

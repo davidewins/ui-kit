@@ -1,13 +1,12 @@
 import { InsetFooter } from "@/components/onboarding/shells/InsetShell";
 import { Badge, Text, View } from "@/components/ui";
 import { ActionMenu } from "@/components/ui/actions/ActionMenu";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsIdentity } from "@/components/ui/lists/SettingsIdentity";
 import { SettingsRow } from "@/components/ui/lists/SettingsRow";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { STATUS_BADGE, VISITS, bookingById, clientById, euro, serviceById } from "@/gallery/demo/data";
-import { Avatar, DataTable, DemoScreen, MetricGrid, useStates } from "@/gallery/demo/parts";
+import { Avatar, DataTable, DemoScreen, FactList, useStates, Section } from "@/gallery/demo/parts";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { router, useLocalSearchParams } from "expo-router";
@@ -68,7 +67,7 @@ export default function BookingDetail() {
           <SettingsRow label={`${s.name}, ${s.minutes} min`} Icon={Scissors} trailing={s.price ? euro(s.price) : "Free"} />
           <SettingsRow label={`Wed 12 Nov, ${b.start} to ${b.end}`} Icon={CalendarDays} trailing={b.staff} />
         </SettingsGroup>
-        <MetricGrid
+        <FactList
           items={[
             { label: "Visits", value: String(c.visits) },
             { label: "Spent", value: euro(c.spent) },
@@ -80,11 +79,11 @@ export default function BookingDetail() {
         />
         {c.note ? (
           <>
-            <SectionTitle>Note</SectionTitle>
+            <Section title="Note" art="clipboard" />
             <Text weight="medium" style={{ fontSize: 15, lineHeight: 21, color: colors.muted, marginHorizontal: 16, marginBottom: 6 }}>{c.note}</Text>
           </>
         ) : null}
-        <SectionTitle>Past visits</SectionTitle>
+        <Section title="Past visits" art="calendar" trailing={`${c.visits} in all`} />
         <DataTable
           dense
           columns={[

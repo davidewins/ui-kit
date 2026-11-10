@@ -141,13 +141,13 @@ export function SkeletonChartCard() {
   );
 }
 
-/** A row of three small stat tiles. */
-export function SkeletonTiles() {
+/** Section (ArtSectionHeader)'s box: 16 in, 28 above, 10 below, the 28pt
+ *  icon then a 17pt title. */
+export function SkeletonSection() {
   return (
-    <View style={{ flexDirection: "row", gap: 10, marginHorizontal: GUTTER, marginBottom: 18 }}>
-      {[0, 1, 2].map((i) => (
-        <Skeleton key={i} height={66} radius={16} style={{ flex: 1 }} />
-      ))}
+    <View style={{ flexDirection: "row", alignItems: "center", columnGap: 10, paddingHorizontal: GUTTER, marginTop: 28, marginBottom: 10 }}>
+      <Skeleton width={28} height={28} radius={8} />
+      <Skeleton width={120} height={14} radius={4} />
     </View>
   );
 }
@@ -198,20 +198,15 @@ export function SkeletonTable({ rows = 5, numbers = 3, dense = true }: { rows?: 
   );
 }
 
-/** MetricGrid's shape: rows of three cells (label, value, change) split by hairlines. */
-export function SkeletonMetricGrid({ rows = 2 }: { rows?: number }) {
+/** FactList's shape: 36pt label / value rows on hairlines. */
+export function SkeletonFacts({ rows = 4 }: { rows?: number }) {
   const colors = useThemeColors();
   return (
     <View style={{ marginHorizontal: GUTTER, marginBottom: 18 }}>
-      {Array.from({ length: rows }, (_, r) => (
-        <View key={r} style={{ flexDirection: "row", borderTopWidth: r ? StyleSheet.hairlineWidth : 0, borderColor: colors.border }}>
-          {[0, 1, 2].map((c) => (
-            <View key={c} style={{ flex: 1, paddingVertical: 10, paddingLeft: c ? 12 : 0, borderLeftWidth: c ? StyleSheet.hairlineWidth : 0, borderColor: colors.border, gap: 1 }}>
-              <Line box={15} bar={9} width="60%" />
-              <Line box={22} bar={14} width="50%" />
-              <Line box={15} bar={9} width="70%" />
-            </View>
-          ))}
+      {Array.from({ length: rows }, (_, i) => (
+        <View key={i} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 36, borderTopWidth: i ? StyleSheet.hairlineWidth : 0, borderColor: colors.border }}>
+          <Skeleton width={i % 2 ? 90 : 120} height={11} radius={4} />
+          <Skeleton width={56} height={11} radius={4} />
         </View>
       ))}
     </View>
