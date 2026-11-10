@@ -34,9 +34,8 @@ function SwiftStack() {
   const [path, setPath] = useState<string[]>([]);
   const muted = [font({ family: "Geist-Medium", size: 15 }), foregroundStyle(colors.muted)];
   return (
-    <DemoPage usage='SwiftUI: import { NavigationStack, NavigationLink, NavigationDestination } from "@expo/ui/swift-ui". Apps navigate with expo-router.'>
-      <Demo title={path.length ? `Showing order #${path[path.length - 1]}` : "Tap an order"}>
-        <Frame height={440}>
+    <DemoPage usage='SwiftUI: import { NavigationStack, NavigationLink, NavigationDestination } from "@expo/ui/swift-ui". Apps navigate with expo-router.' fill>
+        <Frame fill>
           <SwiftHost style={{ flex: 1 }}>
             <NavigationStack path={path} onPathChange={setPath}>
               <List modifiers={[navigationTitle("Kitchen"), navigationBarTitleDisplayMode("inline")]}>
@@ -70,7 +69,6 @@ function SwiftStack() {
             </NavigationStack>
           </SwiftHost>
         </Frame>
-      </Demo>
       <Note>Android: expo-router Stack screens; there is no Compose navigation host in @expo/ui.</Note>
     </DemoPage>
   );

@@ -18,11 +18,9 @@ const match = (q: string) => MENU.filter((m) => m.name.toLowerCase().includes(q.
 export default function SearchPage() {
   const colors = useThemeColors();
   return (
-    <DemoPage usage='Screens: headerSearchBarOptions on the expo-router Stack.Screen (see the ZESTY home page). Islands: SwiftUI searchable(), Compose SearchBar / DockedSearchBar.'>
+    <DemoPage usage='Screens: headerSearchBarOptions on the expo-router Stack.Screen (see the ZESTY home page). Islands: SwiftUI searchable(), Compose SearchBar / DockedSearchBar.' fill={isIOS}>
       {isIOS ? <SwiftSearch /> : <ComposeSearch />}
-      <Text weight="medium" style={{ fontSize: 13, color: colors.muted, paddingHorizontal: 20, paddingTop: 16 }}>
-        {isIOS ? "Android: Compose SearchBar and DockedSearchBar." : "iOS: SwiftUI searchable() on a NavigationStack."}
-      </Text>
+      <Note>{isIOS ? "Android: Compose SearchBar and DockedSearchBar." : "iOS: SwiftUI searchable() on a NavigationStack."}</Note>
     </DemoPage>
   );
 }
@@ -31,8 +29,7 @@ function SwiftSearch() {
   const text = useNativeState("");
   const [q, setQ] = useState("");
   return (
-    <Demo title="searchable(): filter the menu">
-      <Frame height={400}>
+      <Frame fill>
         <SwiftHost style={{ flex: 1 }}>
           <NavigationStack>
             <List
@@ -49,7 +46,6 @@ function SwiftSearch() {
           </NavigationStack>
         </SwiftHost>
       </Frame>
-    </Demo>
   );
 }
 

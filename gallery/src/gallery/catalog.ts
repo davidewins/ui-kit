@@ -96,6 +96,9 @@ export interface Section {
 
 export interface Entry {
   title: string;
+  /** The page's own header title, when the catalog title describes the
+   *  variant ("Tracking, arriving now") rather than naming the page. */
+  header?: string;
   /** Expo Router route name (file path under src/app without .tsx). */
   route: string;
   /** Link target when the route has params. Defaults to "/" + route. */
@@ -130,12 +133,15 @@ export const SECTIONS: Section[] = [
   s("components", "layout", "Layout", LayoutGrid),
   s("components", "data", "Data and media", ChartColumn),
   s("components", "native", "Native hosts", Cpu),
-  s("screens", "creator", "Creator (TKVR redo)", Megaphone),
-  s("screens", "motion", "Transitions", Clapperboard),
   s("screens", "fitness", "Fitness", Dumbbell),
+  s("screens", "money", "Money", Wallet),
+  s("screens", "orders", "Orders", Package),
   s("screens", "shop", "Shop", ShoppingBag),
-  s("screens", "bookings", "Bookings", CalendarDays),
+  s("screens", "calendar", "Calendar", CalendarDays),
+  s("screens", "social", "Social", Megaphone),
+  s("screens", "bookings", "Bookings", Clock),
   s("screens", "profile", "Account and settings", User),
+  s("screens", "motion", "Transitions", Clapperboard),
   s("screens", "sign-in", "Sign in", LogIn),
   s("screens", "account", "Account (copied from the apps)", User),
   s("screens", "selling", "Selling (SELLERS)", Store),
@@ -238,27 +244,48 @@ export const ENTRIES: Entry[] = [
   c("native", "host", "Host and RNHostView", Cpu, "Host RNHostView SwiftHost ComposeHost"),
   c("native", "native-state", "Native state", Timer, "useNativeState SyncToggle SyncSwitch worklet"),
 
-  // Creator: TKVR's social pages, redone
-  { title: "Social calendar", route: "screens/creator/calendar", section: "creator", Icon: CalendarDays, keywords: "TKVR social posts month MonthCalendar schedule", states: ["Busy month", "Loading", "Empty day"] },
-  { title: "Social account", route: "screens/creator/account/[id]", href: "/screens/creator/account/ig", section: "creator", Icon: Megaphone, keywords: "TKVR instagram followers reach results disconnect", states: ["Connected", "Login expired", "Loading", "No posts"] },
-
   // Transitions
   { title: "Apple zoom", route: "screens/motion/zoom", section: "motion", Icon: Music, keywords: "AppleZoom zoom transition Link.Preview peek menu native apple music" },
   { title: "Push styles", route: "screens/motion/push-styles", section: "motion", Icon: Navigation, keywords: "animation fade slide_from_bottom simple_push native stack" },
   { title: "Transition lab", route: "screens/motion/lab/index", href: "/screens/motion/lab", section: "motion", Icon: Wand, keywords: "react-native-screen-transitions shared element bounds zoom presets sheet snap points card stack" },
 
+  // Screens built to look like the best app at each job, on kit components
+  // (charts, rings, calendars, timelines, bubbles). src/screens holds them.
+  { title: "Today", route: "screens/fitness/today", section: "fitness", Icon: Activity, keywords: "ActivityRings Sparkline Trend rings home goals week" },
+  { title: "Live workout", header: "Lower body power", route: "screens/fitness/session", section: "fitness", Icon: Timer, keywords: "rest timer ActivityRings sets heart rate" },
+  { title: "Workout summary", header: "Lower body power", route: "screens/fitness/summary", section: "fitness", Icon: Trophy, keywords: "LineChart SegmentBar BarList heart rate zones records" },
+  { title: "Progress", route: "screens/fitness/progress", section: "fitness", Icon: ChartLine, keywords: "Heatmap BarChart LineChart BarList consistency volume one-rep max" },
+  { title: "Balance", route: "screens/money/balance", section: "money", Icon: Wallet, keywords: "LineChart IconTile Chip transactions payout scrub" },
+  { title: "Sales today", header: "Today", route: "screens/money/sales", section: "money", Icon: ChartColumn, keywords: "BarChart SegmentBar BarList Badge forecast channels" },
+  { title: "Spending", header: "October", route: "screens/money/spending", section: "money", Icon: Disc, keywords: "DonutChart LineChart Heatmap comparison busy hours" },
+  { title: "Rider earnings", header: "Earnings", route: "screens/money/earnings", section: "money", Icon: Bike, keywords: "BarChart SegmentBar ProgressBar goal trips tips RIDERS" },
+  { title: "Orders", route: "screens/orders/list", section: "orders", Icon: Receipt, keywords: "ThumbStack StepTracker history reorder" },
+  { title: "Tracking, courier timeline", header: "Order", route: "screens/orders/track-timeline", section: "orders", Icon: Package, keywords: "Timeline StepTracker BrandMark CopyButton DPD Visa" },
+  { title: "Tracking, arriving now", header: "On its way", route: "screens/orders/track-live", section: "orders", Icon: Bike, keywords: "QuickActions Avatar handover code ETA rider" },
+  { title: "Receipt", route: "screens/orders/receipt", section: "orders", Icon: Receipt, keywords: "TicketCard BrandMark CopyButton VAT totals" },
+  { title: "Order on one screen", header: "Order", route: "screens/orders/compact", section: "orders", Icon: Rows3, keywords: "dense compact VOID StepTracker" },
+  { title: "Product, photo gallery", header: "", route: "screens/orders/product-gallery", section: "shop", Icon: Image, keywords: "Carousel Chip reviews sizes stock" },
+  { title: "Product, editorial", header: "", route: "screens/orders/product-editorial", section: "shop", Icon: Type, keywords: "PhotoCard glass story specs" },
+  { title: "Month", header: "Calendar", route: "screens/calendar/month", section: "calendar", Icon: Calendar, keywords: "MonthGrid posts TKVR social calendar" },
+  { title: "Week", header: "Calendar", route: "screens/calendar/week", section: "calendar", Icon: Columns2, keywords: "WeekGrid hours now line" },
+  { title: "Day", header: "Calendar", route: "screens/calendar/day", section: "calendar", Icon: CalendarDays, keywords: "DayTimeline WeekStrip bookings salon overlap" },
+  { title: "List", header: "Calendar", route: "screens/calendar/agenda", section: "calendar", Icon: LayoutList, keywords: "AgendaList agenda two weeks" },
+  { title: "Team day", header: "Calendar", route: "screens/calendar/team", section: "calendar", Icon: Users, keywords: "DayTimeline columns staff resource view" },
+  { title: "Account, profile", route: "screens/social/account-profile", section: "social", Icon: User, keywords: "Avatar MediaGrid IconTabs posts TKVR instagram" },
+  { title: "Account, insights", route: "screens/social/account-insights", section: "social", Icon: ChartLine, keywords: "LineChart BarChart DonutChart Heatmap followers reach best times" },
+  { title: "Account, timeline", route: "screens/social/account-feed", section: "social", Icon: Megaphone, keywords: "post cards results failed retry SegmentBar" },
+  { title: "Inbox", route: "screens/social/inbox", section: "social", Icon: Inbox, keywords: "ConversationRow DMs unread networks" },
+  { title: "Conversation", route: "screens/social/thread", section: "social", Icon: MessageSquare, keywords: "MessageBubble Composer chat thread" },
+  { title: "Activity", route: "screens/social/activity", section: "social", Icon: Bell, keywords: "AvatarStack likes comments follows mentions" },
+  { title: "Choose a plan", header: "Set up", route: "screens/profile/plan", section: "profile", Icon: Sparkles, keywords: "SelectRow GlassGroup InsetShell SegmentedControl pricing onboarding" },
+
   // Demo apps: built only from kit components, one idiom across all of them.
-  { title: "Today", route: "screens/fitness/today", section: "fitness", Icon: Activity, keywords: "home week goal", states: ["Workout day", "Rest day", "New"] },
   { title: "Workouts", route: "screens/fitness/workouts", section: "fitness", Icon: Dumbbell, keywords: "library grid chips", states: ["Loaded", "Loading", "No results"] },
   { title: "Workout", route: "screens/fitness/workout/[id]", href: "/screens/fitness/workout/lower-power", section: "fitness", Icon: Dumbbell, keywords: "detail exercises", states: ["Not started", "In your plan", "Done today"] },
-  { title: "Live workout", route: "screens/fitness/session", section: "fitness", Icon: Timer, keywords: "session sets stepper rest", states: ["Lifting", "Resting", "Finished"] },
-  { title: "Progress", route: "screens/fitness/history", section: "fitness", Icon: Trophy, keywords: "history chart personal best", states: ["Loaded", "Loading", "Empty"] },
   { title: "New workout", route: "screens/fitness/new-workout", section: "fitness", Icon: Plus, keywords: "create modal" },
   { title: "Shop", route: "screens/shop/home", section: "shop", Icon: Store, keywords: "ecommerce home grid", states: ["Loaded", "Loading", "Couldn't load"] },
   { title: "Product", route: "screens/shop/product/[id]", href: "/screens/shop/product/pace", section: "shop", Icon: Tag, keywords: "sizes carousel", states: ["In stock", "Sold out"] },
   { title: "Bag and checkout", route: "screens/shop/basket", section: "shop", Icon: ShoppingCart, keywords: "basket cart checkout VOID BasketFooter" },
-  { title: "Order", route: "screens/shop/order/[id]", href: "/screens/shop/order/4821", section: "shop", Icon: Package, keywords: "tracking status", states: ["Processing", "On the way", "Delivered"] },
-  { title: "Orders", route: "screens/shop/orders", section: "shop", Icon: Receipt, keywords: "history", states: ["Loaded", "Loading", "Empty"] },
   { title: "Schedule", route: "screens/bookings/schedule", section: "bookings", Icon: CalendarDays, keywords: "day appointments salon", states: ["Busy", "Loading", "Day off"] },
   { title: "Booking", route: "screens/bookings/booking/[id]", href: "/screens/bookings/booking/b2", section: "bookings", Icon: Clock, keywords: "appointment detail check in", states: ["Confirmed", "Checked in", "Cancelled"] },
   { title: "New booking", route: "screens/bookings/new-booking", section: "bookings", Icon: CalendarPlus, keywords: "create slots modal" },

@@ -21,6 +21,7 @@ import { font, foregroundStyle, navigationBarTitleDisplayMode, navigationTitle, 
 export default function ToolbarPage() {
   return (
     <DemoPage
+      fill={isIOS}
       usage={
         isIOS
           ? 'SwiftUI: import { Toolbar, ToolbarItem } from "@expo/ui/swift-ui" inside a NavigationStack. App headers use expo-router + ActionMenu.'
@@ -36,8 +37,7 @@ function SwiftToolbar() {
   const colors = useThemeColors();
   return (
     <>
-      <Demo title="Top bar and bottom bar items">
-        <Frame height={320}>
+        <Frame fill>
           <SwiftHost style={{ flex: 1 }}>
             <NavigationStack>
               <Toolbar modifiers={[navigationTitle("Order #1042"), navigationBarTitleDisplayMode("inline")]}>
@@ -57,7 +57,6 @@ function SwiftToolbar() {
             </NavigationStack>
           </SwiftHost>
         </Frame>
-      </Demo>
       <Note>Android: Compose TopAppBar and HorizontalFloatingToolbar.</Note>
     </>
   );

@@ -23,9 +23,8 @@ function SwiftSplit() {
   const [store, setStore] = useState<(typeof STORES)[number]>(STORES[0]);
   const [column, setColumn] = useState<NavigationSplitViewColumn>("sidebar");
   return (
-    <DemoPage usage='SwiftUI: import { NavigationSplitView } from "@expo/ui/swift-ui". One column on iPhone, two on iPad.'>
-      <Demo title={`Selected: ${store.name}`}>
-        <Frame height={440}>
+    <DemoPage usage='SwiftUI: import { NavigationSplitView } from "@expo/ui/swift-ui". One column on iPhone, two on iPad.' fill>
+        <Frame fill>
           <SwiftHost style={{ flex: 1 }}>
             <NavigationSplitView preferredCompactColumn={column} onPreferredCompactColumnChange={setColumn}>
               <NavigationSplitView.Sidebar>
@@ -51,7 +50,6 @@ function SwiftSplit() {
             </NavigationSplitView>
           </SwiftHost>
         </Frame>
-      </Demo>
       <Note>Android: list and detail as two expo-router screens.</Note>
     </DemoPage>
   );

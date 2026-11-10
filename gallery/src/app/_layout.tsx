@@ -24,12 +24,10 @@ const minimal = { headerBackButtonDisplayMode: "minimal" as const };
 // paints its header in the page colour, so its pages are opaque.
 const SCREEN_OPTIONS: Record<string, NativeStackNavigationOptions> = {
   "screens/patterns/create": { presentation: "modal", headerTransparent: false },
-  "screens/creator/account/[id]": { ...minimal },
   "screens/fitness/new-workout": { presentation: "modal", headerTransparent: false },
   "screens/bookings/new-booking": { presentation: "modal", headerTransparent: false },
   "screens/fitness/workout/[id]": { ...minimal, title: "" },
   "screens/shop/product/[id]": { ...minimal, title: "" },
-  "screens/shop/order/[id]": { ...minimal },
   "screens/bookings/booking/[id]": { ...minimal },
   "screens/patterns/detail": { title: "" },
   "screens/sign-in/welcome": { headerShown: false },
@@ -47,6 +45,37 @@ const SCREEN_OPTIONS: Record<string, NativeStackNavigationOptions> = {
   "screens/delivering/earnings": { ...minimal },
   "screens/delivering/delivery/[id]": { ...minimal, title: "Active Delivery", headerTransparent: false },
 };
+
+// The src/screens pages: back chevron only, like any pushed page in the apps.
+const NEW_SCREENS = new Set([
+  "screens/calendar/agenda",
+  "screens/calendar/day",
+  "screens/calendar/month",
+  "screens/calendar/team",
+  "screens/calendar/week",
+  "screens/fitness/progress",
+  "screens/fitness/session",
+  "screens/fitness/summary",
+  "screens/fitness/today",
+  "screens/money/balance",
+  "screens/money/earnings",
+  "screens/money/sales",
+  "screens/money/spending",
+  "screens/orders/compact",
+  "screens/orders/list",
+  "screens/orders/product-editorial",
+  "screens/orders/product-gallery",
+  "screens/orders/receipt",
+  "screens/orders/track-live",
+  "screens/orders/track-timeline",
+  "screens/profile/plan",
+  "screens/social/account-feed",
+  "screens/social/account-insights",
+  "screens/social/account-profile",
+  "screens/social/activity",
+  "screens/social/inbox",
+  "screens/social/thread",
+]);
 
 // Page types: the root screenOptions above paint every page and give it a
 // header. Sheets and overlays undo both, so the native sheet material (or the
@@ -102,7 +131,7 @@ export default function RootLayout() {
               <Stack.Screen key={sec.route} name={sec.route} options={{ title: sec.title }} />
             ))}
             {ENTRIES.filter((e) => !NESTED_STACKS.some((n) => e.route.startsWith(`${n}/`))).map((e) => (
-              <Stack.Screen key={e.route} name={e.route} options={{ title: e.title, ...SCREEN_OPTIONS[e.route] }} />
+              <Stack.Screen key={e.route} name={e.route} options={{ title: e.header ?? e.title, ...(e.route in SCREEN_OPTIONS ? SCREEN_OPTIONS[e.route] : NEW_SCREENS.has(e.route) ? minimal : null) }} />
             ))}
             {NESTED_STACKS.map((n) => (
               // The lab pops its own pages; a native edge swipe would pop the

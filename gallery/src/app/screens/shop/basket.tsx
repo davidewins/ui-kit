@@ -148,7 +148,7 @@ export default function ShopBasket() {
         prepTimeMins={15}
         handlePlaceOrder={() => {
           useBasketStore.setState({ items: [] });
-          router.push("/screens/shop/order/4821");
+          router.push("/screens/orders/track-timeline");
         }}
         onRetryPaymentSetup={() => {}}
         promoCode={null}

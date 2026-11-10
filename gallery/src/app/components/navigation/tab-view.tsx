@@ -20,15 +20,24 @@ export default function TabViewPage() {
   const [tab, setTab] = useState<string>("orders");
   return (
     <DemoPage
+      fill={isIOS}
       usage={
         isIOS
           ? 'SwiftUI: import { TabView } from "@expo/ui/swift-ui". App tabs use expo-router native tabs.'
           : 'Compose: import { NavigationBar, NavigationBarItem } from "@expo/ui/jetpack-compose". App tabs use expo-router native tabs.'
       }
     >
-      <Demo title={`Selected: ${TABS.find((t) => t.key === tab)!.label}`}>
-        <Frame height={300}>{isIOS ? <SwiftTabs onTab={setTab} /> : <ComposeTabs tab={tab} onTab={setTab} />}</Frame>
-      </Demo>
+      {isIOS ? (
+        <Frame fill>
+          <SwiftTabs onTab={setTab} />
+        </Frame>
+      ) : (
+        <Demo title={`Selected: ${TABS.find((t) => t.key === tab)!.label}`}>
+          <Frame height={300}>
+            <ComposeTabs tab={tab} onTab={setTab} />
+          </Frame>
+        </Demo>
+      )}
       <Note>{isIOS ? "Android: Compose NavigationBar with NavigationBarItems." : "iOS: SwiftUI TabView."}</Note>
     </DemoPage>
   );

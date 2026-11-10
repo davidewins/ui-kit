@@ -53,7 +53,7 @@ export default function Account() {
           </SettingsGroup>
         ) : null}
         <SettingsGroup>
-          <SettingsRow label="Orders" Icon={Package} trailing="2 in progress" navigates href="/screens/shop/orders" />
+          <SettingsRow label="Orders" Icon={Package} trailing="2 in progress" navigates href="/screens/orders/list" />
           <SettingsRow label="Addresses" Icon={MapPin} trailing="2" navigates onPress={() => Toast.info("Addresses")} />
           <SettingsRow label="Payment methods" Icon={CreditCard} trailing="Visa 4242" navigates onPress={() => Toast.info("Payment methods")} />
         </SettingsGroup>

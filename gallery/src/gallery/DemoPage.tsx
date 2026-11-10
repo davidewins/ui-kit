@@ -25,6 +25,7 @@ export function DemoPage({
   children,
   bottom,
   inline = false,
+  fill = false,
 }: {
   /** The import line: where this comes from in an app. */
   usage: string;
@@ -33,6 +34,10 @@ export function DemoPage({
   bottom?: ReactNode;
   /** The page owns headerRight (a header menu demo): show usage and notes in the page. */
   inline?: boolean;
+  /** One native island takes the whole screen under the header (navigation
+   *  demos: David, 10 Nov, "show it fullscreen"). No scroll view, and the
+   *  header is opaque so the island starts below it. */
+  fill?: boolean;
 }) {
   const insets = useSafeAreaInsets();
   const colors = useThemeColors();
@@ -54,6 +59,7 @@ export function DemoPage({
       {inline ? null : (
         <Stack.Screen
           options={{
+            ...(fill ? { headerTransparent: false } : null),
             headerRight: () => (
               <HeaderIconButton icon={Info} accessibilityLabel="About this component" onPress={() => setOpen(true)} />
             ),
@@ -61,13 +67,17 @@ export function DemoPage({
         />
       )}
       <View style={{ flex: 1 }}>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          contentContainerStyle={{ paddingBottom: bottom ? 24 : insets.bottom + 32 }}
-        >
-          {inline ? <InfoText>{usage}</InfoText> : null}
-          {children}
-        </ScrollView>
+        {fill ? (
+          <View style={{ flex: 1 }}>{children}</View>
+        ) : (
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            contentContainerStyle={{ paddingBottom: bottom ? 24 : insets.bottom + 32 }}
+          >
+            {inline ? <InfoText>{usage}</InfoText> : null}
+            {children}
+          </ScrollView>
+        )}
         {bottom}
       </View>
       {inline ? null : (
@@ -125,9 +135,11 @@ export function Note({ children }: { children: string }) {
   );
 }
 
-/** A fixed-size box for a native island that needs real height (stacks, tabs, lists). */
-export function Frame({ height, children }: { height: number; children: ReactNode }) {
+/** A fixed-size box for a native island that needs real height (stacks, tabs, lists).
+ *  With `fill` (inside a DemoPage fill) it is the whole screen, edge to edge. */
+export function Frame({ height, fill = false, children }: { height?: number; fill?: boolean; children: ReactNode }) {
   const colors = useThemeColors();
+  if (fill) return <View style={{ flex: 1 }}>{children}</View>;
   return (
     <View
       style={{
