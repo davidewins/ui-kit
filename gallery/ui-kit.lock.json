@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "3ed1ccb",
+  "rev": "fff0923",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -105,7 +105,7 @@
     "src/components/ui/data/DonutChart.tsx": "dc291c9749a7c406ea3d6a4ceb39b37f23ba4b47867f8b9ee51a390f115ccd06",
     "src/components/ui/data/Heatmap.tsx": "0fc86560775027eb9302a906d2598c5fe6799bedb6d7ee123d1c2f7d12c4afaf",
     "src/components/ui/data/LineChart.tsx": "ff9c797f909a0b14848b919422686f8fa18df40e25b9bb47a845a15130a37fc2",
-    "src/components/ui/data/SegmentBar.tsx": "c2d445bbaf8d26dabbdc8a21f438809b34fbf552289fd0a15f5aa46ac8433710",
+    "src/components/ui/data/SegmentBar.tsx": "8d33a7a33a1f702269d2eef3f40d205c61daff448fa3742d1fddafc56af9e880",
     "src/components/ui/data/Trend.tsx": "140f9ba255d3125c472c5a77df655ed01dff58fe5eff22f07beca78ffeb01a66",
     "src/components/ui/feedback/StepTracker.tsx": "06f9c4ba5056c6d358afc96fee1ea647e1de3f7096d485bf17692ca410958338",
     "src/components/ui/feedback/Timeline.tsx": "0196a5f59acdaeb8fb1d6d994e1af274e60515704181f0a630f0b8834aa62ccd",

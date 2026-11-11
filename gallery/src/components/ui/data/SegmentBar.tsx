@@ -28,8 +28,10 @@ export function SegmentBar({ segments, height = 12, legend = true, accessibility
   return (
     <View accessibilityRole="image" accessibilityLabel={accessibilityLabel ?? segments.map((s) => `${s.label} ${figure(s)}`).join(", ")}>
       <View style={{ flexDirection: "row", height, columnGap: 2, borderRadius: height / 2, overflow: "hidden" }}>
-        {segments.map((s) => (
-          <View key={s.label} style={{ flex: s.value, minWidth: 2, backgroundColor: s.color }} />
+        {/* Destructured on purpose: Reanimated's Babel plugin warns on any
+            `x.value` written inside an inline style, shared value or not. */}
+        {segments.map(({ label, value, color }) => (
+          <View key={label} style={{ flex: value, minWidth: 2, backgroundColor: color }} />
         ))}
       </View>
       {legend ? (
