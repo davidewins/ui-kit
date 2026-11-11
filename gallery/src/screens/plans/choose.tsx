@@ -23,7 +23,6 @@ const PLANS = [
 
 const FEATURES: { label: string; from: number; detail: [string, string, string] }[] = [
   { label: "Connected accounts", from: 0, detail: ["3", "10", "Unlimited"] },
-  { label: "Scheduled posts", from: 0, detail: ["10 a month", "Unlimited", "Unlimited"] },
   { label: "Best time to post", from: 1, detail: ["", "Per network", "Per network"] },
   { label: "One inbox for DMs", from: 1, detail: ["", "All networks", "All networks"] },
   { label: "Results history", from: 0, detail: ["30 days", "2 years", "For ever"] },
