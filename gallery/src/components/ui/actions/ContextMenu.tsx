@@ -42,6 +42,7 @@ export function ContextMenu({ actions, children, onPress }: ContextMenuProps) {
   const colors = useThemeColors();
   const [open, setOpen] = useState(false);
   const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   const run = (a: ContextMenuAction) => {
     setOpen(false);
     a.onPress();
@@ -54,34 +55,37 @@ export function ContextMenu({ actions, children, onPress }: ContextMenuProps) {
     // parent's width in normal layout and hands it to the content as a fixed
     // width. Give the child padding, not margins: a margin on the child still
     // pushed its row past the edge.
+    //
+    // The height goes the other way: React Native measures the content and
+    // the host is given that height outright. Sizing the host from SwiftUI
+    // (matchContents + boundedByHost) measured it at 0 before the content was
+    // drawn, so every row collapsed and stacked on the next (device, 11 Nov).
     return (
       <View onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
-      <SwiftHost matchContents={{ vertical: true }}>
-        <SwiftContextMenu>
-          <SwiftContextMenu.Items>
-            {actions.map((a) => (
-              <Button
-                key={a.label}
-                label={a.label}
-                systemImage={a.systemImage}
-                role={a.destructive ? "destructive" : "default"}
-                onPress={() => run(a)}
-              />
-            ))}
-          </SwiftContextMenu.Items>
-          <SwiftContextMenu.Trigger>
-            <RNHostView matchContents={{ vertical: true }} boundedByHost>
-              {/* The host sizes its direct child itself, so the fixed width
-                  goes one level down. Nothing is drawn until it is known. */}
-              <View>
-                {width ? (
-                  <View style={{ width }}>{onPress ? <Pressable onPress={onPress}>{children}</Pressable> : children}</View>
-                ) : null}
-              </View>
-            </RNHostView>
-          </SwiftContextMenu.Trigger>
-        </SwiftContextMenu>
-      </SwiftHost>
+        {width ? (
+          <SwiftHost style={{ height }}>
+            <SwiftContextMenu>
+              <SwiftContextMenu.Items>
+                {actions.map((a) => (
+                  <Button
+                    key={a.label}
+                    label={a.label}
+                    systemImage={a.systemImage}
+                    role={a.destructive ? "destructive" : "default"}
+                    onPress={() => run(a)}
+                  />
+                ))}
+              </SwiftContextMenu.Items>
+              <SwiftContextMenu.Trigger>
+                <RNHostView matchContents={{ vertical: true }}>
+                  <View style={{ width }} onLayout={(e) => setHeight(e.nativeEvent.layout.height)}>
+                    {onPress ? <Pressable onPress={onPress}>{children}</Pressable> : children}
+                  </View>
+                </RNHostView>
+              </SwiftContextMenu.Trigger>
+            </SwiftContextMenu>
+          </SwiftHost>
+        ) : null}
       </View>
     );
   }
