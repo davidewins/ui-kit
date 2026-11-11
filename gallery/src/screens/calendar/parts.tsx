@@ -7,7 +7,6 @@ import { GlassSurface } from "@/components/GlassSurface";
 import { Button, Text, View } from "@/components/ui";
 import { ActionMenu, type MenuAction, type SFSymbolName } from "@/components/ui/actions/ActionMenu";
 import { ContextMenu, type ContextMenuAction } from "@/components/ui/actions/ContextMenu";
-import { todayIcon } from "@/components/ui/calendar/TodayIcon";
 import { ViewSwitch } from "@/components/ui/calendar/ViewSwitch";
 import { ConfirmDialog } from "@/components/ui/overlays/ConfirmDialog";
 import { TABULAR, TYPE } from "@/components/ui/primitives/type";
@@ -16,7 +15,7 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { Toast } from "@/lib/toast";
 import { format } from "date-fns";
 import { type Href, Stack, router } from "expo-router";
-import { CalendarDays, Columns3, List, Plus, Rows3, Users, type LucideIcon } from "lucide-react-native";
+import { CalendarDays, Columns3, List, Rows3, Users, type LucideIcon } from "lucide-react-native";
 import { type ReactNode, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { type Booking, NETWORK_LABEL, type Network, type Post, type PostStatus, SERVICES, type ServiceKind, TODAY, bookingStatus } from "./data";
@@ -38,7 +37,6 @@ const VIEWS: { key: CalendarView; label: string; icon: LucideIcon }[] = [
   { key: "agenda", label: "List", icon: List },
   { key: "team", label: "Team", icon: Users },
 ];
-const TODAY_ICON = todayIcon(TODAY.getDate());
 const TODAY_SYMBOL = `${TODAY.getDate()}.calendar` as SFSymbolName;
 
 /** The navigation bar of every calendar view: the switch where the title
@@ -64,11 +62,11 @@ export function CalendarHeader({
       <Stack.Screen options={{ headerTitle: () => <ViewSwitch options={VIEWS} value={view} onChange={(k) => router.replace(HREF[k] as Href)} /> }} />
       <ActionMenu
         accessibilityLabel="Calendar actions"
-        buttons={[
-          { label: "Go to today", systemImage: TODAY_SYMBOL, icon: TODAY_ICON, onPress: onToday },
-          { label: addLabel, systemImage: "plus", icon: Plus, onPress: onAdd },
+        actions={[
+          { label: addLabel, systemImage: "plus", onPress: onAdd },
+          { label: "Go to today", systemImage: TODAY_SYMBOL, onPress: onToday },
+          ...actions,
         ]}
-        actions={actions}
       />
     </>
   );

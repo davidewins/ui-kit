@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "967e0ad",
+  "rev": "3ed1ccb",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -34,7 +34,7 @@
     "src/components/ui/inputs/ColorRow.tsx": "72a66b9e0be5cea5054ac2ac83360c349a1443bc3d3a81d9356049e765a89a57",
     "src/components/ui/overlays/ConfirmDialog.tsx": "b3d46859e1e62e8b7fbcf781faef04684ee7038132f35ad2e13b8f90142ff28c",
     "src/components/ui/feedback/ContentUnavailable.tsx": "d3bba445597288c2164afecc15e3cad0b9ef0bda1c63e2b86f59845116f4ac84",
-    "src/components/ui/actions/ContextMenu.tsx": "5811d2729903caeb655a388a3336c5c5ab09b8a76cddcbb4594fdf850f0089e5",
+    "src/components/ui/actions/ContextMenu.tsx": "646a94ff8af082c6ce0b00f9e0a7896c9b05a12d989c8fea16dc1df79fc28356",
     "src/components/ui/feedback/CountBadge.tsx": "fe21026836140e31500c691c4d8610bb042f78d7c6c83c5ad082fbd938cec61c",
     "src/components/ui/inputs/DateRow.tsx": "dbae5546591e7b8dba60d54576539fbdec9c61d15861ab412483a03d605fe1d6",
     "src/components/ui/lists/Disclosure.tsx": "25c0267b4e3c63243c2753f5c4bf9f9bb9b5ff14c41db7704f5340d4973a1b55",

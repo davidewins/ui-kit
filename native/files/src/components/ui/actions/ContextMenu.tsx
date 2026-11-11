@@ -16,7 +16,7 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { haptic } from "@/lib/haptics";
 import type { ComponentProps, ReactElement } from "react";
 import { useState } from "react";
-import { Platform, Pressable } from "react-native";
+import { Platform, Pressable, View } from "react-native";
 import { ComposeHost, SwiftHost } from "../native/NativeHost";
 
 type SFSymbol = NonNullable<ComponentProps<typeof Button>["systemImage"]>;
@@ -40,13 +40,21 @@ export interface ContextMenuProps {
 export function ContextMenu({ actions, children, onPress }: ContextMenuProps) {
   const colors = useThemeColors();
   const [open, setOpen] = useState(false);
+  const [width, setWidth] = useState(0);
   const run = (a: ContextMenuAction) => {
     setOpen(false);
     a.onPress();
   };
 
   if (Platform.OS === "ios") {
+    // Inside the SwiftUI host the React Native content is laid out at its
+    // natural width, so a row with long text ran past its panel instead of
+    // wrapping (seen on the iOS simulator, 10 Nov). The outer view takes the
+    // parent's width in normal layout and hands it to the content as a fixed
+    // width. Give the child padding, not margins: a margin on the child still
+    // pushed its row past the edge.
     return (
+      <View onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
       <SwiftHost matchContents={{ vertical: true }}>
         <SwiftContextMenu>
           <SwiftContextMenu.Items>
@@ -61,12 +69,19 @@ export function ContextMenu({ actions, children, onPress }: ContextMenuProps) {
             ))}
           </SwiftContextMenu.Items>
           <SwiftContextMenu.Trigger>
-            <RNHostView matchContents={{ vertical: true }}>
-              {onPress ? <Pressable onPress={onPress}>{children}</Pressable> : children}
+            <RNHostView matchContents={{ vertical: true }} boundedByHost>
+              {/* The host sizes its direct child itself, so the fixed width
+                  goes one level down. Nothing is drawn until it is known. */}
+              <View>
+                {width ? (
+                  <View style={{ width }}>{onPress ? <Pressable onPress={onPress}>{children}</Pressable> : children}</View>
+                ) : null}
+              </View>
             </RNHostView>
           </SwiftContextMenu.Trigger>
         </SwiftContextMenu>
       </SwiftHost>
+      </View>
     );
   }
 

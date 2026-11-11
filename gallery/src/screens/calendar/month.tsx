@@ -21,7 +21,7 @@ import { Toast } from "@/lib/toast";
 import { format, isSameDay, isSameMonth } from "date-fns";
 import { Image } from "expo-image";
 import { useMemo, useState } from "react";
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { NETWORK_LABEL, type Network, POSTS, type Post, type PostStatus, STATUS_LABEL, TODAY, compact, engagement, fromNow, postsOn } from "./data";
 import { CONTENT_ACTIONS, CalendarHeader, NetworkMarks, STATUS_BADGE, usePostActions, useStatusColor } from "./parts";
 
@@ -41,8 +41,13 @@ function PostRow({ post, first, actions }: { post: Post; first: boolean; actions
           ? "Caption and cover to finish"
           : null;
   return (
-    <ContextMenu actions={actions} onPress={() => Toast.info(`Opening "${post.title}"`)}>
-      <View style={{ flexDirection: "row", columnGap: 12, marginLeft: 16, paddingRight: 16, paddingVertical: 14, borderTopWidth: first ? 0 : StyleSheet.hairlineWidth, borderColor: colors.border }}>
+    <ContextMenu actions={actions}>
+      <Pressable
+        onPress={() => Toast.info(`Opening "${post.title}"`)}
+        accessibilityRole="button"
+        accessibilityLabel={post.title}
+        style={({ pressed }) => ({ flexDirection: "row", columnGap: 12, paddingHorizontal: 16, paddingVertical: 14, borderTopWidth: first ? 0 : StyleSheet.hairlineWidth, borderColor: colors.border, backgroundColor: pressed ? colors.border : "transparent" })}
+      >
         <View style={{ width: TIME }}>
           <Text weight="semibold" style={[TYPE.body, TABULAR]}>
             {format(post.at, "HH:mm")}
@@ -81,7 +86,7 @@ function PostRow({ post, first, actions }: { post: Post; first: boolean; actions
           ) : null}
         </View>
         {post.photo ? <Image source={post.photo} style={{ width: 56, height: 56, borderRadius: 12 }} contentFit="cover" /> : null}
-      </View>
+      </Pressable>
     </ContextMenu>
   );
 }
