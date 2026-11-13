@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "c64b2d9",
+  "rev": "a4d0623",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -67,7 +67,7 @@
     "src/components/ui/inputs/SegmentedControl.tsx": "74837a8de2146598b8d49cb7854eaf4d8e93db8983d9b8c28190559c718914a0",
     "src/components/ui/lists/SettingsGroup.tsx": "ba2fed88a8f32a26d207468878446791d4ddcef3c0ce1e2544fb03445291c051",
     "src/components/ui/lists/SettingsIdentity.tsx": "316b1a202aade94250bedee1b0f9fa203fabf5740125bc3af029de258a0a1ac6",
-    "src/components/ui/lists/SettingsRow.tsx": "b903388c9535b55fc28f81d5d2e4eda2c421b5b4f9737876fe3da6f6cbe5e9ce",
+    "src/components/ui/lists/SettingsRow.tsx": "55f0d373b9978fc687c749580078a21bc8e152d2ed98f3378946b4765e70328d",
     "src/components/ui/actions/ShareLink.tsx": "7299bda6eadf4097842a03edd6d3fbf5291f9a23e93d3a411774e8380bda5844",
     "src/components/ui/overlays/Sheet.tsx": "288c8e727af3ac7873ecc8a55400f0fc3a04a5a3461ae5be7303231781fc395f",
     "src/components/ui/feedback/Skeleton.tsx": "0e68c16f7462396e812a8c630c6f59880c890303421c521a76c03893e0ff4e6e",
