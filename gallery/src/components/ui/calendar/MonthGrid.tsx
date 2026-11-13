@@ -3,16 +3,19 @@
 // which days have something on them. The selected day is a filled circle in
 // the text colour, today sits in a grey circle, and each day can carry up to
 // three coloured dots or a count. It has no list of its own: put the selected
-// day's events under it. For seven days against the clock use WeekGrid.
+// day's events under it. Swipe the days sideways or use the arrows to change
+// month; the new month slides in from the side it lies on. For seven days
+// against the clock use WeekGrid.
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { addDays, addMonths, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek } from "date-fns";
 import * as Haptics from "expo-haptics";
-import { useMemo } from "react";
-import { Pressable, View } from "react-native";
+import { useMemo, useRef } from "react";
+import { PanResponder, Pressable, View } from "react-native";
+import Animated from "react-native-reanimated";
 import { Text } from "../primitives/Text";
 import { TABULAR, TYPE } from "../primitives/type";
 import { PeriodBar } from "./PeriodBar";
-import { dayKey } from "./timeline";
+import { dayKey, usePeriodSlide } from "./timeline";
 
 export interface DayMark {
   /** Colours of the first three things on the day. */
@@ -45,6 +48,20 @@ export function MonthGrid({ month, onMonthChange, selected, onSelect, marks = {}
     for (let d = first; d <= last; d = addDays(d, 7)) rows.push(Array.from({ length: 7 }, (_, i) => addDays(d, i)));
     return rows;
   }, [month]);
+  const entering = usePeriodSlide(dayKey(startOfMonth(month)));
+  const shiftRef = useRef<(months: number) => void>(() => {});
+  shiftRef.current = (months: number) => {
+    Haptics.selectionAsync().catch(() => {});
+    onMonthChange(addMonths(month, months));
+  };
+  const pan = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, g) => Math.abs(g.dx) > 12 && Math.abs(g.dx) > Math.abs(g.dy) * 1.5,
+      onPanResponderRelease: (_, g) => {
+        if (Math.abs(g.dx) > 40) shiftRef.current(g.dx < 0 ? 1 : -1);
+      },
+    }),
+  ).current;
 
   return (
     <View>
@@ -56,58 +73,60 @@ export function MonthGrid({ month, onMonthChange, selected, onSelect, marks = {}
           </Text>
         ))}
       </View>
-      {weeks.map((week) => (
-        <View key={dayKey(week[0])} style={{ flexDirection: "row" }}>
-          {week.map((date) => {
-            const inMonth = isSameMonth(date, month);
-            const isSelected = !!selected && isSameDay(date, selected);
-            const isToday = isSameDay(date, today);
-            const mark = marks[dayKey(date)];
-            const dots = mark?.dots?.slice(0, 3) ?? [];
-            return (
-              <Pressable
-                key={dayKey(date)}
-                onPress={() => {
-                  Haptics.selectionAsync().catch(() => {});
-                  if (!inMonth) onMonthChange(date);
-                  onSelect(date);
-                }}
-                accessibilityRole="button"
-                accessibilityLabel={`${format(date, "EEEE d MMMM")}${mark?.count ?? dots.length ? `, ${mark?.count ?? dots.length} items` : ""}${isToday ? ", today" : ""}`}
-                accessibilityState={{ selected: isSelected }}
-                style={{ flex: 1, alignItems: "center", height: 52, paddingTop: 2 }}
-              >
-                <View
-                  style={{
-                    width: CIRCLE,
-                    height: CIRCLE,
-                    borderRadius: CIRCLE / 2,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: isSelected ? colors.text : isToday ? colors.border : "transparent",
+      <Animated.View key={dayKey(startOfMonth(month))} entering={entering} {...pan.panHandlers}>
+        {weeks.map((week) => (
+          <View key={dayKey(week[0])} style={{ flexDirection: "row" }}>
+            {week.map((date) => {
+              const inMonth = isSameMonth(date, month);
+              const isSelected = !!selected && isSameDay(date, selected);
+              const isToday = isSameDay(date, today);
+              const mark = marks[dayKey(date)];
+              const dots = mark?.dots?.slice(0, 3) ?? [];
+              return (
+                <Pressable
+                  key={dayKey(date)}
+                  onPress={() => {
+                    Haptics.selectionAsync().catch(() => {});
+                    if (!inMonth) onMonthChange(date);
+                    onSelect(date);
                   }}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${format(date, "EEEE d MMMM")}${mark?.count ?? dots.length ? `, ${mark?.count ?? dots.length} items` : ""}${isToday ? ", today" : ""}`}
+                  accessibilityState={{ selected: isSelected }}
+                  style={{ flex: 1, alignItems: "center", height: 52, paddingTop: 2 }}
                 >
-                  <Text
-                    weight={isSelected || isToday ? "semibold" : "medium"}
-                    style={[TYPE.body, TABULAR, { color: isSelected ? colors.background : colors.text, opacity: inMonth || isSelected ? 1 : 0.3 }]}
+                  <View
+                    style={{
+                      width: CIRCLE,
+                      height: CIRCLE,
+                      borderRadius: CIRCLE / 2,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: isSelected ? colors.text : isToday ? colors.border : "transparent",
+                    }}
                   >
-                    {format(date, "d")}
-                  </Text>
-                </View>
-                <View style={{ height: 12, flexDirection: "row", alignItems: "center", columnGap: 3, opacity: inMonth ? 1 : 0.3 }}>
-                  {mark?.count !== undefined ? (
-                    <Text weight="semibold" style={[TYPE.caption, TABULAR, { color: colors.muted, lineHeight: 12 }]}>
-                      {mark.count}
+                    <Text
+                      weight={isSelected || isToday ? "semibold" : "medium"}
+                      style={[TYPE.body, TABULAR, { color: isSelected ? colors.background : colors.text, opacity: inMonth || isSelected ? 1 : 0.3 }]}
+                    >
+                      {format(date, "d")}
                     </Text>
-                  ) : (
-                    dots.map((c, i) => <View key={i} style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: c }} />)
-                  )}
-                </View>
-              </Pressable>
-            );
-          })}
-        </View>
-      ))}
+                  </View>
+                  <View style={{ height: 12, flexDirection: "row", alignItems: "center", columnGap: 3, opacity: inMonth ? 1 : 0.3 }}>
+                    {mark?.count !== undefined ? (
+                      <Text weight="semibold" style={[TYPE.caption, TABULAR, { color: colors.muted, lineHeight: 12 }]}>
+                        {mark.count}
+                      </Text>
+                    ) : (
+                      dots.map((c, i) => <View key={i} style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: c }} />)
+                    )}
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
+        ))}
+      </Animated.View>
     </View>
   );
 }

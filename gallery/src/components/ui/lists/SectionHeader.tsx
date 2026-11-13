@@ -28,7 +28,7 @@ export function SectionHeader({
   return (
     <View
       accessibilityRole="header"
-      style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, marginTop: first ? 4 : 28, marginBottom: 10, minHeight: 32, columnGap: 8 }}
+      style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, marginTop: first ? 4 : 12, marginBottom: 6, minHeight: 32, columnGap: 8 }}
     >
       <Text weight="semibold" numberOfLines={1} style={[TYPE.headline, { flex: 1 }]}>
         {title}

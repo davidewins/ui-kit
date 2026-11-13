@@ -7,9 +7,17 @@
 // haptic per change, so callers never fire their own.
 import { SegmentedControl as CommunitySegmentedControl } from "@expo/ui/community/segmented-control";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import NativeSegmentedControl from "@react-native-segmented-control/segmented-control";
+import NativeSegmentedControlClass, {
+  type SegmentedControlProps as NativeSegmentedControlProps,
+} from "@react-native-segmented-control/segmented-control";
 import * as Haptics from "expo-haptics";
+import type { ComponentType } from "react";
 import { Platform, View, useColorScheme, type StyleProp, type ViewStyle } from "react-native";
+
+// The package types its default export as a NativeMethods mixin class, which
+// React Native 0.88's types no longer accept as JSX; the runtime is the same.
+const NativeSegmentedControl =
+  NativeSegmentedControlClass as unknown as ComponentType<NativeSegmentedControlProps>;
 
 export interface SegmentedControlProps {
   values: readonly string[];

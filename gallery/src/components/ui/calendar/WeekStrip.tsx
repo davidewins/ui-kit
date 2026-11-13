@@ -1,8 +1,8 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/ui/calendar/WeekStrip.tsx. Edit it there and sync; local edits fail ui-kit:check.
 // One week in a row: weekday over day number, a dot under days that have
 // something, the selected day filled. For choosing the day a timeline or list
-// below it shows. Swipe sideways or use the arrows to change week. For a whole
-// month use MonthGrid.
+// below it shows. Swipe sideways or use the arrows to change week; the new
+// week slides in from the side it lies on. For a whole month use MonthGrid.
 import { RoundButton } from "../actions/RoundButton";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { addDays, format, isSameDay, startOfWeek } from "date-fns";
@@ -10,9 +10,10 @@ import * as Haptics from "expo-haptics";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { useMemo, useRef } from "react";
 import { PanResponder, Pressable, View } from "react-native";
+import Animated from "react-native-reanimated";
 import { Text } from "../primitives/Text";
 import { TABULAR, TYPE } from "../primitives/type";
-import { dayKey } from "./timeline";
+import { dayKey, usePeriodSlide } from "./timeline";
 
 export interface WeekStripProps {
   selected: Date;
@@ -34,6 +35,7 @@ export function WeekStrip({ selected, onSelect, dots = {}, today = new Date(), a
     const first = startOfWeek(selected, { weekStartsOn: 1 });
     return Array.from({ length: 7 }, (_, i) => addDays(first, i));
   }, [selected]);
+  const entering = usePeriodSlide(dayKey(days[0]));
   const shift = (weeks: number) => {
     Haptics.selectionAsync().catch(() => {});
     onSelect(addDays(selected, weeks * 7));
@@ -60,7 +62,7 @@ export function WeekStrip({ selected, onSelect, dots = {}, today = new Date(), a
   return (
     <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
       {arrows ? arrow("Previous week", ChevronLeft, -1) : null}
-      <View {...pan.panHandlers} style={{ flex: 1, flexDirection: "row" }}>
+      <Animated.View key={dayKey(days[0])} entering={entering} {...pan.panHandlers} style={{ flex: 1, flexDirection: "row" }}>
         {days.map((date) => {
           const isSelected = isSameDay(date, selected);
           const isToday = isSameDay(date, today);
@@ -98,7 +100,7 @@ export function WeekStrip({ selected, onSelect, dots = {}, today = new Date(), a
             </Pressable>
           );
         })}
-      </View>
+      </Animated.View>
       {arrows ? arrow("Next week", ChevronRight, 1) : null}
     </View>
   );

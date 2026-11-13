@@ -8,8 +8,9 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { format } from "date-fns";
 import * as Haptics from "expo-haptics";
 import { Plus } from "lucide-react-native";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
+import { FadeInLeft, FadeInRight } from "react-native-reanimated";
 import { Text } from "../primitives/Text";
 import { TABULAR, TYPE } from "../primitives/type";
 
@@ -36,6 +37,17 @@ export const RAIL = 44;
 /** Room above the first hour line so its label is not cut off. */
 export const PAD = 8;
 export const dayKey = (d: Date) => format(d, "yyyy-MM-dd");
+
+/**
+ * The entering animation for a calendar body keyed by its period ("yyyy-MM-dd"
+ * of the period's first day): a later period slides in from the right, an
+ * earlier one from the left, the first render does not move.
+ */
+export function usePeriodSlide(key: string) {
+  const [last, setLast] = useState({ key, dir: 0 });
+  if (last.key !== key) setLast({ key, dir: key > last.key ? 1 : -1 });
+  return last.dir === 0 ? undefined : last.dir > 0 ? FadeInRight.duration(220) : FadeInLeft.duration(220);
+}
 const hours = (d: Date) => d.getHours() + d.getMinutes() / 60;
 export const yOf = (d: Date, startHour: number, hourHeight: number) => PAD + (hours(d) - startHour) * hourHeight;
 
