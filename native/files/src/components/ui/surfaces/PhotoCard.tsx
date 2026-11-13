@@ -70,7 +70,8 @@ export function PhotoCard({
           ) : (
             <View style={{ flexDirection: "row", alignItems: "center", columnGap: 12 }}>
               <View style={{ flex: 1, rowGap: 1 }}>
-                <Text weight="semibold" numberOfLines={1} style={TYPE.headline}>{title}</Text>
+                {/* Never cut: the title is usually the seller's own product name. */}
+                <Text weight="semibold" style={TYPE.headline}>{title}</Text>
                 {subtitle ? <Text weight="medium" numberOfLines={1} style={[TYPE.sub, { color: colors.muted }]}>{subtitle}</Text> : null}
               </View>
               {figure ? <Text weight="semibold" style={[TYPE.headline, TABULAR]}>{figure}</Text> : null}
