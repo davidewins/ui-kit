@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "a4d0623",
+  "rev": "59127f2",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -20,7 +20,7 @@
     "src/components/onboarding/CheckRow.tsx": "222ac52469e5bd105a1b80950ca1ab54fbaf59b0ddb34d9c3ab6f8039f72d995",
     "src/components/onboarding/SelectRow.tsx": "ae56e211bbd570a1ba8f1de561171c0f9c8e2feecb47b27585a4abedcd55441f",
     "src/components/onboarding/WizardProgress.tsx": "49fd63667646ef1da4c2667980771caacc8ab098d960630569c104035c8a82f3",
-    "src/components/onboarding/shells/InsetShell.tsx": "dbf2e5521b6390d11d625de2e6c0e746aa40975c44182b2d8d4840f20f901e0f",
+    "src/components/onboarding/shells/InsetShell.tsx": "a42576e0a5567d8f548f0bf09e5daba1fca1eb4179e53b398b55a10f61085885",
     "src/components/phone/PhoneInput.tsx": "d56a90b5ba5feae2ce16671f123c4c57903a63eeaf4a17fda423293d649e2f21",
     "src/components/phone/countries.ts": "078dc60d474edf09be9e0b842f4a7fc900b7b9fee359320543693d96779dbd94",
     "src/components/ui/actions/ActionMenu.tsx": "a6a5eac3b087c6801ac7cc12bfa396ae31908a74b8241f3cdfea4cea4bd86868",

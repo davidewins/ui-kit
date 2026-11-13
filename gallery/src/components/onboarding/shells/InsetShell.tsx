@@ -9,8 +9,9 @@
 import { WizardProgress } from "@/components/onboarding/WizardProgress";
 import { Text, View } from "@/components/ui";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import * as Haptics from "expo-haptics";
-import { ActivityIndicator, Pressable, ScrollView } from "react-native";
+import { ActivityIndicator, Platform, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Cta = {
@@ -114,6 +115,7 @@ export function InsetFooter({
 }: Pick<Props, "step" | "total" | "phase" | "primaryCta" | "secondaryCta">) {
   const showProgress = typeof step === "number" && typeof total === "number";
   const colors = useThemeColors();
+  const glassPrimary = Platform.OS === "ios" && isLiquidGlassAvailable();
   const insets = useSafeAreaInsets();
   return (
   <View
@@ -186,6 +188,36 @@ export function InsetFooter({
               : 1,
       })}
     >
+      {/* Liquid Glass tinted with the app's tint on iOS 26 (David, 13 Nov:
+          "the save button is opaque black, not glass"); a solid tint pill
+          where glass is not available. */}
+      {glassPrimary ? (
+        <GlassView
+          isInteractive
+          glassEffectStyle="regular"
+          tintColor={colors.tint}
+          style={{ borderRadius: 999, overflow: "hidden", borderCurve: "continuous" }}
+        >
+          <View style={{ paddingVertical: 14, paddingHorizontal: 18, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8 }}>
+        {primaryCta.loading ? (
+          <ActivityIndicator size="small" color={colors.background} />
+        ) : (
+          <>
+            <Text
+              weight="semibold"
+              style={{
+                fontSize: 15,
+                color: colors.background,
+                letterSpacing: -0.2,
+              }}
+            >
+              {primaryCta.label}
+            </Text>
+          </>
+        )}
+          </View>
+        </GlassView>
+      ) : (
       <View
         style={{
           borderRadius: 999,
@@ -216,6 +248,7 @@ export function InsetFooter({
           </>
         )}
       </View>
+      )}
     </Pressable>
   </View>
   );
