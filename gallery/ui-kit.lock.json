@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "6998e35",
+  "rev": "0f18561",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -120,7 +120,7 @@
     "src/components/ui/primitives/BrandMark.tsx": "92a49817c13113c1a73f70d3a3f9e6329509d09837831f71734a5eb7a7c2563f",
     "src/components/ui/primitives/IconTile.tsx": "b7b453a8f711f011889b64876c64a6de86608d1a9dd6ec45fcadc51ec8963797",
     "src/components/ui/primitives/type.ts": "891d99e35a195958584f456cc3b6218a504a136492efb7955dd2349d41da78d5",
-    "src/components/ui/surfaces/PhotoCard.tsx": "5ed32b750cbc9d499f3c45fc5b6600f8cda158ff5211419e3edc718900be0842",
+    "src/components/ui/surfaces/PhotoCard.tsx": "20b81155f2c4168c4e766f0927ec832928be453b9a77fa7a3d8f90f7bee8dc00",
     "src/components/ui/surfaces/TicketCard.tsx": "254a0d1ab2990029443facb7e2377ced48409f933aa08e48b528ae63695b9296",
     "src/hooks/useHues.ts": "d81e945b87aff2b722fc03601193e55b62f21ccebfbf3000d3b8bf12ad13d158",
     "src/components/ui/surfaces/Panel.tsx": "c590cedb6d24e8c69f029897f92c7e06f90550cf5da1a947f8407645b41789d6",
