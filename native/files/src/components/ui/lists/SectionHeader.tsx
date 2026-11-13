@@ -27,9 +27,10 @@ export function SectionHeader({
   return (
     <View
       accessibilityRole="header"
-      style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, marginTop: first ? 4 : 12, marginBottom: 6, minHeight: 32, columnGap: 8 }}
+      style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, marginTop: first ? 4 : 12, marginBottom: 6, minHeight: 28, columnGap: 8 }}
     >
-      <Text weight="semibold" numberOfLines={1} style={[TYPE.headline, { flex: 1 }]}>
+      {/* Body size (David, 13 Nov: 17pt headings were "so damn big"). */}
+      <Text weight="semibold" numberOfLines={1} style={[TYPE.body, { flex: 1 }]}>
         {title}
       </Text>
       {action ? (
