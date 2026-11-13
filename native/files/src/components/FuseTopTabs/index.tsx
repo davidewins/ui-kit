@@ -36,9 +36,13 @@ type Props = {
   variant?: FuseTabsVariant;
   /** Tab to open on (e.g. a deep link into Analytics > Customers). */
   initialIndex?: number;
+  /** false: panes change only from the control, never by a sideways swipe.
+   *  Use it when a pane holds something that swipes sideways itself (a
+   *  calendar's weeks, a chart scrub), or the pager takes the swipe. */
+  swipeable?: boolean;
 };
 
-export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, initialIndex = 0 }) => {
+export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, initialIndex = 0, swipeable = true }) => {
   const { width } = useWindowDimensions();
   const horizontalListRef = useRef<FlatList>(null);
   // iOS floats the native tab bar over the panes; Android lays them out above
@@ -114,6 +118,7 @@ export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, init
         initialScrollIndex={startIndex}
         getItemLayout={(_, index) => ({ length: width, offset: width * index, index })}
         pagingEnabled
+        scrollEnabled={swipeable}
         decelerationRate="fast"
         onScroll={scrollHandler}
         scrollEventThrottle={16}
