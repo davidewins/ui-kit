@@ -16,6 +16,9 @@ function isTransientError(err: unknown) {
   const msg = errorMessage(err);
   return (
     msg.includes("network request failed") ||
+    // The apps' own wording for a request that never reached the server
+    // (TKVR's creatorApi): retried like any dropped connection.
+    msg.includes("couldn't reach") ||
     msg.includes("failed to fetch") ||
     msg.includes("timeout") ||
     msg.includes("timed out") ||
@@ -41,13 +44,15 @@ export const queryClient = new QueryClient({
       staleTime: 30_000,
       retry: (failureCount, error) => {
         if (isRateLimited(error)) return failureCount < 3;
-        return isTransientError(error) && failureCount < 2;
+        // David's phone is often on weak 4G (13 Nov): a dropped request is
+        // tried four more times over about 15 seconds before any error shows.
+        return isTransientError(error) && failureCount < 4;
       },
       retryDelay: (attempt, error) => {
         if (isRateLimited(error)) {
           return Math.min(5000 * 2 ** attempt, 30_000);
         }
-        return Math.min(1000 * 2 ** attempt, 4000);
+        return Math.min(1000 * 2 ** attempt, 8000);
       },
     },
   },
