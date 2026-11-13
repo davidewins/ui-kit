@@ -187,26 +187,26 @@ export function InsetFooter({
               : 1,
       })}
     >
-      {/* Liquid Glass tinted with the app's tint on iOS 26 (David, 13 Nov:
-          "the save button is opaque black, not glass"); a solid tint pill
-          where glass is not available. */}
+      {/* Clear Liquid Glass on iOS 26 (David, 13 Nov: "the save button is
+          opaque black, not glass"). No tint: SELLERS' tint is black in light
+          mode, and black-tinted glass reads as the same opaque pill. A solid
+          tint pill where glass is not available. */}
       {glassPrimary ? (
         <GlassView
           isInteractive
           glassEffectStyle="regular"
-          tintColor={colors.tint}
           style={{ borderRadius: 999, overflow: "hidden", borderCurve: "continuous" }}
         >
           <View style={{ paddingVertical: 14, paddingHorizontal: 18, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8 }}>
         {primaryCta.loading ? (
-          <ActivityIndicator size="small" color={colors.background} />
+          <ActivityIndicator size="small" color={colors.text} />
         ) : (
           <>
             <Text
               weight="semibold"
               style={{
                 fontSize: 15,
-                color: colors.background,
+                color: colors.text,
                 letterSpacing: -0.2,
               }}
             >
