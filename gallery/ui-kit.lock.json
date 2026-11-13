@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "59127f2",
+  "rev": "8e2a7d5",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -101,11 +101,11 @@
     "src/components/ui/calendar/timeline.tsx": "d192a6611b67942a23bdf8544f61712b511801e2f504eea136d0992a9083f489",
     "src/components/ui/data/ActivityRings.tsx": "2248c9efb688d849989967afc91389b7d467ee791012414adb8c68e9bcd4e571",
     "src/components/ui/data/BarChart.tsx": "94c7a365be83719a1b8a9e618c092c928d99369314fda2cd054ff5e1d082c194",
-    "src/components/ui/data/BarList.tsx": "14b4c666483f02de631d954a399f16007fde24f17ace0e54729471f3acfd2184",
+    "src/components/ui/data/BarList.tsx": "33301d6ba91d875a570a19287522e87f460aeb9f1dd79cf317441a742434d978",
     "src/components/ui/data/DonutChart.tsx": "dc291c9749a7c406ea3d6a4ceb39b37f23ba4b47867f8b9ee51a390f115ccd06",
     "src/components/ui/data/Heatmap.tsx": "0fc86560775027eb9302a906d2598c5fe6799bedb6d7ee123d1c2f7d12c4afaf",
     "src/components/ui/data/LineChart.tsx": "ff9c797f909a0b14848b919422686f8fa18df40e25b9bb47a845a15130a37fc2",
-    "src/components/ui/data/SegmentBar.tsx": "8d33a7a33a1f702269d2eef3f40d205c61daff448fa3742d1fddafc56af9e880",
+    "src/components/ui/data/SegmentBar.tsx": "f2daa2096afd5f6e18cdaa3d3ebcd6a725a474e3c8d07444364673ff471f2b73",
     "src/components/ui/data/Trend.tsx": "140f9ba255d3125c472c5a77df655ed01dff58fe5eff22f07beca78ffeb01a66",
     "src/components/ui/feedback/StepTracker.tsx": "06f9c4ba5056c6d358afc96fee1ea647e1de3f7096d485bf17692ca410958338",
     "src/components/ui/feedback/Timeline.tsx": "0196a5f59acdaeb8fb1d6d994e1af274e60515704181f0a630f0b8834aa62ccd",

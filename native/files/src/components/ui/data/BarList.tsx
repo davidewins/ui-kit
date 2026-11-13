@@ -25,8 +25,8 @@ export function BarList({ items, max, color }: { items: BarListItem[]; max?: num
   const top = max ?? Math.max(...items.map((i) => i.value), 1);
   return (
     <View style={{ rowGap: 14 }}>
-      {items.map((item) => (
-        <View key={item.label} style={{ flexDirection: "row", alignItems: "center", columnGap: 12 }} accessibilityLabel={`${item.label}, ${item.display ?? item.value}`}>
+      {items.map((item, i) => (
+        <View key={i} style={{ flexDirection: "row", alignItems: "center", columnGap: 12 }} accessibilityLabel={`${item.label}, ${item.display ?? item.value}`}>
           {item.leading}
           <View style={{ flex: 1, rowGap: 6 }}>
             <View style={{ flexDirection: "row", alignItems: "baseline", columnGap: 8 }}>

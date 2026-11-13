@@ -29,14 +29,14 @@ export function SegmentBar({ segments, height = 12, legend = true, accessibility
       <View style={{ flexDirection: "row", height, columnGap: 2, borderRadius: height / 2, overflow: "hidden" }}>
         {/* Destructured on purpose: Reanimated's Babel plugin warns on any
             `x.value` written inside an inline style, shared value or not. */}
-        {segments.map(({ label, value, color }) => (
-          <View key={label} style={{ flex: value, minWidth: 2, backgroundColor: color }} />
+        {segments.map(({ value, color }, i) => (
+          <View key={i} style={{ flex: value, minWidth: 2, backgroundColor: color }} />
         ))}
       </View>
       {legend ? (
         <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 16, rowGap: 6, marginTop: 10 }}>
-          {segments.map((s) => (
-            <View key={s.label} style={{ flexDirection: "row", alignItems: "center", columnGap: 6 }}>
+          {segments.map((s, i) => (
+            <View key={i} style={{ flexDirection: "row", alignItems: "center", columnGap: 6 }}>
               <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: s.color }} />
               <Text weight="medium" style={[TYPE.sub, TABULAR]}>
                 {`${s.label} ${figure(s)}`}
