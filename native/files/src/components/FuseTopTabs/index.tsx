@@ -1,5 +1,5 @@
-import { TabPaneBottomInsetContext } from "@/hooks/useTabPaneBottomInset";
-import React, { FC, useContext, useRef } from "react";
+import { TabPaneBottomInsetContext, TabPaneHeaderContext, type TabPaneHeader } from "@/hooks/useTabPaneBottomInset";
+import React, { FC, useCallback, useContext, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   Platform,
@@ -40,9 +40,16 @@ type Props = {
    *  Use it when a pane holds something that swipes sideways itself (a
    *  calendar's weeks, a chart scrub), or the pager takes the swipe. */
   swipeable?: boolean;
+  /** iOS see-through header height (headerTransparent). The tab control then
+   *  leads the active pane's own list, which scrolls up under the header the
+   *  way Today does; there is no pager or fixed strip, so iOS finds that list
+   *  as the screen's scroll view and gives it the Liquid Glass edge. Until a
+   *  list takes the control (loading, empty) it sits above the pane, below
+   *  the header. */
+  headerInset?: number;
 };
 
-export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, initialIndex = 0, swipeable = true }) => {
+export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, initialIndex = 0, swipeable = true, headerInset }) => {
   const { width } = useWindowDimensions();
   const horizontalListRef = useRef<FlatList>(null);
   // iOS floats the native tab bar over the panes; Android lays them out above
@@ -56,7 +63,9 @@ export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, init
   const prevActiveTabIndex = useSharedValue(startIndex);
   const activeTabIndex = useSharedValue(startIndex);
 
+  const [active, setActive] = useState(startIndex);
   const notifyChange = (i: number) => {
+    setActive(i);
     onTabChange?.(i);
   };
 
@@ -83,6 +92,49 @@ export const FuseTopTabs: FC<Props> = ({ tabs, style, onTabChange, variant, init
       activeTabIndex.set(Math.round(event.contentOffset.x / width));
     },
   });
+
+  const [claims, setClaims] = useState(0);
+  const [barHeight, setBarHeight] = useState(0);
+  const claim = useCallback(() => {
+    setClaims((n) => n + 1);
+    return () => setClaims((n) => n - 1);
+  }, []);
+  const bar = (
+    <TabBar
+      variant={variant ?? defaultVariant}
+      tabs={tabs}
+      horizontalListRef={horizontalListRef}
+      horizontalListOffsetX={horizontalListOffsetX}
+      isHorizontalListScrollingX={isHorizontalListScrollingX}
+      activeTabIndex={activeTabIndex}
+      prevActiveTabIndex={prevActiveTabIndex}
+    />
+  );
+  const paneHeader = useMemo<TabPaneHeader>(() => ({ node: bar, claim }), [tabs, variant, claim]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (headerInset != null) {
+    const pane = tabs[Math.min(active, tabs.length - 1)];
+    return (
+      <View style={[{ flex: 1 }, style]}>
+        <TabPaneBottomInsetContext.Provider value={paneBottomInset}>
+          <TabPaneHeaderContext.Provider value={paneHeader}>
+            <View key={pane?.value} style={{ flex: 1, paddingTop: claims === 0 ? headerInset + barHeight : 0 }}>
+              {pane?.content}
+            </View>
+          </TabPaneHeaderContext.Provider>
+        </TabPaneBottomInsetContext.Provider>
+        {/* Drawn after the pane so the pane's list stays first in line for iOS. */}
+        {claims === 0 ? (
+          <View
+            onLayout={(e) => setBarHeight(e.nativeEvent.layout.height)}
+            style={{ position: "absolute", top: headerInset, left: 0, right: 0 }}
+          >
+            {bar}
+          </View>
+        ) : null}
+      </View>
+    );
+  }
 
   return (
     <View style={[{ flex: 1 }, style]}>

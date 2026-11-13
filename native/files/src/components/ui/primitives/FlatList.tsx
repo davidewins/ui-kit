@@ -1,4 +1,5 @@
 import {
+  TabPaneHeaderContext,
   useTabPaneBottomInset,
   withBottomInset,
 } from "@/hooks/useTabPaneBottomInset";
@@ -15,10 +16,25 @@ function FlatListComponent<T>(
   ref: React.Ref<RNFlatList<T>>,
 ) {
   const inset = useTabPaneBottomInset();
+  // Under a see-through header: the pane's tab control leads the list.
+  const header = React.useContext(TabPaneHeaderContext);
+  const paneHeader = props.horizontal ? null : header;
+  React.useEffect(() => paneHeader?.claim(), [paneHeader]);
+  const OwnHeader = props.ListHeaderComponent as any;
+  const listHeader = paneHeader ? (
+    <>
+      {paneHeader.node}
+      {OwnHeader ? (React.isValidElement(OwnHeader) ? OwnHeader : <OwnHeader />) : null}
+    </>
+  ) : (
+    props.ListHeaderComponent
+  );
   return (
     <UniwindFlatList
+      {...(paneHeader ? { contentInsetAdjustmentBehavior: "automatic" } : null)}
       {...(props as any)}
       ref={ref}
+      ListHeaderComponent={listHeader}
       contentContainerStyle={withBottomInset(
         props.contentContainerStyle,
         props.horizontal ? 0 : inset,

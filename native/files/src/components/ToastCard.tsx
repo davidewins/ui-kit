@@ -130,7 +130,7 @@ export function ToastCard({
             )}
           </View>
           <View style={{ flex: 1 }}>
-            <Text weight="semibold" style={{ fontSize: 15, lineHeight: 20, letterSpacing: -0.2, color: colors.text }}>
+            <Text weight="medium" style={{ fontSize: 15, lineHeight: 20, letterSpacing: -0.2, color: colors.text }}>
               {title}
             </Text>
             {description ? (
