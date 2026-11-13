@@ -50,6 +50,8 @@ export function SegmentedControl({
         onChange={(e) => select(e.nativeEvent.selectedSegmentIndex)}
         appearance={scheme === "dark" ? "dark" : "light"}
         tintColor={colors.tint}
+        // No grey track: only the thumb and labels draw (David, 13 Nov).
+        backgroundColor="transparent"
         fontStyle={{ color: colors.text }}
         activeFontStyle={{ color: colors.onTint }}
         accessibilityLabel={accessibilityLabel}

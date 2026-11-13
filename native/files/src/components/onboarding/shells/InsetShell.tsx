@@ -9,7 +9,6 @@ import { WizardProgress } from "@/components/onboarding/WizardProgress";
 import { Text, View } from "@/components/ui";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
-import { ArrowRight } from "lucide-react-native";
 import { ActivityIndicator, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -204,7 +203,7 @@ export function InsetFooter({
         ) : (
           <>
             <Text
-              weight="bold"
+              weight="semibold"
               style={{
                 fontSize: 15,
                 color: colors.background,
@@ -213,11 +212,6 @@ export function InsetFooter({
             >
               {primaryCta.label}
             </Text>
-            <ArrowRight
-              size={16}
-              color={colors.background}
-              strokeWidth={2.4}
-            />
           </>
         )}
       </View>

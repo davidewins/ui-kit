@@ -87,5 +87,7 @@ export function useComposeColors(): Partial<MaterialColors> {
 export function ComposeHost(props: ComposeUIHostProps) {
   const scheme = useColorScheme();
   const colorOverrides = useComposeColors();
-  return <ComposeUIHost colorScheme={scheme ?? undefined} colorOverrides={colorOverrides} {...props} />;
+  // Spread so apps on @expo/ui 57 (no colorOverrides prop yet) still type-check.
+  const overrides = { colorOverrides } as Partial<ComposeUIHostProps>;
+  return <ComposeUIHost colorScheme={scheme ?? undefined} {...overrides} {...props} />;
 }
