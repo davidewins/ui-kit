@@ -117,6 +117,10 @@ export default function RootLayout() {
     headerStyle: { backgroundColor: Platform.OS === "ios" ? "transparent" : colors.background },
     headerTintColor: colors.tint,
     headerTitleStyle: colors.headerTitleStyle,
+    // iOS 26 pops a page on a swipe anywhere by default, so swiping the
+    // calendar's month or week back a period left the calendar instead (as
+    // TKVR's useStackOptions). The edge swipe still goes back.
+    fullScreenGestureEnabled: false,
     contentStyle: { backgroundColor: colors.background },
   };
 
