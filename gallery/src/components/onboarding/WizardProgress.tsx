@@ -24,7 +24,7 @@ export function WizardProgress({ step, total, phase }: Props) {
           className="text-muted text-[11px] uppercase tracking-tight"
           style={{ fontVariant: ["tabular-nums"] }}
         >
-          {phase} · {step} of {total}
+          {phase}, {step} of {total}
         </Text>
       ) : null}
       <View style={{ flexDirection: "row", gap: 4 }}>

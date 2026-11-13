@@ -1,6 +1,6 @@
 {
   "kit": "davidewins/ui-kit",
-  "rev": "4d380d3",
+  "rev": "12c0e6c",
   "files": {
     "src/assets/icons/keyboard_arrow_down.xml": "25c502082d201a6223f4ab6418918218a864e73f75d1d734984e648c55eccba3",
     "src/assets/sounds/toast-error.wav": "856456409a763d03648d8f31d113c170a83de1d4cfe8dcf95a4bd68a1118f489",
@@ -19,7 +19,7 @@
     "src/components/analytics/Sparkline.tsx": "65e2997c94476823bafb49565baf97e98e424951340334437eb771df78bfdea6",
     "src/components/onboarding/CheckRow.tsx": "222ac52469e5bd105a1b80950ca1ab54fbaf59b0ddb34d9c3ab6f8039f72d995",
     "src/components/onboarding/SelectRow.tsx": "ae56e211bbd570a1ba8f1de561171c0f9c8e2feecb47b27585a4abedcd55441f",
-    "src/components/onboarding/WizardProgress.tsx": "151db95ef8ea43ed834da3186e5eb0c85c0d165560ee72a66f1ec80074b6b730",
+    "src/components/onboarding/WizardProgress.tsx": "49fd63667646ef1da4c2667980771caacc8ab098d960630569c104035c8a82f3",
     "src/components/onboarding/shells/InsetShell.tsx": "dbf2e5521b6390d11d625de2e6c0e746aa40975c44182b2d8d4840f20f901e0f",
     "src/components/phone/PhoneInput.tsx": "d56a90b5ba5feae2ce16671f123c4c57903a63eeaf4a17fda423293d649e2f21",
     "src/components/phone/countries.ts": "078dc60d474edf09be9e0b842f4a7fc900b7b9fee359320543693d96779dbd94",
@@ -90,7 +90,7 @@
     "src/assets/images/brands/VisaBlue.png": "fa4ac83af61becb5435fd5a7cda3c7234696140f4cbb93de6dfcfd8b87755fc8",
     "src/components/ui/actions/CopyButton.tsx": "240d03ecbff3c19c1fc499dd8e32c0894d48c835f0621d73d321d96712870371",
     "src/components/ui/actions/QuickActions.tsx": "9737a3d00e97013c4da58e91f62afc810b7fe8a815ef2d7e67c9466fc7b1dfa0",
-    "src/components/ui/calendar/AgendaList.tsx": "c443423bde97edb890627f043c0612acd03344d146940a2422981b4ae4526d61",
+    "src/components/ui/calendar/AgendaList.tsx": "f46dff628d50d3c20b02cde74d87cda97cb843540dd42c44f15d50bec2142cdd",
     "src/components/ui/calendar/DayTimeline.tsx": "dec5056d2783281f24b36edd99ab3af3bb673d11d54b62898e58ffa02f439c9c",
     "src/components/ui/calendar/MonthGrid.tsx": "a3d6b0940ce12064ebb10bb27474112623a46306d4f550b08f4fbebb08e0e02f",
     "src/components/ui/calendar/PeriodBar.tsx": "f332fb17b0af4ec554c186f4333ff4c8ec310120414b6bf3025f887c18cb46b3",

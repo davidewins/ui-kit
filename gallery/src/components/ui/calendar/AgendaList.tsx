@@ -39,7 +39,7 @@ function Row({ event, onPress }: { event: AgendaEvent; onPress?: (event: AgendaE
   const colors = useThemeColors();
   const [pressed, setPressed] = useState(false);
   const time = event.time ?? `${format(event.start, "HH:mm")} to ${format(event.end, "HH:mm")}`;
-  const detail = typeof event.detail === "string" ? event.detail : event.detail?.join(" · ");
+  const detail = typeof event.detail === "string" ? event.detail : event.detail?.join(", ");
   const struck = event.struck ? ("line-through" as const) : ("none" as const);
   return (
     <Pressable
@@ -60,7 +60,7 @@ function Row({ event, onPress }: { event: AgendaEvent; onPress?: (event: AgendaE
           {event.title}
         </Text>
         <Text weight="medium" numberOfLines={1} style={[TYPE.sub, TABULAR, { color: colors.muted }]}>
-          {[time, detail].filter(Boolean).join(" · ")}
+          {[time, detail].filter(Boolean).join(", ")}
         </Text>
       </View>
       {event.trailing}
@@ -93,7 +93,7 @@ export function AgendaList({ from, days, events, today = new Date(), emptyLabel 
           return (
             <View key={dayKey(g.first)} style={[line, { marginLeft: 16, paddingVertical: 10, flexDirection: "row", columnGap: 8 }]}>
               <Text weight="medium" style={[TYPE.sub, TABULAR, { color: colors.muted }]}>
-                {`${span} · ${emptyLabel}`}
+                {`${span}, ${emptyLabel}`}
               </Text>
             </View>
           );
