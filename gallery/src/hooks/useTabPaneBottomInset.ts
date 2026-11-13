@@ -7,7 +7,7 @@
 // under the tab bar. FuseTopTabs provides the measured bar height here, and the
 // ui ScrollView / FlatList / LegendList wrappers add it to their bottom padding.
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 import { StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 
 export const TabPaneBottomInsetContext = createContext(0);
@@ -25,4 +25,20 @@ export function withBottomInset(
   const flat = StyleSheet.flatten(style) ?? {};
   const base = flat.paddingBottom ?? flat.paddingVertical ?? flat.padding ?? 0;
   return [flat, { paddingBottom: (typeof base === "number" ? base : 0) + inset }];
+}
+
+// A FuseTopTabs given a headerInset (a see-through iOS header above) hands its
+// tab control to the pane's own vertical list, which draws it as its first
+// row and lets iOS inset the content under the header. The list is then the
+// screen's scroll view, so it scrolls up under the glass header the way
+// Today does. `claim` returns a release; until a list claims the control,
+// FuseTopTabs draws it above the pane itself (loading and empty states).
+export type TabPaneHeader = { node: ReactNode; claim: () => () => void };
+
+export const TabPaneHeaderContext = createContext<TabPaneHeader | null>(null);
+
+export function useTabPaneHeader(): ReactNode {
+  const header = useContext(TabPaneHeaderContext);
+  useEffect(() => header?.claim(), [header]);
+  return header?.node ?? null;
 }

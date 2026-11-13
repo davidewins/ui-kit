@@ -64,7 +64,7 @@ export function SelectRow({
 
       <View style={{ flex: 1 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <Text weight="semibold" style={{ fontSize: 14, color: colors.text }}>
+          <Text weight="medium" style={{ fontSize: 14, color: colors.text }}>
             {label}
           </Text>
           {comingSoon && (
@@ -77,7 +77,7 @@ export function SelectRow({
               }}
             >
               <Text
-                weight="bold"
+                weight="semibold"
                 style={{
                   fontSize: 9,
                   color: colors.muted,

@@ -1,6 +1,7 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/ui/primitives/ScrollView.tsx. Edit it there and sync; local edits fail ui-kit:check.
 import {
   TabPaneBottomInsetContext,
+  TabPaneHeaderContext,
   useTabPaneBottomInset,
   withBottomInset,
 } from "@/hooks/useTabPaneBottomInset";
@@ -13,20 +14,28 @@ const UniwindScrollView = withUniwind(RNScrollView);
 type Props = React.ComponentProps<typeof UniwindScrollView>;
 
 // Inside a FuseTopTabs pane, a vertical ScrollView leaves room for the tab bar
-// (see useTabPaneBottomInset). Nested scroll views get no extra room.
+// (see useTabPaneBottomInset). Nested scroll views get no extra room. Under a
+// see-through header it also draws the pane's tab control as its first child.
 export const ScrollView = React.forwardRef<React.ComponentRef<typeof UniwindScrollView>, Props>(
   function ScrollView({ contentContainerStyle, children, ...props }, ref) {
     const inset = useTabPaneBottomInset();
     const applied = props.horizontal ? 0 : inset;
+    const header = React.useContext(TabPaneHeaderContext);
+    const paneHeader = props.horizontal ? null : header;
+    React.useEffect(() => paneHeader?.claim(), [paneHeader]);
     return (
       <UniwindScrollView
         ref={ref}
+        {...(paneHeader ? { contentInsetAdjustmentBehavior: "automatic" as const } : null)}
         {...props}
         contentContainerStyle={withBottomInset(contentContainerStyle, applied)}
       >
-        {applied ? (
+        {paneHeader ? paneHeader.node : null}
+        {applied || paneHeader ? (
           <TabPaneBottomInsetContext.Provider value={0}>
-            {children}
+            <TabPaneHeaderContext.Provider value={null}>
+              {children}
+            </TabPaneHeaderContext.Provider>
           </TabPaneBottomInsetContext.Provider>
         ) : (
           children
