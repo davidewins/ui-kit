@@ -55,9 +55,9 @@ export function Menu({ label, systemImage, items }: MenuProps) {
           systemImage={systemImage}
           modifiers={[buttonStyle("glass"), buttonBorderShape("capsule"), controlSize("small")]}
         >
-          {items.map((item) => (
+          {items.map((item, i) => (
             <Button
-              key={item.label}
+              key={`${i}-${item.label}`}
               label={item.label}
               systemImage={item.selected ? "checkmark" : item.systemImage}
               role={item.destructive ? "destructive" : "default"}
@@ -79,16 +79,16 @@ export function Menu({ label, systemImage, items }: MenuProps) {
           </FilledTonalButton>
         </DropdownMenu.Trigger>
         <DropdownMenu.Items>
-          {items.map((item) =>
+          {items.map((item, i) =>
             single ? (
-              <SelectableDropdownMenuItem key={item.label} selected={!!item.selected} onClick={() => choose(item)}>
+              <SelectableDropdownMenuItem key={`${i}-${item.label}`} selected={!!item.selected} onClick={() => choose(item)}>
                 <SelectableDropdownMenuItem.Text>
                   <ComposeText>{item.label}</ComposeText>
                 </SelectableDropdownMenuItem.Text>
               </SelectableDropdownMenuItem>
             ) : (
               <DropdownMenuItem
-                key={item.label}
+                key={`${i}-${item.label}`}
                 onClick={() => choose(item)}
                 elementColors={item.destructive ? { textColor: colors.error } : undefined}
               >

@@ -65,9 +65,9 @@ export function ContextMenu({ actions, children, onPress }: ContextMenuProps) {
           <SwiftHost style={{ height }}>
             <SwiftContextMenu>
               <SwiftContextMenu.Items>
-                {actions.map((a) => (
+                {actions.map((a, i) => (
                   <Button
-                    key={a.label}
+                    key={`${i}-${a.label}`}
                     label={a.label}
                     systemImage={a.systemImage}
                     role={a.destructive ? "destructive" : "default"}
@@ -107,9 +107,9 @@ export function ContextMenu({ actions, children, onPress }: ContextMenuProps) {
           </ComposeRNHostView>
         </DropdownMenu.Trigger>
         <DropdownMenu.Items>
-          {actions.map((a) => (
+          {actions.map((a, i) => (
             <DropdownMenuItem
-              key={a.label}
+              key={`${i}-${a.label}`}
               onClick={() => run(a)}
               elementColors={a.destructive ? { textColor: colors.error } : undefined}
             >

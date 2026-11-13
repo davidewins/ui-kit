@@ -57,9 +57,9 @@ export function ActionMenu({ actions, accessibilityLabel, title, buttons = [], e
     return (
       <Stack.Toolbar placement="right">
         {extra ? <Stack.Toolbar.View>{extra}</Stack.Toolbar.View> : null}
-        {buttons.map((b) => (
+        {buttons.map((b, i) => (
           <Stack.Toolbar.Button
-            key={b.label}
+            key={`${i}-${b.label}`}
             icon={b.systemImage}
             accessibilityLabel={b.label}
             onPress={b.onPress}
@@ -67,9 +67,9 @@ export function ActionMenu({ actions, accessibilityLabel, title, buttons = [], e
         ))}
         {actions.length > 0 ? (
           <Stack.Toolbar.Menu icon="ellipsis" accessibilityLabel={accessibilityLabel} title={title}>
-            {actions.map((a) => (
+            {actions.map((a, i) => (
               <Stack.Toolbar.MenuAction
-                key={a.label}
+                key={`${i}-${a.label}`}
                 icon={a.systemImage}
                 destructive={a.destructive}
                 onPress={a.onPress}
@@ -89,8 +89,8 @@ export function ActionMenu({ actions, accessibilityLabel, title, buttons = [], e
         headerRight: () => (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
             {extra}
-            {buttons.map((b) => (
-              <HeaderIconButton key={b.label} icon={b.icon} accessibilityLabel={b.label} onPress={b.onPress} />
+            {buttons.map((b, i) => (
+              <HeaderIconButton key={`${i}-${b.label}`} icon={b.icon} accessibilityLabel={b.label} onPress={b.onPress} />
             ))}
             {actions.length > 0 ? (
               <HeaderIconButton
