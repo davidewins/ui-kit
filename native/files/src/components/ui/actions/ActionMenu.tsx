@@ -28,6 +28,8 @@ export interface MenuAction {
   /** iOS menu glyph. */
   systemImage?: SFSymbolName;
   destructive?: boolean;
+  /** Android glyph, used when this is the menu's only action. */
+  icon?: LucideIcon;
   onPress: () => void;
 }
 
@@ -38,6 +40,8 @@ export interface HeaderButton {
   systemImage: SFSymbolName;
   /** Android glyph. */
   icon: LucideIcon;
+  /** Tints the iOS glyph red (a lone destructive action). */
+  destructive?: boolean;
   onPress: () => void;
 }
 
@@ -52,7 +56,15 @@ export interface ActionMenuProps {
   extra?: ReactElement;
 }
 
-export function ActionMenu({ actions, accessibilityLabel, title, buttons = [], extra }: ActionMenuProps) {
+export function ActionMenu({ actions: allActions, accessibilityLabel, title, buttons: ownButtons = [], extra }: ActionMenuProps) {
+  // A "..." menu holding one action is never drawn (David, 13 Nov): that action
+  // becomes its own header button, shown with its glyph.
+  const single = allActions.length === 1 ? allActions[0] : null;
+  const actions = single ? [] : allActions;
+  const buttons = single
+    ? [...ownButtons, { label: single.label, systemImage: single.systemImage ?? "ellipsis", icon: single.icon ?? Ellipsis, onPress: single.onPress, destructive: single.destructive }]
+    : ownButtons;
+
   if (Platform.OS === "ios") {
     return (
       <Stack.Toolbar placement="right">
@@ -62,6 +74,7 @@ export function ActionMenu({ actions, accessibilityLabel, title, buttons = [], e
             key={`${i}-${b.label}`}
             icon={b.systemImage}
             accessibilityLabel={b.label}
+            tintColor={b.destructive ? "red" : undefined}
             onPress={b.onPress}
           />
         ))}
