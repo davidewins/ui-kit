@@ -15,8 +15,9 @@
 //
 // Back: the native button wherever the stack has history. A stack's first
 // screen has none, so when that stack was pushed from another stack its first
-// screen gets components/ui/actions/HeaderBack, from here. Layouts never set
-// a back button of their own; ui-kit check fails on one.
+// screen gets components/ui/actions/HeaderBack, from here. A stack shown as a
+// modal closes with a swipe down, so it says { modal: true } and gets none.
+// Layouts never set a back button of their own; ui-kit check fails on one.
 import { HeaderBack } from "@/components/ui/actions/HeaderBack";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { DarkTheme, DefaultTheme, useNavigation, useRoute, type Theme } from "expo-router";
@@ -36,10 +37,10 @@ function useHostRoute(): { key: string; state?: { index?: number; routes: unknow
 
 /** True while this stack shows its first screen and the stack around it can
  * pop back from it: the one case the native back button is missing. */
-function useNeedsBack() {
+function useNeedsBack(modal: boolean) {
   const host = useHostRoute();
   const navigation = useNavigation();
-  if (!host) return false;
+  if (!host || modal) return false;
   const inner = host.state;
   const index = inner ? (inner.index ?? inner.routes.length - 1) : 0;
   if (index !== 0) return false;
@@ -48,9 +49,9 @@ function useNeedsBack() {
   return outer.routes.findIndex((r) => r.key === host.key) > 0;
 }
 
-export function useStackScreenOptions() {
+export function useStackScreenOptions({ modal = false }: { modal?: boolean } = {}) {
   const colors = useThemeColors();
-  const needsBack = useNeedsBack();
+  const needsBack = useNeedsBack(modal);
   return useMemo(
     () => ({
       ...(needsBack ? { headerLeft: headerBack } : null),
