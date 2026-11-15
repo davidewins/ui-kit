@@ -1,8 +1,10 @@
 // SettingsScreen: the one Settings page for every app (David, 15 Nov: each
 // app's settings drifted). Remixed from ZESTY gallery screens/profile/account
 // and components/lists/settings-rows: optional identity row on top, then
-// groups of SettingsRows, each with an optional SectionTitle above and an
+// groups of SettingsRows, each with an optional section title above and an
 // optional muted note under it, then an optional centred footnote (version).
+// Section titles are the kit SectionHeader, as on SELLERS' Account screen,
+// set 2pt lower (David, 15 Nov), never the muted SectionTitle.
 //
 // The screen sets no header options. The app's route:
 //   tab root:     <Stack.Screen options={{ title: "Settings", ...LARGE_TITLE }} />
@@ -14,7 +16,7 @@
 // ActionMenu, never a lone destructive row at the bottom.
 import { ScrollView, Text, View } from "@/components/ui";
 import { ActionMenu, type MenuAction } from "@/components/ui/actions/ActionMenu";
-import { SectionTitle } from "@/components/ui/lists/SectionTitle";
+import { SectionHeader } from "@/components/ui/lists/SectionHeader";
 import { SettingsGroup } from "@/components/ui/lists/SettingsGroup";
 import { SettingsIdentity } from "@/components/ui/lists/SettingsIdentity";
 import { type SettingsIcon, SettingsRow } from "@/components/ui/lists/SettingsRow";
@@ -55,10 +57,10 @@ export type SettingsScreenRow = SettingsScreenItem | SettingsScreenElement | nul
 
 export interface SettingsScreenSection {
   key?: string;
-  /** SectionTitle above the group. Leave out for an unlabelled group. */
+  /** Section title above the group. Leave out for an unlabelled group. */
   title?: string;
-  /** Right side of the title line, e.g. an "Add" link. */
-  titleTrailing?: ReactNode;
+  /** Small pill on the right of the title line, e.g. "Add". */
+  titleAction?: { label: string; onPress: () => void };
   rows: readonly SettingsScreenRow[];
   /** Muted line that belongs to this group, directly under it. */
   note?: string;
@@ -110,7 +112,7 @@ export function SettingsSections({ sections }: { sections: readonly SettingsScre
         if (rows.length === 0) return null;
         return (
           <View key={section.key ?? section.title ?? i}>
-            {section.title ? <SectionTitle trailing={section.titleTrailing}>{section.title}</SectionTitle> : null}
+            {section.title ? <SettingsSectionTitle title={section.title} action={section.titleAction} /> : null}
             {/* The note belongs to this group, so the group's gap moves under it. */}
             <SettingsGroup style={section.note ? { marginBottom: 8 } : undefined}>
               {rows.map((row, j) => renderRow(row, j))}
@@ -120,6 +122,16 @@ export function SettingsSections({ sections }: { sections: readonly SettingsScre
         );
       })}
     </>
+  );
+}
+
+/** The title above a group: the Account screen's SectionHeader, drawn 2pt
+ *  lower without moving the group under it (David, 15 Nov). */
+export function SettingsSectionTitle({ title, action }: { title: string; action?: { label: string; onPress: () => void } }) {
+  return (
+    <View style={{ transform: [{ translateY: 2 }] }}>
+      <SectionHeader title={title} action={action} />
+    </View>
   );
 }
 
