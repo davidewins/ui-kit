@@ -61,7 +61,7 @@ export function DateRow({
       Icon={Icon}
       disabled={disabled}
       accessory={
-        <Host matchContents seedColor={colors.tint}>
+        <Host ignoreSafeArea="all" matchContents seedColor={colors.tint}>
           <DatePicker
             title={label}
             selection={value}

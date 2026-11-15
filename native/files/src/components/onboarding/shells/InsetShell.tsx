@@ -59,6 +59,7 @@ export function InsetShell({
         contentContainerStyle={{ paddingTop: 4, paddingBottom: footerSpace }}
         scrollIndicatorInsets={{ bottom: footerSpace - 16 }}
         showsVerticalScrollIndicator={false}
+        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
         keyboardShouldPersistTaps="handled"
         alwaysBounceVertical
       >
@@ -115,6 +116,9 @@ export function InsetFooter({
   const showProgress = typeof step === "number" && typeof total === "number";
   const colors = useThemeColors();
   const glassPrimary = Platform.OS === "ios" && isLiquidGlassAvailable();
+  // Disabled, not loading: loading keeps the live pill with its spinner.
+  const primaryOff = Boolean(primaryCta.disabled) && !primaryCta.loading;
+  const primaryLabel = primaryOff ? colors.muted : colors.onTint;
   const insets = useSafeAreaInsets();
   return (
   <View
@@ -178,35 +182,31 @@ export function InsetFooter({
         primaryCta.onPress?.();
       }}
       disabled={primaryCta.disabled || primaryCta.loading}
-      style={({ pressed }) => ({
-        opacity:
-          primaryCta.disabled || primaryCta.loading
-            ? 0.45
-            : pressed
-              ? 0.85
-              : 1,
-      })}
+      style={({ pressed }) => ({ opacity: pressed ? 0.85 : 1 })}
     >
-      {/* Clear Liquid Glass on iOS 26 (David, 13 Nov: "the save button is
-          opaque black, not glass"). No tint: SELLERS' tint is black in light
-          mode, and black-tinted glass reads as the same opaque pill. A solid
-          tint pill where glass is not available. */}
+      {/* Black Liquid Glass on iOS 26 (David, 15 Nov): glass tinted the
+          theme's primary, so black in light mode and white in dark, label
+          on-tint. A half-clear black tint read grey on white and vanished on
+          a black page, and fading the whole pill when disabled made it
+          disappear; disabled is a grey pill with a grey label instead. A
+          solid pill where glass is not available. */}
       {glassPrimary ? (
         <GlassView
-          isInteractive
+          isInteractive={!primaryOff}
           glassEffectStyle="regular"
+          tintColor={primaryOff ? colors.secondaryBackground : colors.primary}
           style={{ borderRadius: 999, overflow: "hidden", borderCurve: "continuous" }}
         >
           <View style={{ paddingVertical: 14, paddingHorizontal: 18, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8 }}>
         {primaryCta.loading ? (
-          <ActivityIndicator size="small" color={colors.text} />
+          <ActivityIndicator size="small" color={primaryLabel} />
         ) : (
           <>
             <Text
               weight="semibold"
               style={{
                 fontSize: 15,
-                color: colors.text,
+                color: primaryLabel,
                 letterSpacing: -0.2,
               }}
             >
@@ -226,19 +226,19 @@ export function InsetFooter({
           alignItems: "center",
           justifyContent: "center",
           gap: 8,
-          backgroundColor: colors.tint,
+          backgroundColor: primaryOff ? colors.secondaryBackground : colors.primary,
           borderCurve: "continuous",
         }}
       >
         {primaryCta.loading ? (
-          <ActivityIndicator size="small" color={colors.background} />
+          <ActivityIndicator size="small" color={primaryLabel} />
         ) : (
           <>
             <Text
               weight="semibold"
               style={{
                 fontSize: 15,
-                color: colors.background,
+                color: primaryLabel,
                 letterSpacing: -0.2,
               }}
             >

@@ -49,7 +49,7 @@ export function PickerRow<T extends string | number>({
         Icon={Icon}
         disabled={disabled}
         accessory={
-          <Host matchContents seedColor={colors.muted}>
+          <Host ignoreSafeArea="all" matchContents seedColor={colors.muted}>
             <Picker
               label={label}
               selection={value}

@@ -5,6 +5,7 @@ import {
 } from "@/hooks/useTabPaneBottomInset";
 import React from "react";
 import { FlatList as RNFlatList, type FlatListProps } from "react-native";
+import { KEYBOARD_DISMISS } from "./ScrollView";
 import { withUniwind } from "uniwind";
 
 const UniwindFlatList = withUniwind(RNFlatList);
@@ -31,6 +32,7 @@ function FlatListComponent<T>(
   );
   return (
     <UniwindFlatList
+      {...KEYBOARD_DISMISS}
       {...(paneHeader ? { contentInsetAdjustmentBehavior: "automatic" } : null)}
       {...(props as any)}
       ref={ref}

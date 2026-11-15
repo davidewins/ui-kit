@@ -77,7 +77,7 @@ export function SliderRow({
         )}
       </View>
       {ios ? (
-        <Host
+        <Host ignoreSafeArea="all"
           matchContents={{ vertical: true }}
           seedColor={colors.tint}
           style={{ marginLeft: SETTINGS_ROW.glyphWidth + SETTINGS_ROW.gap }}

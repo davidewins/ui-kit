@@ -4,7 +4,12 @@
 // Android: a Material 3 ListItem header with a rotating arrow and an
 // AnimatedVisibility body, the expressive expandable-list pattern.
 //
-// Children are React Native views. Controlled when `open` is passed.
+// A plain-text body (an FAQ answer) renders as native Text, so SwiftUI /
+// Compose size it on the first frame and the open animates as the system's
+// own does. A React Native body goes through RNHostView, which is measured
+// after the group opens: the group grows twice, the bounce David saw on
+// Help & Support (14 Nov). Use text wherever the body is text.
+// Controlled when `open` is passed.
 import {
   AnimatedVisibility,
   Column,
@@ -17,7 +22,9 @@ import {
 } from "@expo/ui/jetpack-compose";
 import { animated, clickable, graphicsLayer, padding, spring } from "@expo/ui/jetpack-compose/modifiers";
 import { DisclosureGroup, RNHostView, Text } from "@expo/ui/swift-ui";
-import { font } from "@expo/ui/swift-ui/modifiers";
+import { font, foregroundStyle, padding as swiftPadding } from "@expo/ui/swift-ui/modifiers";
+import { useFontFamily } from "@/hooks/useFontFamily";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { haptic } from "@/lib/haptics";
 import type { ReactElement } from "react";
 import { useState } from "react";
@@ -30,14 +37,18 @@ const EXIT = ExitTransition.shrinkVertically().plus(ExitTransition.fadeOut());
 
 export interface DisclosureProps {
   title: string;
-  /** One React Native element: the body. */
-  children: ReactElement;
+  /** The body: a string (native text, preferred) or one React Native element. */
+  children: string | ReactElement;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   defaultOpen?: boolean;
 }
 
 export function Disclosure({ title, children, open, onOpenChange, defaultOpen = false }: DisclosureProps) {
+  // The app's chosen font (Appearance), not a fixed Geist: SwiftUI finds a
+  // loaded font by its registered name.
+  const fontFamily = useFontFamily();
+  const colors = useThemeColors();
   const [own, setOwn] = useState(defaultOpen);
   const isOpen = open ?? own;
   const toggle = (next: boolean) => {
@@ -51,9 +62,21 @@ export function Disclosure({ title, children, open, onOpenChange, defaultOpen = 
       <SwiftHost matchContents={{ vertical: true }}>
         <DisclosureGroup isExpanded={isOpen} onIsExpandedChange={toggle}>
           <DisclosureGroup.Label>
-            <Text modifiers={[font({ family: "Geist-Medium", size: 15 })]}>{title}</Text>
+            <Text modifiers={[font({ family: fontFamily("medium"), size: 15 })]}>{title}</Text>
           </DisclosureGroup.Label>
-          <RNHostView matchContents={{ vertical: true }}>{children}</RNHostView>
+          {typeof children === "string" ? (
+            <Text
+              modifiers={[
+                font({ family: fontFamily("medium"), size: 15 }),
+                foregroundStyle(colors.muted),
+                swiftPadding({ top: 4 }),
+              ]}
+            >
+              {children}
+            </Text>
+          ) : (
+            <RNHostView matchContents={{ vertical: true }}>{children}</RNHostView>
+          )}
         </DisclosureGroup>
       </SwiftHost>
     );
@@ -72,7 +95,11 @@ export function Disclosure({ title, children, open, onOpenChange, defaultOpen = 
         </ListItem>
         <AnimatedVisibility visible={isOpen} enterTransition={ENTER} exitTransition={EXIT}>
           <Column modifiers={[padding(16, 0, 16, 16)]}>
-            <ComposeRNHostView matchContents={{ vertical: true }}>{children}</ComposeRNHostView>
+            {typeof children === "string" ? (
+              <ComposeText color={colors.muted} style={{ fontFamily: "Geist-Medium", fontSize: 15 }}>{children}</ComposeText>
+            ) : (
+              <ComposeRNHostView matchContents={{ vertical: true }}>{children}</ComposeRNHostView>
+            )}
           </Column>
         </AnimatedVisibility>
       </Column>
