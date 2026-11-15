@@ -128,6 +128,8 @@ const BANNED = [
   // Header button rows (David, 15 Nov: "i dont want fucking random spacing").
   { re: /header(?:Left|Right)\s*:\s*\(\)\s*=>\s*\(?\s*<View\b/, use: "components/ui/actions/HeaderActions around the header buttons" },
   { re: /function\s+HeaderTextButton\b/, use: "components/ui/actions/HeaderTextButton" },
+  // Back buttons (David, 15 Nov: "this should be FUCKING STANDARDISED").
+  { re: /\bNavBackChevron\b|header(?:Left|BackVisible)\s*:\s*(?:\(\)\s*=>\s*\(?\s*<\w*(?:Back|Chevron|Arrow)\w*|true)/, use: "nothing: useStackScreenOptions() puts components/ui/actions/HeaderBack where the native back is missing" },
 ];
 
 function bannedImports(app) {

@@ -12,15 +12,48 @@
 // and large titles show (a headerStyle background hides them on iOS 26).
 // Small-title bars take the nav theme's card colour, which useNavTheme sets to
 // the page colour. Android paints the page colour (useThemeColors.headerStyle).
+//
+// Back: the native button wherever the stack has history. A stack's first
+// screen has none, so when that stack was pushed from another stack its first
+// screen gets components/ui/actions/HeaderBack, from here. Layouts never set
+// a back button of their own; ui-kit check fails on one.
+import { HeaderBack } from "@/components/ui/actions/HeaderBack";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { DarkTheme, DefaultTheme, type Theme } from "expo-router";
-import { useMemo } from "react";
+import { DarkTheme, DefaultTheme, useNavigation, useRoute, type Theme } from "expo-router";
+import { createElement, useMemo } from "react";
 import { Platform, useColorScheme } from "react-native";
+
+const headerBack = () => createElement(HeaderBack);
+
+/** The screen this stack sits in, or undefined for the app's root stack. */
+function useHostRoute(): { key: string; state?: { index?: number; routes: unknown[] } } | undefined {
+  try {
+    return useRoute();
+  } catch {
+    return undefined;
+  }
+}
+
+/** True while this stack shows its first screen and the stack around it can
+ * pop back from it: the one case the native back button is missing. */
+function useNeedsBack() {
+  const host = useHostRoute();
+  const navigation = useNavigation();
+  if (!host) return false;
+  const inner = host.state;
+  const index = inner ? (inner.index ?? inner.routes.length - 1) : 0;
+  if (index !== 0) return false;
+  const outer = navigation.getState() as { type?: string; routes: { key: string }[] } | undefined;
+  if (outer?.type !== "stack") return false;
+  return outer.routes.findIndex((r) => r.key === host.key) > 0;
+}
 
 export function useStackScreenOptions() {
   const colors = useThemeColors();
+  const needsBack = useNeedsBack();
   return useMemo(
     () => ({
+      ...(needsBack ? { headerLeft: headerBack } : null),
       headerBackButtonDisplayMode: "minimal" as const,
       headerStyle: colors.headerStyle ?? undefined,
       headerTintColor: colors.tint,
@@ -32,7 +65,7 @@ export function useStackScreenOptions() {
       // swipes from calendars, charts and tabs. Edge swipe still goes back.
       fullScreenGestureEnabled: false,
     }),
-    [colors.headerStyle, colors.tint, colors.headerTitleStyle, colors.headerLargeTitleStyle],
+    [needsBack, colors.headerStyle, colors.tint, colors.headerTitleStyle, colors.headerLargeTitleStyle],
   );
 }
 
