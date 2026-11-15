@@ -124,6 +124,12 @@
     "src/components/ui/surfaces/TicketCard.tsx": "254a0d1ab2990029443facb7e2377ced48409f933aa08e48b528ae63695b9296",
     "src/hooks/useHues.ts": "d81e945b87aff2b722fc03601193e55b62f21ccebfbf3000d3b8bf12ad13d158",
     "src/components/ui/surfaces/Panel.tsx": "c590cedb6d24e8c69f029897f92c7e06f90550cf5da1a947f8407645b41789d6",
-    "src/components/ui/actions/RoundButton.tsx": "4f5b1a3c378668988f352fbb698c276243a2b14bd6c0623ff7cbf6bb72811ffc"
+    "src/components/ui/actions/RoundButton.tsx": "4f5b1a3c378668988f352fbb698c276243a2b14bd6c0623ff7cbf6bb72811ffc",
+    "src/screens/AccountScreen.tsx": "2073928429cf06d21aa410f23e0ac26e5538199d2ebe29a60f07347d536cfe7e",
+    "src/screens/DataPrivacyScreen.tsx": "f0bc40ece75cd06c495bf5f279013702d8202e34521cf79c1dcb4b69428eb2b8",
+    "src/screens/GdprScreen.tsx": "b3f1be64dab7fde450b44d32700e212369417e7b4c66eb52e3971e2e28f4880c",
+    "src/screens/LegalScreen.tsx": "94dea1168f0368a2130fa42baa8780f4eab4d326e7c56b680207da02b0422361",
+    "src/screens/PersonalDetailsScreen.tsx": "652c711445ae1adbb101ae99d5f7a21d20303bceb3ee6294df60c7312b826db9",
+    "src/screens/SettingsScreen.tsx": "bb2c96b5545d4aba0dd7c63adc3820e719c422f1f46c9af216ceda5407ae8733"
   }
 }

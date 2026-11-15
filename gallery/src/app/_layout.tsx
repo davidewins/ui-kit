@@ -38,6 +38,9 @@ const SCREEN_OPTIONS: Record<string, NativeStackNavigationOptions> = {
   "screens/ordering/order/[id]": { ...minimal, title: "Order", headerTransparent: false },
   "screens/account/notifications": { ...minimal },
   "screens/account/gdpr": { ...minimal, headerTransparent: false },
+  // Legal pages: large title, as lib/stackHeader's LARGE_TITLE in the apps.
+  "screens/profile/terms": { ...minimal, headerLargeTitle: true },
+  "screens/profile/privacy-policy": { ...minimal, headerLargeTitle: true },
   "screens/account/country-code": { presentation: "modal", title: "Country Code", headerTransparent: false },
   "screens/selling/analytics": { ...minimal, headerTransparent: false },
   "screens/selling/product/[id]": { ...minimal, title: "", headerTransparent: false },

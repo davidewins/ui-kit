@@ -4,6 +4,8 @@
 // missing from this list (or listed but missing on disk).
 import {
   AppWindow,
+  FileLock,
+  ScrollText,
   Bell,
   Bike,
   Blocks,
@@ -295,6 +297,8 @@ export const ENTRIES: Entry[] = [
   { title: "Edit details", route: "screens/profile/edit-profile", section: "profile", Icon: UserPen, keywords: "profile form" },
   { title: "Notifications", route: "screens/profile/notifications", section: "profile", Icon: Bell, keywords: "push email quiet hours", states: ["Allowed", "Off in Settings"] },
   { title: "Privacy and data", route: "screens/profile/privacy", section: "profile", Icon: ShieldCheck, keywords: "gdpr export delete account", states: ["Default", "Preparing export", "Export ready"] },
+  { title: "Terms", route: "screens/profile/terms", section: "profile", Icon: ScrollText, keywords: "legal LegalScreen terms of service" },
+  { title: "Privacy policy", route: "screens/profile/privacy-policy", section: "profile", Icon: FileLock, keywords: "legal LegalScreen" },
 
   // Screens
   { title: "Welcome", route: "screens/sign-in/welcome", section: "sign-in", Icon: Sparkles, keywords: "VOID auth" },

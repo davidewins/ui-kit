@@ -123,7 +123,13 @@
     "src/components/ui/surfaces/TicketCard.tsx",
     "src/hooks/useHues.ts",
     "src/components/ui/surfaces/Panel.tsx",
-    "src/components/ui/actions/RoundButton.tsx"
+    "src/components/ui/actions/RoundButton.tsx",
+    "src/screens/AccountScreen.tsx",
+    "src/screens/DataPrivacyScreen.tsx",
+    "src/screens/GdprScreen.tsx",
+    "src/screens/LegalScreen.tsx",
+    "src/screens/PersonalDetailsScreen.tsx",
+    "src/screens/SettingsScreen.tsx"
   ],
   "seeds": [
     "src/hooks/useFontFamily.ts"
