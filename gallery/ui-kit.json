@@ -66,6 +66,7 @@
     "src/components/ui/inputs/SegmentedControl.tsx",
     "src/components/ui/lists/SettingsGroup.tsx",
     "src/components/ui/lists/SettingsIdentity.tsx",
+    "src/components/ui/lists/RowPanel.tsx",
     "src/components/ui/lists/SettingsRow.tsx",
     "src/components/ui/actions/ShareLink.tsx",
     "src/components/ui/overlays/Sheet.tsx",
