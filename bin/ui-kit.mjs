@@ -3,7 +3,8 @@
 //
 //   node bin/ui-kit.mjs tokens        regenerate native/files/src/globals.css from tokens.json
 //   node bin/ui-kit.mjs sync <app>    copy the files listed in <app>/ui-kit.json into the app
-//   node bin/ui-kit.mjs check <app>   fail if the app's copies differ from the kit
+//   node bin/ui-kit.mjs check <app>   fail if the app's copies differ from the kit, or app
+//                                     code imports something ZESTY wraps (BANNED)
 //
 // Each synced file gets a one-line header saying where it lives. Seeds are
 // copied once (only when missing) and are then owned by the app.
@@ -108,6 +109,44 @@ function kitCopies(app) {
   return out;
 }
 
+// App code that reaches past ZESTY for something ZESTY already wraps. Only
+// files under src/components/ui/ (the kit copies) may import these. David,
+// 14 Nov: "I MADE A COMPONENT LIBRARY, USE THE COMPONENT LIBRARY".
+const BANNED = [
+  { re: /from\s+["']@react-native-segmented-control\/segmented-control["']/, use: "components/ui/inputs/SegmentedControl" },
+  { re: /import\s*\{[^}]*\bModal\b[^}]*\}\s*from\s*["']react-native["']/, use: "components/ui/overlays/Sheet or ConfirmDialog" },
+  { re: /import\s*\{[^}]*\bSwitch\b[^}]*\}\s*from\s*["']react-native["']/, use: "components/ui/inputs/Switch" },
+  { re: /import\s*\{[^}]*\bActionSheetIOS\b[^}]*\}\s*from\s*["']react-native["']/, use: "components/ui/actions/ActionMenu or ConfirmDialog" },
+  { re: /\bKeyboardAvoidingView\b/, use: "nothing (no keyboard handling)" },
+  // Segmented controls, headers (David, 15 Nov: "every time i see a
+  // segmentedcontrol its WRONG"; headers changed app by app without asking).
+  { re: /from\s+["']@expo\/ui\/[\w/-]*segmented[\w/-]*["']/, use: "components/ui/inputs/SegmentedControl" },
+  { re: /(?:function|const|class)\s+\w*Segment(?:ed)?(?:Control|Bar|Tabs|Picker)\w*\s*[=(<:]/, use: "components/ui/inputs/SegmentedControl or components/ui/data/SegmentBar, not a home-made one" },
+  { re: /\bsetIOSHeaderBackground\s*\(\s*["']page["']/, use: "nothing: iOS headers are the system bar (lib/stackHeader)" },
+  { re: /\benableLegacyHeaderAppearance\b/, use: "nothing: iOS headers are the system bar (lib/stackHeader)" },
+  { re: /\b(?:headerStyle|headerTransparent|headerBlurEffect|headerTintColor|headerTitleStyle|headerLargeTitleStyle|headerShadowVisible|headerLargeTitleShadowVisible|headerBackButtonDisplayMode|headerLargeTitleEnabled|headerBackground)\s*:/, use: "useStackScreenOptions(), LARGE_TITLE or SEE_THROUGH from lib/stackHeader" },
+];
+
+function bannedImports(app) {
+  const out = [];
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === "node_modules" || e.name.startsWith(".") || e.name === "__tests__") continue;
+      const p = join(dir, e.name);
+      if (e.isDirectory()) {
+        if (relative(app, p) !== join("src", "components", "ui")) walk(p);
+      } else if (/\.(tsx?|jsx?)$/.test(e.name) && !/\.d\.ts$/.test(e.name)) {
+        const text = readFileSync(p, "utf8");
+        // Kit copies anywhere in src/ (lib/stackHeader, hooks) are the kit.
+        if (text.slice(0, 120).includes("ui-kit: copy of davidewins/ui-kit")) continue;
+        for (const b of BANNED) if (b.re.test(text)) out.push(`raw      ${relative(app, p)}: use ${b.use}`);
+      }
+    }
+  };
+  if (existsSync(join(app, "src"))) walk(join(app, "src"));
+  return out;
+}
+
 function check(app) {
   const cfg = readConfig(app);
   const kind = cfg.kit ?? "native";
@@ -121,8 +160,9 @@ function check(app) {
   // check never compares (left behind by a move, or synced by hand).
   const listed = new Set(cfg.files);
   for (const file of kitCopies(app)) if (!listed.has(file)) drift.push(`unlisted ${file}`);
+  if ((cfg.kit ?? "native") === "native") drift.push(...bannedImports(app));
   if (drift.length) {
-    console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nMove the change into ui-kit, then sync.`);
+    console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nKit copies: move the change into ui-kit, then sync. Raw imports: use the ZESTY component named.`);
     process.exit(1);
   }
   console.log(`ui-kit: ${cfg.files.length} files match the kit`);
