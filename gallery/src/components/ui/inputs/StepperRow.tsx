@@ -50,7 +50,7 @@ export function StepperRow({
       disabled={disabled}
       accessory={
         Platform.OS === "ios" ? (
-          <Host matchContents>
+          <Host ignoreSafeArea="all" matchContents>
             {/* Counted in whole steps (25 = 62.5 kg at a 2.5 step): with a
                 fractional step SwiftUI's Stepper ignored labelsHidden and drew
                 the label beside the buttons a second time. */}

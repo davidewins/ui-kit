@@ -21,9 +21,8 @@ import { SETTINGS_ROW } from "./SettingsRow";
 export const SETTINGS_GROUP = {
   radius: 24,
   marginHorizontal: 16,
-  // David, 13 Nov: no big gaps in any app. 12 under a group, the next
-  // section header adds 12 above itself.
-  marginBottom: 12,
+  // SELLERS' gap, so the three apps match (David, 14 Nov).
+  marginBottom: 18,
 } as const;
 
 export function SettingsGroup({

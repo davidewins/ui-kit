@@ -114,8 +114,10 @@ export function useThemeColors() {
           ? { backgroundColor: background }
           : null,
 
-      headerTitleStyle: { fontFamily: headerFont },
-      headerLargeTitleStyle: { fontFamily: headerFont, fontSize: 32 },
+      // Titles are text, not accent: headerTintColor (the accent) only
+      // colours the header buttons (accent-means-accent).
+      headerTitleStyle: { fontFamily: headerFont, color: text },
+      headerLargeTitleStyle: { fontFamily: headerFont, fontSize: 32, color: text },
     }),
     [
       headerFont,

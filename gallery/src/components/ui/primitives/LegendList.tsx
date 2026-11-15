@@ -11,6 +11,7 @@ import {
 } from "@/hooks/useTabPaneBottomInset";
 import React from "react";
 import { withUniwind } from "uniwind";
+import { KEYBOARD_DISMISS } from "./ScrollView";
 
 const WrappedLegendList = withUniwind(DefaultLegendList);
 
@@ -36,6 +37,7 @@ function LegendListComponent<T>(
   );
   return (
     <WrappedLegendList
+      {...KEYBOARD_DISMISS}
       {...(paneHeader ? { contentInsetAdjustmentBehavior: "automatic" } : null)}
       {...(props as any)}
       ref={ref}

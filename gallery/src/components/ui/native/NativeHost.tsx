@@ -22,10 +22,21 @@ import { useColorScheme } from "react-native";
 
 type Hex = `#${string}`;
 
+// ignoreSafeArea "all" on every host: a host is a hosting controller, and
+// SwiftUI pushes its content out of the top safe area. Scrolled under a
+// transparent header, rows slid down and piled up under the title
+// (VOID Help & Support, 15 Nov). The host is a piece of a row, never a screen.
 export function SwiftHost({ modifiers = [], ...props }: SwiftUIHostProps) {
   const colors = useThemeColors();
   // seedColor tints SwiftUI controls; tint() alone does not reach them (see ProgressBar).
-  return <SwiftUIHost seedColor={colors.text} {...props} modifiers={[tint(colors.text), ...modifiers]} />;
+  return (
+    <SwiftUIHost
+      ignoreSafeArea="all"
+      seedColor={colors.text}
+      {...props}
+      modifiers={[tint(colors.text), ...modifiers]}
+    />
+  );
 }
 
 /** For SwiftUI controls the system fills with the tint and labels in white:
@@ -35,8 +46,8 @@ export function SwiftHost({ modifiers = [], ...props }: SwiftUIHostProps) {
  *  - "filled": muted grey tint (alerts, button-style toggles), which holds a white label in light and dark. */
 export function SwiftSystemHost({ kind, ...props }: SwiftUIHostProps & { kind: "toggle" | "filled" }) {
   const colors = useThemeColors();
-  if (kind === "toggle") return <SwiftUIHost {...props} />;
-  return <SwiftUIHost seedColor={colors.muted} {...props} modifiers={[tint(colors.muted), ...(props.modifiers ?? [])]} />;
+  if (kind === "toggle") return <SwiftUIHost ignoreSafeArea="all" {...props} />;
+  return <SwiftUIHost ignoreSafeArea="all" seedColor={colors.muted} {...props} modifiers={[tint(colors.muted), ...(props.modifiers ?? [])]} />;
 }
 
 /** Material 3 roles mapped onto the kit tokens: black and white, red for errors. */

@@ -22,9 +22,9 @@ import { ActivityIndicator, Pressable as RNPressable } from "react-native";
  * Link around a plain-object-style Pressable, with the iOS peek preview.
  */
 export const SETTINGS_ROW = {
-  /** Fixed, never min-height. 44 is iOS's own row (David, 13 Nov: compact
-   *  means dense; 52 read fat). */
-  height: 44,
+  /** Fixed, never min-height. SELLERS' 52, the account list David calls
+   *  sturdy; VOID, RIDERS and SELLERS render the same rows (David, 14 Nov). */
+  height: 52,
   /** Matches the card's own horizontal padding. */
   paddingHorizontal: 16,
   /** Fixed-width glyph box so every label starts on the same x. */

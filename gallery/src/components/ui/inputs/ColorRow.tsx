@@ -27,7 +27,7 @@ export function ColorRow({ label, Icon, value, onChange, supportsOpacity = false
       disabled={disabled}
       accessory={
         Platform.OS === "ios" ? (
-          <Host matchContents>
+          <Host ignoreSafeArea="all" matchContents>
             <ColorPicker
               label={label}
               selection={value}

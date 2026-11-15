@@ -33,7 +33,7 @@ function IOSSwitch({ value = false, onValueChange, disabled, trackColor, style, 
   const onColor = typeof trackColor?.true === "string" ? trackColor.true : undefined;
 
   return (
-    <Host matchContents seedColor={onColor} style={style} testID={testID}>
+    <Host ignoreSafeArea="all" matchContents seedColor={onColor} style={style} testID={testID}>
       <Toggle
         key={rev}
         isOn={value}

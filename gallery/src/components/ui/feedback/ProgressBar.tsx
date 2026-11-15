@@ -24,7 +24,7 @@ export function ProgressBar({ value, color, accessibilityLabel, style }: Progres
 
   if (Platform.OS === "ios") {
     return (
-      <Host matchContents={{ vertical: true }} style={style} seedColor={fill}>
+      <Host ignoreSafeArea="all" matchContents={{ vertical: true }} style={style} seedColor={fill}>
         <ProgressView
           value={clamped}
           modifiers={[progressViewStyle(clamped == null ? "circular" : "linear")]}

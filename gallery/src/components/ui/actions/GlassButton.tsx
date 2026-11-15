@@ -71,14 +71,14 @@ export const GlassButton: FC<GlassButtonProps> = ({
   const fill = solidDisabled
     ? colors.background
     : tone === "primary"
-      ? colors.text
+      ? colors.primary // = text in the base kit; an app accent moves it
       : tone === "danger"
         ? colors.error
         : colors.secondaryBackground; // neutral
   const labelColor = solidDisabled
     ? colors.muted
     : tone === "primary"
-      ? colors.background
+      ? colors.onTint
       : tone === "danger"
         ? colors.onVariant
         : tone === "neutral"

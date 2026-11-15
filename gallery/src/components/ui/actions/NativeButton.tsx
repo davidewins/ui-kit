@@ -52,7 +52,7 @@ export function NativeButton({
   }
 
   return (
-    <Host matchContents>
+    <Host ignoreSafeArea="all" matchContents>
       <SwiftButton
         label={label}
         systemImage={systemImage}

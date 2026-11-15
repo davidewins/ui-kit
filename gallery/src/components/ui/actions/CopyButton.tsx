@@ -1,13 +1,15 @@
 // ui-kit: copy of davidewins/ui-kit native/files/src/components/ui/actions/CopyButton.tsx. Edit it there and sync; local edits fail ui-kit:check.
 // A small filled circle that copies a value: an order number, a tracking
-// number, a referral code. The glyph swaps to a tick for a moment and a haptic
-// fires, so no toast is needed. Sits at the end of the row that shows the
+// number, a referral code, a code snippet (top right of the block). The glyph
+// cross-fades and scales to a tick for a moment and a haptic fires, so no
+// toast is needed. Sits at the end of the row that shows the
 // value. Not for sharing a link (ShareLink).
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { Check, Copy } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Share } from "react-native";
+import Animated, { FadeOut, ZoomIn } from "react-native-reanimated";
 
 export function CopyButton({
   value,
@@ -66,7 +68,16 @@ export function CopyButton({
         opacity: pressed ? 0.6 : 1,
       })}
     >
-      <Glyph size={Math.round(size * 0.48)} color={copied ? colors.success : colors.text} strokeWidth={copied ? 2.6 : 2} />
+      {/* Keyed so each swap runs the enter on the new glyph and the exit on
+          the old one, stacked in the same spot. Eased, not sprung. */}
+      <Animated.View
+        key={copied ? "copied" : "copy"}
+        entering={ZoomIn.duration(180)}
+        exiting={FadeOut.duration(120)}
+        style={{ position: "absolute" }}
+      >
+        <Glyph size={Math.round(size * 0.48)} color={copied ? colors.success : colors.text} strokeWidth={copied ? 2.6 : 2} />
+      </Animated.View>
     </Pressable>
   );
 }
