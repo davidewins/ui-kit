@@ -14,11 +14,15 @@ const UniwindScrollView = withUniwind(RNScrollView);
 type Props = React.ComponentProps<typeof UniwindScrollView>;
 
 // Every list lets the person put the keyboard away: drag the content
-// (iOS follows the finger), or tap anywhere that is not a control. A screen
-// can still pass its own values.
+// (iOS follows the finger), or tap anywhere that is not a control. On iOS the
+// keyboard also pushes the content up and scrolls the field being typed in
+// above it (React Native's own inset handling, no library); Android resizes
+// the window. David, 15 Nov: inputs at the bottom of Loyalty sat under the
+// keyboard. A screen can still pass its own values.
 export const KEYBOARD_DISMISS = {
   keyboardDismissMode: Platform.OS === "ios" ? "interactive" : "on-drag",
   keyboardShouldPersistTaps: "handled",
+  automaticallyAdjustKeyboardInsets: true,
 } as const;
 
 // Inside a FuseTopTabs pane, a vertical ScrollView leaves room for the tab bar
