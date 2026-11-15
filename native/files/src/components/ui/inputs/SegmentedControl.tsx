@@ -7,7 +7,13 @@
 // haptic per change, so callers never fire their own.
 import { SegmentedControl as CommunitySegmentedControl } from "@expo/ui/community/segmented-control";
 import { Host, Picker, Text as SwiftText } from "@expo/ui/swift-ui";
-import { controlSize, disabled as disabledModifier, pickerStyle, tag } from "@expo/ui/swift-ui/modifiers";
+import {
+  accessibilityLabel as accessibilityLabelModifier,
+  controlSize,
+  disabled as disabledModifier,
+  pickerStyle,
+  tag,
+} from "@expo/ui/swift-ui/modifiers";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import NativeSegmentedControlClass, {
   type SegmentedControlProps as NativeSegmentedControlProps,
@@ -61,7 +67,6 @@ export function SegmentedControl({
     return (
       <Host
         matchContents={{ vertical: true }}
-        accessibilityLabel={accessibilityLabel}
         style={[{ minHeight: size === "large" ? 44 : 36 }, style]}
       >
         <Picker
@@ -72,6 +77,7 @@ export function SegmentedControl({
             pickerStyle("segmented"),
             controlSize(size === "large" ? "extraLarge" : "large"),
             ...(disabled ? [disabledModifier()] : []),
+            ...(accessibilityLabel ? [accessibilityLabelModifier(accessibilityLabel)] : []),
           ]}
         >
           {values.map((label, index) => (
