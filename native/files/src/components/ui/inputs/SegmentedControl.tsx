@@ -6,18 +6,26 @@
 // Controlled: pass selectedIndex and update it in onChange. One selection
 // haptic per change, so callers never fire their own.
 import { SegmentedControl as CommunitySegmentedControl } from "@expo/ui/community/segmented-control";
+import { Host, Picker, Text as SwiftText } from "@expo/ui/swift-ui";
+import { controlSize, disabled as disabledModifier, pickerStyle, tag } from "@expo/ui/swift-ui/modifiers";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import NativeSegmentedControlClass, {
   type SegmentedControlProps as NativeSegmentedControlProps,
 } from "@react-native-segmented-control/segmented-control";
 import * as Haptics from "expo-haptics";
 import type { ComponentType } from "react";
-import { Platform, View, useColorScheme, type StyleProp, type ViewStyle } from "react-native";
+import { Platform, UIManager, View, useColorScheme, type StyleProp, type ViewStyle } from "react-native";
 
 // The package types its default export as a NativeMethods mixin class, which
 // React Native 0.88's types no longer accept as JSX; the runtime is the same.
 const NativeSegmentedControl =
   NativeSegmentedControlClass as unknown as ComponentType<NativeSegmentedControlProps>;
+
+// A dev build made before the package was added has no UIKit control in it.
+// There iOS falls back to SwiftUI's segmented Picker at its large size instead
+// of failing (TAK-1570: TKVR's 5 Nov iOS build, until the next native build).
+const HAS_UIKIT_CONTROL =
+  Platform.OS === "ios" && UIManager.hasViewManagerConfig("RNCSegmentedControl");
 
 export interface SegmentedControlProps {
   values: readonly string[];
@@ -48,6 +56,33 @@ export function SegmentedControl({
     Haptics.selectionAsync().catch(() => {});
     onChange(index);
   };
+
+  if (Platform.OS === "ios" && !HAS_UIKIT_CONTROL) {
+    return (
+      <Host
+        matchContents={{ vertical: true }}
+        accessibilityLabel={accessibilityLabel}
+        style={[{ minHeight: size === "large" ? 44 : 36 }, style]}
+      >
+        <Picker
+          selection={selectedIndex}
+          onSelectionChange={(index: number) => select(index)}
+          label=""
+          modifiers={[
+            pickerStyle("segmented"),
+            controlSize(size === "large" ? "extraLarge" : "large"),
+            ...(disabled ? [disabledModifier()] : []),
+          ]}
+        >
+          {values.map((label, index) => (
+            <SwiftText key={index} modifiers={[tag(index)]}>
+              {label}
+            </SwiftText>
+          ))}
+        </Picker>
+      </Host>
+    );
+  }
 
   if (Platform.OS === "ios") {
     return (
