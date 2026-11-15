@@ -125,6 +125,9 @@ const BANNED = [
   { re: /\bsetIOSHeaderBackground\s*\(\s*["']page["']/, use: "nothing: iOS headers are the system bar (lib/stackHeader)" },
   { re: /\benableLegacyHeaderAppearance\b/, use: "nothing: iOS headers are the system bar (lib/stackHeader)" },
   { re: /\b(?:headerStyle|headerTransparent|headerBlurEffect|headerTintColor|headerTitleStyle|headerLargeTitleStyle|headerShadowVisible|headerLargeTitleShadowVisible|headerBackButtonDisplayMode|headerLargeTitleEnabled|headerBackground)\s*:/, use: "useStackScreenOptions(), LARGE_TITLE or SEE_THROUGH from lib/stackHeader" },
+  // Header button rows (David, 15 Nov: "i dont want fucking random spacing").
+  { re: /header(?:Left|Right)\s*:\s*\(\)\s*=>\s*\(?\s*<View\b/, use: "components/ui/actions/HeaderActions around the header buttons" },
+  { re: /function\s+HeaderTextButton\b/, use: "components/ui/actions/HeaderTextButton" },
 ];
 
 function bannedImports(app) {
