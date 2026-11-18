@@ -22,7 +22,9 @@ const [cmd, appArg] = process.argv.slice(2);
 
 function header(kitPath) {
   const msg = `ui-kit: copy of davidewins/ui-kit ${kitPath}. Edit it there and sync; local edits fail ui-kit:check.`;
-  return kitPath.endsWith(".css") ? `/* ${msg} */\n` : `// ${msg}\n`;
+  if (kitPath.endsWith(".css")) return `/* ${msg} */\n`;
+  if (kitPath.endsWith(".md")) return `<!-- ${msg} -->\n`;
+  return `// ${msg}\n`;
 }
 
 // Text files get the header line; binary assets (sounds, images) are copied as-is.
@@ -170,7 +172,7 @@ function check(app) {
   for (const file of kitCopies(app)) if (!listed.has(file)) drift.push(`unlisted ${file}`);
   if ((cfg.kit ?? "native") === "native") drift.push(...bannedImports(app), ...checkRules(app));
   if (drift.length) {
-    console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nKit copies: move the change into ui-kit, then sync. Raw imports: use the ZESTY component named. Rules: fix the screen; they are David's (ui-kit bin/rules.mjs).`);
+    console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nKit copies: move the change into ui-kit, then sync. Raw imports: use the ZESTY component named. Rules: fix the screen; every rule is explained in UI-RULES.md.`);
     process.exit(1);
   }
   console.log(`ui-kit: ${cfg.files.length} files match the kit`);
