@@ -6,6 +6,7 @@
 // Same props as RN's Switch. The Toggle keeps its own state, so if the host
 // doesn't accept a flip (e.g. it asks to confirm first) we snap it back,
 // matching RN's controlled Switch.
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { Host, Toggle } from "@expo/ui/swift-ui";
 import { disabled as disabledModifier, labelsHidden } from "@expo/ui/swift-ui/modifiers";
 import { useEffect, useState } from "react";
@@ -29,7 +30,12 @@ function IOSSwitch({ value = false, onValueChange, disabled, trackColor, style, 
     return () => clearTimeout(t);
   }, [shown, value]);
 
-  const onColor = typeof trackColor?.true === "string" ? trackColor.true : undefined;
+  // The Toggle takes the Host's tint. With none it fell back to the app's
+  // tint, white in dark mode, so an on switch was a white track under a white
+  // knob: a blank pill (David, 18 Nov, opening hours). On is the success
+  // green unless the caller asks for another colour.
+  const colors = useThemeColors();
+  const onColor = typeof trackColor?.true === "string" ? trackColor.true : colors.success;
 
   return (
     <Host ignoreSafeArea="all" matchContents seedColor={onColor} style={style} testID={testID}>
