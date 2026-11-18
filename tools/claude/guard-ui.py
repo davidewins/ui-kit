@@ -115,6 +115,18 @@ def check_raised(path, new, old):
         out("deny", f"RAISED SURFACE BLOCKED in {path}: this adds a Panel/RowPanel/Card/Tile/TicketCard/GlassGroup or a surface/card fill. David, 15 Nov: no screens filled with raised surface cards, hard block. Lay content flat on the page (SectionTitle + rows on the page background, figures as text, kit data components). Only David can unlock one named block via ~/.claude/raised-unlock.")
 
 
+# David, 18 Nov: Settings is the cog in the Account screen's headerRight
+# (kit HeaderIconButton), never a "Settings" row in a list. Hard block.
+SETTINGS_ROW = re.compile(r"""\b(label|title)\s*[=:]\s*\{?\s*["'`]Settings["'`]""")
+
+
+def check_settings_row(path, new, old):
+    if not path.endswith(".tsx"):
+        return
+    if len(SETTINGS_ROW.findall(new)) > len(SETTINGS_ROW.findall(old)):
+        out("deny", f"SETTINGS ROW BLOCKED in {path}: Settings is never a row in a list. It is the cog in the Account screen's headerRight (kit HeaderIconButton, settings icon) opening the settings screen (David, 18 Nov). Put the cog in the header instead.")
+
+
 def check_text(path, text):
     """Shared rules for one file path and the text being written into it."""
     if path == RAISED_UNLOCK:
@@ -156,6 +168,7 @@ def main():
             else:
                 old = "\n".join([ti.get("old_string", "")] + [e.get("old_string", "") for e in ti.get("edits") or []])
             check_raised(path, new, old)
+            check_settings_row(path, new, old)
         sys.exit(0)
 
     if tool == "Bash":
