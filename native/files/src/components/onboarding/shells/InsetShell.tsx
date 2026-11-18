@@ -9,12 +9,15 @@ import { WizardProgress } from "@/components/onboarding/WizardProgress";
 import { Text, View } from "@/components/ui";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
+import type { LucideIcon } from "lucide-react-native";
 import * as Haptics from "expo-haptics";
 import { ActivityIndicator, Platform, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Cta = {
   label: string;
+  /** Optional lucide glyph before the label, in the label's colour. */
+  icon?: LucideIcon;
   onPress?: () => void;
   disabled?: boolean;
   loading?: boolean;
@@ -161,6 +164,9 @@ export function InsetFooter({
             borderCurve: "continuous",
           }}
         >
+          {secondaryCta.icon ? (
+            <secondaryCta.icon size={17} color={colors.text} strokeWidth={2.2} />
+          ) : null}
           <Text
             weight="semibold"
             style={{
@@ -202,6 +208,9 @@ export function InsetFooter({
           <ActivityIndicator size="small" color={primaryLabel} />
         ) : (
           <>
+            {primaryCta.icon ? (
+              <primaryCta.icon size={17} color={primaryLabel} strokeWidth={2.2} />
+            ) : null}
             <Text
               weight="semibold"
               style={{
@@ -234,6 +243,9 @@ export function InsetFooter({
           <ActivityIndicator size="small" color={primaryLabel} />
         ) : (
           <>
+            {primaryCta.icon ? (
+              <primaryCta.icon size={17} color={primaryLabel} strokeWidth={2.2} />
+            ) : null}
             <Text
               weight="semibold"
               style={{

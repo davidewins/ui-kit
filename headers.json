@@ -1,0 +1,22 @@
+{
+  "Account": "SEE_THROUGH",
+  "Settings": "SEE_THROUGH",
+  "Personal Info": "SEE_THROUGH",
+  "Notifications": "SEE_THROUGH",
+  "Referrals": "SEE_THROUGH",
+  "Name": "SEE_THROUGH",
+  "Phone": "SEE_THROUGH",
+  "Date of Birth": "SEE_THROUGH",
+  "Help & Support": "LARGE_TITLE",
+  "Delete Account": "LARGE_TITLE",
+  "Chats": "LARGE_TITLE",
+  "Privacy Policy": "LARGE_TITLE",
+  "Terms of Service": "LARGE_TITLE",
+  "GDPR": "LARGE_TITLE",
+  "Become RIDER": "LARGE_TITLE",
+  "Become SELLER": "LARGE_TITLE",
+  "What's New": "default",
+  "About": "default",
+  "Send Feedback": "default",
+  "System Status": "default"
+}

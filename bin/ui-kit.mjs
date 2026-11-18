@@ -3,8 +3,10 @@
 //
 //   node bin/ui-kit.mjs tokens        regenerate native/files/src/globals.css from tokens.json
 //   node bin/ui-kit.mjs sync <app>    copy the files listed in <app>/ui-kit.json into the app
-//   node bin/ui-kit.mjs check <app>   fail if the app's copies differ from the kit, or app
-//                                     code imports something ZESTY wraps (BANNED)
+//   node bin/ui-kit.mjs check <app>   fail if the app's copies differ from the kit, app
+//                                     code imports something ZESTY wraps (BANNED), or
+//                                     breaks a UI rule beyond its baseline (bin/rules.mjs)
+//   node bin/ui-kit.mjs baseline <app> freeze the app's current rule violations
 //
 // Each synced file gets a one-line header saying where it lives. Seeds are
 // copied once (only when missing) and are then owned by the app.
@@ -13,6 +15,7 @@ import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkRules, writeBaseline } from "./rules.mjs";
 
 const KIT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const [cmd, appArg] = process.argv.slice(2);
@@ -165,9 +168,9 @@ function check(app) {
   // check never compares (left behind by a move, or synced by hand).
   const listed = new Set(cfg.files);
   for (const file of kitCopies(app)) if (!listed.has(file)) drift.push(`unlisted ${file}`);
-  if ((cfg.kit ?? "native") === "native") drift.push(...bannedImports(app));
+  if ((cfg.kit ?? "native") === "native") drift.push(...bannedImports(app), ...checkRules(app));
   if (drift.length) {
-    console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nKit copies: move the change into ui-kit, then sync. Raw imports: use the ZESTY component named.`);
+    console.error(`ui-kit drift in ${app}:\n  ${drift.join("\n  ")}\nKit copies: move the change into ui-kit, then sync. Raw imports: use the ZESTY component named. Rules: fix the screen; they are David's (ui-kit bin/rules.mjs).`);
     process.exit(1);
   }
   console.log(`ui-kit: ${cfg.files.length} files match the kit`);
@@ -177,8 +180,9 @@ try {
   if (cmd === "tokens") tokens();
   else if (cmd === "sync" && appArg) sync(resolve(appArg));
   else if (cmd === "check" && appArg) check(resolve(appArg));
+  else if (cmd === "baseline" && appArg) writeBaseline(resolve(appArg));
   else {
-    console.error("usage: ui-kit tokens | sync <app> | check <app>");
+    console.error("usage: ui-kit tokens | sync <app> | check <app> | baseline <app>");
     process.exit(2);
   }
 } catch (e) {
