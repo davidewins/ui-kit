@@ -1,7 +1,7 @@
 import { Text, View } from "@/components/ui";
 import { GlassButton } from "@/components/ui/actions/GlassButton";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { FC } from "react";
 
 interface LoadErrorStateProps {
@@ -14,7 +14,7 @@ interface LoadErrorStateProps {
 }
 
 /**
- * Full-screen error state for a failed data load - icon, headline, one line of
+ * Full-screen error state for a failed data load - Thiings art, headline, one line of
  * guidance, and a solid retry CTA. Used wherever a fetch can fail to render.
  */
 export const LoadErrorState: FC<LoadErrorStateProps> = ({
@@ -28,12 +28,15 @@ export const LoadErrorState: FC<LoadErrorStateProps> = ({
   const colors = useThemeColors();
   return (
     <View className="flex-1 items-center justify-center bg-background px-8">
-      <View
-        className="rounded-full items-center justify-center mb-5"
-        style={{ width: 72, height: 72, backgroundColor: colors.secondaryBackground }}
-      >
-        <Ionicons name="cloud-offline-outline" size={32} color={colors.muted} />
-      </View>
+      {/* Thiings art at EmptyState's size, not an icon in a grey circle
+          (David, 18 Nov: no icon empty or error screens anywhere). The image
+          ships with the kit, so every app that syncs this file has it. */}
+      <Image
+        source={require("@/assets/images/kit/load-error.png")}
+        style={{ width: 88, height: 88, marginBottom: 12 }}
+        contentFit="contain"
+        accessible={false}
+      />
       {/* Same title and body type as EmptyState. */}
       <Text
         weight="semibold"
