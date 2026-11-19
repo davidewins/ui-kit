@@ -57,6 +57,7 @@
   "raised|src/app/(protected)/profile/earnings/index.tsx": 3,
   "raised|src/app/(protected)/profile/index.tsx": 1,
   "raised|src/app/(protected)/profile/support/index.tsx": 1,
+  "raised|src/app/(protected)/profile/tap-to-pay.tsx": 1,
   "raised|src/components/address/AddressAutocomplete.tsx": 1,
   "raised|src/components/Avatar.tsx": 1,
   "raised|src/components/chat/CustomMessageInput.tsx": 3,
