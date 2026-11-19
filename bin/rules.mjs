@@ -340,7 +340,7 @@ function notTitleCase(title) {
 /** Violations as { key, line } where key = "rule|file" (counted against the baseline). */
 export function findViolations(app) {
   const found = [];
-  const sellers = basename(app) === "SELLERS";
+  const sellers = appName(app) === "SELLERS";
   for (const [file, text] of appFiles(app)) {
     const code = stripComments(text);
     if (sellers)
@@ -382,7 +382,14 @@ export function findViolations(app) {
   return found;
 }
 
-const baselinePath = (app) => join(KIT, "baselines", `${basename(app)}.json`);
+// An app is named by its folder, but CI checks it out under its GitHub repo
+// name, and two repos are named differently: VOID is "ONE", SELLERS is
+// "VENDORS". Without this, CI found no baseline for them and failed on every
+// frozen hit (19 Nov).
+const REPO_APP = { ONE: "VOID", VENDORS: "SELLERS" };
+export const appName = (app) => REPO_APP[basename(app)] ?? basename(app);
+
+const baselinePath = (app) => join(KIT, "baselines", `${appName(app)}.json`);
 
 const tally = (found) => found.reduce((t, v) => ((t[v.key] = (t[v.key] ?? 0) + 1), t), {});
 
@@ -401,7 +408,7 @@ export function writeBaseline(app) {
   const sorted = Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)));
   writeFileSync(baselinePath(app), JSON.stringify(sorted, null, 2) + "\n");
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
-  console.log(`baseline ${basename(app)}: ${total} existing violations frozen in ${relative(KIT, baselinePath(app))}`);
+  console.log(`baseline ${appName(app)}: ${total} existing violations frozen in ${relative(KIT, baselinePath(app))}`);
 }
 
 /** Every titled Stack.Screen in an app, for building headers.json. */
