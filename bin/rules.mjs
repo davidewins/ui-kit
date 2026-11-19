@@ -169,6 +169,18 @@ const RULES = [
     code: true,
   },
   {
+    // David, 19 Nov, after a SELLERS screen imported usePreventRemove from
+    // @react-navigation/native and the whole app stopped bundling: "you need
+    // more hardcoded strong rules preventing you from breaking shit". Expo
+    // SDK 56+ refuses any value import of react-navigation; the same hooks
+    // come from "expo-router" or "expo-router/react-navigation". `import type`
+    // is erased at build time and allowed.
+    id: "react-navigation",
+    why: "never import @react-navigation/* (SDK 56+ will not bundle the app); use expo-router or expo-router/react-navigation, or `import type`",
+    re: /^\s*import\s+(?!type\b)[^;]*?from\s+["']@react-navigation\/[^"']+["']|\brequire\(\s*["']@react-navigation\/[^"']+["']\s*\)/gm,
+    code: true,
+  },
+  {
     id: "magic-link",
     why: "email sign-in is a 6-digit code, never a magic link",
     re: /["'`>][^"'`<\n{}]*\bmagic[ -]?link\b/gi,
