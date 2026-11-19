@@ -6,11 +6,14 @@
 // Never react-native's Modal (banned, DESIGN.md §2).
 //
 // Controlled: `visible` + `onClose`. Render it anywhere in the screen; it takes
-// no layout space.
+// no layout space. `dismissible={false}` is for a sheet that needs an answer
+// (the RIDERS offer: David, 19 Nov, "i shouldnt be able to swipe down an
+// order modal"): no drag handle, no swipe down, and on Android no back press
+// or scrim tap either. Only the sheet's own buttons close it.
 import { View } from "@/components/ui";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { BottomSheet, Group, Host, RNHostView, Spacer } from "@expo/ui/swift-ui";
-import { frame, presentationDragIndicator } from "@expo/ui/swift-ui/modifiers";
+import { frame, interactiveDismissDisabled, presentationDragIndicator } from "@expo/ui/swift-ui/modifiers";
 import {
   Host as ComposeHost,
   ModalBottomSheet,
@@ -24,9 +27,11 @@ export interface SheetProps {
   visible: boolean;
   onClose: () => void;
   children: ReactNode;
+  /** false: swipe, back and scrim can't close it. Default true. */
+  dismissible?: boolean;
 }
 
-export function Sheet({ visible, onClose, children }: SheetProps) {
+export function Sheet({ visible, onClose, children, dismissible = true }: SheetProps) {
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();
 
@@ -43,7 +48,12 @@ export function Sheet({ visible, onClose, children }: SheetProps) {
           // spacer is that view.
           anchor={<Spacer modifiers={[frame({ width: 1, height: 1 })]} />}
         >
-          <Group modifiers={[presentationDragIndicator("visible")]}>
+          <Group
+            modifiers={[
+              presentationDragIndicator(dismissible ? "visible" : "hidden"),
+              interactiveDismissDisabled(!dismissible),
+            ]}
+          >
             <RNHostView matchContents={{ vertical: true }}>
               <View style={{ paddingHorizontal: 24, paddingTop: 28, paddingBottom: 16 }}>{children}</View>
             </RNHostView>
@@ -59,9 +69,16 @@ export function Sheet({ visible, onClose, children }: SheetProps) {
 
   return (
     <ComposeHost style={{ position: "absolute", width: 1, height: 1 }}>
-      <ModalBottomSheet onDismissRequest={onClose} containerColor={colors.background} skipPartiallyExpanded>
+      <ModalBottomSheet
+        onDismissRequest={onClose}
+        containerColor={colors.background}
+        skipPartiallyExpanded
+        showDragHandle={dismissible}
+        sheetGesturesEnabled={dismissible}
+        properties={{ shouldDismissOnBackPress: dismissible, shouldDismissOnClickOutside: dismissible }}
+      >
         <ComposeRNHostView matchContents={{ vertical: true }}>
-          <View style={{ paddingHorizontal: 24, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 16) + 8 }}>
+          <View style={{ paddingHorizontal: 24, paddingTop: dismissible ? 8 : 24, paddingBottom: Math.max(insets.bottom, 16) + 8 }}>
             {children}
           </View>
         </ComposeRNHostView>

@@ -42,12 +42,6 @@ const RULES = [
     code: true,
   },
   {
-    id: "formsheet",
-    why: "no form sheets (push a screen or use the kit Sheet)",
-    re: /presentation\s*:\s*["']formSheet["']|\bsheetAllowedDetents\b|\bsheetGrabberVisible\b/g,
-    code: true,
-  },
-  {
     id: "spring",
     why: "no bouncy animation: timing, never a spring",
     re: /\bwithSpring\s*\(|\.springify\s*\(|\bEasing\.(?:bounce|elastic|back)\b|\bAnimated\.spring\s*\(|type\s*:\s*["']spring["']/g,

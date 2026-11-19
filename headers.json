@@ -2,7 +2,7 @@
   "Account": "SEE_THROUGH",
   "Settings": "SEE_THROUGH",
   "Personal Info": "SEE_THROUGH",
-  "Notifications": "SEE_THROUGH",
+  "Notifications": "OPAQUE",
   "Referrals": "SEE_THROUGH",
   "Name": "SEE_THROUGH",
   "Phone": "SEE_THROUGH",

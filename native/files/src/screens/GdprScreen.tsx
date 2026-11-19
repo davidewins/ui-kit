@@ -26,10 +26,9 @@ export interface GdprScreenProps {
   rights: readonly SettingsScreenRow[];
   /** Default "Your rights". */
   rightsTitle?: string;
-  /** One paragraph: what personal data the app keeps. */
+  /** One paragraph opening the page, no title over it (David, 19 Nov):
+   *  "We hold your name, email ...". */
   dataHeld: string;
-  /** Default "What we hold". */
-  dataHeldTitle?: string;
   /** DPO email, Privacy policy, Terms. */
   contact: readonly SettingsScreenRow[];
   /** Default "Contact". */
@@ -45,7 +44,6 @@ export function GdprScreen({
   rights,
   rightsTitle = "Your rights",
   dataHeld,
-  dataHeldTitle = "What we hold",
   contact,
   contactTitle = "Contact",
   replyNote,
@@ -57,8 +55,7 @@ export function GdprScreen({
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingTop: 8, paddingBottom: primaryCta ? space : 32 }}>
-        <SettingsSectionTitle title={dataHeldTitle} />
-        <Text selectable style={{ fontSize: 15, lineHeight: 24, color: colors.text, marginHorizontal: 16, marginBottom: 18 }}>
+        <Text selectable weight="medium" style={{ fontSize: 15, lineHeight: 20, color: colors.text, marginHorizontal: 16, marginTop: 8, marginBottom: 18 }}>
           {dataHeld}
         </Text>
 

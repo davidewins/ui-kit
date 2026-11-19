@@ -4,16 +4,32 @@
 // stack's first screen has none, so useStackScreenOptions puts this there and
 // nowhere else. Every other screen keeps the native one. Drawn like the
 // native one: SF Symbol chevron.backward in tint, and iOS 26 draws the glass.
-// David, 15 Nov: "this should be FUCKING STANDARDISED".
+// On Android it is the Material arrow with the round ripple, the same as the
+// native back on every other Android screen (David, 19 Nov: the iOS chevron
+// on Android "looks like shit"). David, 15 Nov: "this should be FUCKING
+// STANDARDISED".
 import { useThemeColors } from "@/hooks/useThemeColors";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { ChevronLeft } from "lucide-react-native";
+import { ArrowLeft } from "lucide-react-native";
 import { Platform, Pressable } from "react-native";
 
 export function HeaderBack() {
   const colors = useThemeColors();
+  if (Platform.OS === "android") {
+    return (
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Navigate up"
+        onPress={() => router.back()}
+        android_ripple={{ color: colors.border, borderless: true, radius: 20 }}
+        style={{ width: 40, height: 40, marginLeft: -8, marginRight: 8, alignItems: "center", justifyContent: "center" }}
+      >
+        <ArrowLeft size={24} strokeWidth={2} color={colors.tint} />
+      </Pressable>
+    );
+  }
   return (
     <Pressable
       accessibilityRole="button"
@@ -31,11 +47,7 @@ export function HeaderBack() {
         opacity: pressed ? 0.4 : 1,
       })}
     >
-      {Platform.OS === "ios" ? (
-        <SymbolView name="chevron.backward" size={20} weight="semibold" tintColor={colors.tint} resizeMode="scaleAspectFit" />
-      ) : (
-        <ChevronLeft size={24} strokeWidth={2} color={colors.tint} />
-      )}
+      <SymbolView name="chevron.backward" size={20} weight="semibold" tintColor={colors.tint} resizeMode="scaleAspectFit" />
     </Pressable>
   );
 }

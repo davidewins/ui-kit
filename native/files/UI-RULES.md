@@ -83,7 +83,7 @@ Source of truth: `ui-kit/bin/rules.mjs` (the checks), `ui-kit/headers.json` (hea
   - `ui/inputs/SegmentedControl` (never another segmented control)
   - `ui/overlays/Sheet` or `ConfirmDialog` (never the React Native Modal)
   - `ui/actions/ActionMenu` (never `ActionSheetIOS` or a custom popover)
-- **[checked: formsheet]** No form sheets (`presentation: "formSheet"`, detents, grabber). Create in a modal, edit in a pushed screen.
+- Form sheets only where David asks for one (19 Nov: Send Feedback, the RIDERS incoming orders sheet). Copy RIDERS `chat/report` exactly: native `presentation: "formSheet"`, `sheetGrabberVisible`, `sheetAllowedDetents`, set on the Stack.Screen in the layout, and a transparent screen root so the iOS sheet material shows. Never a hand-rolled sheet.
 - **[checked: keyboard]** No keyboard handling of any kind: no `KeyboardAvoidingView`, KeyboardAware views or `keyboardVerticalOffset`.
 - Prefer native controls (`@expo/ui` SwiftUI Menu, Picker, DisclosureGroup) over hand-rolled dropdowns.
 
@@ -124,7 +124,8 @@ Source of truth: `ui-kit/bin/rules.mjs` (the checks), `ui-kit/headers.json` (hea
 | Topic | Settled rule |
 | --- | --- |
 | Raised panels vs flat | Flat (15 Nov block). |
-| Form sheets, springs, ActionSheetIOS | All banned, even where an older note suggests them. |
+| Form sheets | Allowed where David asks (19 Nov), native pattern only. |
+| Springs, ActionSheetIOS | Banned, even where an older note suggests them. |
 | Thiings in section headers | None (13 Nov). |
 | Grey cards "to break up the screen" | No (raised block wins). |
 | SELLERS/DESIGN.md eyebrows, 34pt numbers | Not allowed (no-eyebrows, max 22 win). |

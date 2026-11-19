@@ -1,8 +1,8 @@
 // A SettingsRow holding a date and/or time. iOS puts SwiftUI's compact
 // DatePicker in the accessory slot (the grey date chip that opens the native
-// calendar / time wheel popover). Other platforms show the value read-only as
-// trailing text; add @react-native-community/datetimepicker in the app if
-// Android needs to edit it.
+// calendar / time wheel popover). Android shows the value as trailing text;
+// tapping the row opens the native Material date or time dialog
+// (@expo/ui/community/datetime-picker, as VOID's Date of Birth screen uses).
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { DatePicker, Host } from "@expo/ui/swift-ui";
 import {
@@ -10,6 +10,8 @@ import {
   disabled as disabledModifier,
   labelsHidden,
 } from "@expo/ui/swift-ui/modifiers";
+import DateTimePicker from "@expo/ui/community/datetime-picker";
+import { useState } from "react";
 import { Platform } from "react-native";
 import { SettingsRow, type SettingsIcon } from "../lists/SettingsRow";
 
@@ -34,7 +36,9 @@ const COMPONENTS = {
 } as const;
 
 function formatValue(value: Date, mode: DateRowMode) {
-  const date = value.toLocaleDateString(undefined, { day: "numeric", month: "short" });
+  // The year shows when it isn't this year (a date of birth, say).
+  const sameYear = value.getFullYear() === new Date().getFullYear();
+  const date = value.toLocaleDateString(undefined, { day: "numeric", month: "short", year: sameYear ? undefined : "numeric" });
   const time = value.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
   return mode === "date" ? date : mode === "time" ? time : `${date}, ${time}`;
 }
@@ -50,9 +54,35 @@ export function DateRow({
   disabled = false,
 }: DateRowProps) {
   const colors = useThemeColors();
+  // Android's dialog opens on mount and stays until it is unmounted.
+  const [open, setOpen] = useState(false);
 
   if (Platform.OS !== "ios") {
-    return <SettingsRow label={label} Icon={Icon} trailing={formatValue(value, mode)} disabled={disabled} />;
+    return (
+      <>
+        <SettingsRow
+          label={label}
+          Icon={Icon}
+          trailing={formatValue(value, mode)}
+          disabled={disabled}
+          onPress={disabled ? undefined : () => setOpen(true)}
+        />
+        {open ? (
+          <DateTimePicker
+            value={value}
+            mode={mode === "time" ? "time" : "date"}
+            accentColor={colors.tint}
+            minimumDate={minimumDate}
+            maximumDate={maximumDate}
+            onValueChange={(_, date) => {
+              setOpen(false);
+              if (date) onChange(date);
+            }}
+            onDismiss={() => setOpen(false)}
+          />
+        ) : null}
+      </>
+    );
   }
 
   return (
