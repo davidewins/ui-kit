@@ -70,6 +70,14 @@ export function useStackScreenOptions({ modal = false }: { modal?: boolean } = {
   );
 }
 
+/** The first screen of a stack that is always pushed onto another (VOID's
+ * Account, pushed from the Home header): the kit HeaderBack, set on that one
+ * Stack.Screen. Use it where the automatic check in useStackScreenOptions
+ * misses (David, 19 Nov: VOID Account lost its back button). Screens pushed
+ * after it keep the native back.
+ *   <Stack.Screen name="index" options={{ title: "Account", ...PUSHED_ROOT }} /> */
+export const PUSHED_ROOT = { headerLeft: headerBack } as const;
+
 /** Large title: tab roots and the legal screens. The page's ScrollView must be
  * its first child with contentInsetAdjustmentBehavior="automatic". */
 export const LARGE_TITLE = {
