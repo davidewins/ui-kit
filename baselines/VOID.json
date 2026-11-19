@@ -82,6 +82,8 @@
   "gradient|src/components/experiments/collapsible-storefronts/StorefrontRow.tsx": 2,
   "gradient|src/components/experiments/vinyl-album/Vinyl.tsx": 2,
   "gradient|src/components/profile/profile-image-base.tsx": 2,
+  "hidden-menu|src/components/orders/variants/VariantOneReceipt.tsx": 1,
+  "hidden-menu|src/components/orders/variants/VariantThreeNative.tsx": 2,
   "nested-text|src/app/(auth)/verify-otp.tsx": 1,
   "nested-text|src/app/(protected)/(tabs)/profile/personal-info/phone.tsx": 1,
   "nested-text|src/app/(protected)/config/delivery-address.tsx": 1,

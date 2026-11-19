@@ -190,6 +190,66 @@ function statRows(code) {
   );
 }
 
+// Hidden header actions (David, 18 Nov: "2 hidden headerrights and not a
+// single fucking primary button"). A screen's main action is the InsetFooter
+// primaryCta (a second one the secondaryCta); headerRight is at most 2 visible
+// kit HeaderIconButtons. Flags: a kit ActionMenu whose written-out `actions`
+// hold 2 or more entries (a "..." menu of actions; one entry is drawn as a
+// visible button, and a list built from data with .map is a picker), more
+// than 2 header items, and any other menu opened from a "..." icon.
+function elementAt(code, i) {
+  let depth = 0;
+  for (let j = i; j < code.length; j++) {
+    const c = code[j];
+    if (c === "{") depth++;
+    else if (c === "}") depth--;
+    else if (depth === 0 && c === "/" && code[j + 1] === ">") return code.slice(i, j + 2);
+    else if (depth === 0 && c === ">" ) return code.slice(i, j + 1);
+  }
+  return code.slice(i);
+}
+function propValue(el, name) {
+  const at = el.search(new RegExp(`\\b${name}=\\{`));
+  if (at < 0) return null;
+  const open = el.indexOf("{", at);
+  let depth = 0;
+  for (let j = open; j < el.length; j++) {
+    if (el[j] === "{") depth++;
+    else if (el[j] === "}" && --depth === 0) return el.slice(open + 1, j).trim();
+  }
+  return el.slice(open + 1);
+}
+function resolveList(code, value) {
+  if (!value) return "";
+  const id = value.match(/^([A-Za-z_$][\w$]*)$/);
+  if (!id) return value;
+  const decl = code.match(new RegExp(`(?:const|let)\\s+${id[1]}\\b[^=]*=\\s*([\\s\\S]*?\\]);`));
+  return decl ? decl[1] : "";
+}
+const entries = (list) => (list.match(/\blabel\s*:/g) ?? []).length;
+function hiddenMenus(code) {
+  const out = [];
+  for (const m of code.matchAll(/<ActionMenu\b/g)) {
+    const el = elementAt(code, m.index);
+    const actions = resolveList(code, propValue(el, "actions"));
+    const buttons = resolveList(code, propValue(el, "buttons"));
+    const data = /\.map\(/.test(actions);
+    const n = data ? 0 : entries(actions);
+    if (n >= 2) out.push({ at: m.index, why: `a "..." menu holding ${n} actions; the main action is the InsetFooter primaryCta, headerRight max 2 visible icons` });
+    const items = entries(buttons) + (data || n >= 2 ? 1 : n);
+    if (items > 2) out.push({ at: m.index, why: `${items} header items; headerRight holds at most 2` });
+  }
+  // Another menu is hidden only when its trigger is a "..." icon; a labelled
+  // pill that opens a picker (Delivery, Sort, a date range) is visible.
+  for (const m of code.matchAll(/<(MenuView|Stack\.Toolbar\.Menu)\b/g)) {
+    const end = code.indexOf(`</${m[1]}>`, m.index);
+    const body = code.slice(m.index, end < 0 ? m.index + 1500 : end);
+    if (/\b(?:MoreHorizontal|MoreVertical|Ellipsis|EllipsisVertical)\b|["']ellipsis(?:\.circle)?["']/.test(body))
+      out.push({ at: m.index, why: 'a "..." overflow menu; main actions go on the InsetFooter, headerRight max 2 visible icons' });
+  }
+  return out;
+}
+
 // Route screens that scroll must sit under transparent and large headers.
 const RN_SCROLL = /import\s*\{[^}]*\b(?:ScrollView|FlatList|SectionList)\b[^}]*\}\s*from\s*["']react-native["']/;
 function missingInset(file, code) {
@@ -292,6 +352,8 @@ export function findViolations(app) {
     }
     for (const at of statRows(code))
       found.push({ key: `stat-cards|${file}`, msg: `stat-cards    ${file}:${code.slice(0, at).split("\n").length}  no rows of equal stat boxes (figure over label); use SettingsRow trailing in a list` });
+    for (const h of hiddenMenus(code))
+      found.push({ key: `hidden-menu|${file}`, msg: `hidden-menu   ${file}:${code.slice(0, h.at).split("\n").length}  ${h.why}` });
     if (missingInset(file, code))
       found.push({ key: `scroll-inset|${file}`, msg: `scroll-inset  ${file}  a scrolling screen needs contentInsetAdjustmentBehavior="automatic" (or the kit ScrollView)` });
     if (/_layout\.tsx$/.test(file)) {
